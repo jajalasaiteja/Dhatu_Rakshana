@@ -1,0 +1,100 @@
+standards:
+  SSPC_PA2:
+    name: "SSPC-PA 2 / NACE SP0188"
+    description: "Measurement of Dry Coating Thickness and Discontinuity (Holiday) Testing on Steel Structures"
+  ISO_4628:
+    name: "ISO 4628-4 / SSPC-VIS 2"
+    description: "Evaluation of degradation of coatings - Assessment of degree of cracking, rusting, and flaking"
+  ISO_8501:
+    name: "ISO 8501-1"
+    description: "Preparation of steel substrates before application of paints - Surface cleanliness grades"
+  ISO_8502:
+    name: "ISO 8502-3"
+    description: "Assessment of dust on steel surfaces prepared for painting (pressure-sensitive tape method)"
+
+rules:
+  # Discontinuities, Pinholes & Holidays (High galvanic corrosion risk)
+  pinhole:
+    standard_reference: "SSPC-PA 2 / NACE SP0188 Discontinuity Standard"
+    thresholds:
+      - max_area_pct: 0.5
+        min_confidence: 0.50
+        severity: "Low"
+        pass_fail: "PASS"
+      - max_area_pct: 2.0
+        min_confidence: 0.50
+        severity: "Medium"
+        pass_fail: "REVIEW"
+      - max_area_pct: 100.0
+        min_confidence: 0.50
+        severity: "High"
+        pass_fail: "FAIL"
+
+  # Scratches & Mechanical Gouges
+  scratch:
+    standard_reference: "ISO 4628-4 Coating Mechanical Integrity"
+    thresholds:
+      - max_area_pct: 1.0
+        min_confidence: 0.50
+        severity: "Low"
+        pass_fail: "PASS"
+      - max_area_pct: 4.0
+        min_confidence: 0.50
+        severity: "Medium"
+        pass_fail: "REVIEW"
+      - max_area_pct: 100.0
+        min_confidence: 0.50
+        severity: "Critical"
+        pass_fail: "FAIL"
+
+  # Chemical, Grease, or Salt Contamination
+  contamination:
+    standard_reference: "ISO 8501-1 Surface Preparation Grade"
+    thresholds:
+      - max_area_pct: 1.5
+        min_confidence: 0.50
+        severity: "Low"
+        pass_fail: "PASS"
+      - max_area_pct: 5.0
+        min_confidence: 0.50
+        severity: "Medium"
+        pass_fail: "REVIEW"
+      - max_area_pct: 100.0
+        min_confidence: 0.50
+        severity: "Critical"
+        pass_fail: "FAIL"
+
+  # Embedded Inclusions (slag, blasting grit)
+  inclusion:
+    standard_reference: "ISO 8501-1 / SSPC-SP 10 Marine Grade"
+    thresholds:
+      - max_area_pct: 1.5
+        min_confidence: 0.50
+        severity: "Low"
+        pass_fail: "PASS"
+      - max_area_pct: 4.5
+        min_confidence: 0.50
+        severity: "Medium"
+        pass_fail: "REVIEW"
+      - max_area_pct: 100.0
+        min_confidence: 0.50
+        severity: "High"
+        pass_fail: "FAIL"
+
+  # Dust & Blast Particles (Class 1)
+  dust_particle:
+    standard_reference: "ISO 8502-3 Dust Particle Rating"
+    thresholds:
+      - max_area_pct: 0.8
+        min_confidence: 0.60
+        severity: "Negligible"
+        pass_fail: "PASS"
+      - max_area_pct: 100.0
+        min_confidence: 0.60
+        severity: "Medium"
+        pass_fail: "REVIEW"
+
+default_rule:
+  standard_reference: "AMPP QP / Marine General Assessment"
+  severity: "Medium"
+  pass_fail: "REVIEW"

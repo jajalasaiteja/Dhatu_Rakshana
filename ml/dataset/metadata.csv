@@ -1,0 +1,13 @@
+filename,class,subtype,area_pct,expected_verdict
+marine_scan_001_pinhole.png,defect,pinhole,0.191,PASS
+marine_scan_002_scratch.png,defect,scratch,4.611,FAIL
+marine_scan_003_inclusion.png,defect,inclusion,0.779,PASS
+marine_scan_004_contamination.png,defect,contamination,2.83,FAIL
+marine_scan_005_dust_particle.png,particle,dust_particle,0.391,PASS
+marine_scan_006_no_defect.png,clean,no_defect,0.0,PASS
+marine_scan_007_pinhole.png,defect,pinhole,0.517,PASS
+marine_scan_008_scratch.png,defect,scratch,1.655,REVIEW
+marine_scan_009_inclusion.png,defect,inclusion,1.225,REVIEW
+marine_scan_010_contamination.png,defect,contamination,2.324,FAIL
+marine_scan_011_dust_particle.png,particle,dust_particle,0.712,PASS
+marine_scan_012_no_defect.png,clean,no_defect,0.0,PASS
