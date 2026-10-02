@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient, { resolveMediaUrl } from '../api/client';
-import { ZONES } from '../config/zones';
+import { ZONES as DEFAULT_ZONES } from '../config/zones';
 import Spinner from '../components/Spinner';
 import ErrorPanel from '../components/ErrorPanel';
 import Badge from '../components/Badge';
@@ -19,15 +19,41 @@ export default function Upload() {
   const fileInputRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState('inspection'); // 'inspection' | '3d' | 'standards' | 'history'
-  const [selectedZoneId, setSelectedZoneId] = useState(ZONES[0].id);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [zones, setZones] = useState(DEFAULT_ZONES);
+  const [selectedZoneId, setSelectedZoneId] = useState(DEFAULT_ZONES[0].id);
+
+  // Multi-image state
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState([]);
+  const [activePreviewIdx, setActivePreviewIdx] = useState(0);
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Zone creation modal state
+  const [isZoneModalOpen, setIsZoneModalOpen] = useState(false);
+  const [newZoneName, setNewZoneName] = useState('');
+  const [newZoneDesc, setNewZoneDesc] = useState('');
+  const [savingZone, setSavingZone] = useState(false);
+  const [zoneError, setZoneError] = useState('');
 
   // History tab data
   const [historyList, setHistoryList] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+
+  // Load zones dynamically from backend
+  useEffect(() => {
+    apiClient('/zones')
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setZones(data);
+          setSelectedZoneId(data[0].id);
+        }
+      })
+      .catch(() => {
+        // Fallback to DEFAULT_ZONES
+      });
+  }, []);
 
   useEffect(() => {
     if (activeTab === 'history') {
@@ -41,30 +67,49 @@ export default function Upload() {
     }
   }, [activeTab]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      setErrorMsg('Please upload a valid JPG or PNG image.');
+  const addFiles = (incomingFiles) => {
+    const valid = Array.from(incomingFiles).filter((f) =>
+      ['image/jpeg', 'image/png'].includes(f.type)
+    );
+    if (valid.length === 0) {
+      setErrorMsg('Please upload valid JPG or PNG images.');
       return;
     }
-    setSelectedFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
+    const updated = [...selectedFiles, ...valid];
+    setSelectedFiles(updated);
+    const urls = updated.map((f) => URL.createObjectURL(f));
+    setPreviewUrls(urls);
+    setActivePreviewIdx(updated.length - 1);
     setErrorMsg('');
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      addFiles(e.target.files);
+      e.target.value = '';
+    }
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-        setErrorMsg('Please upload a valid JPG or PNG image.');
-        return;
-      }
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-      setErrorMsg('');
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      addFiles(e.dataTransfer.files);
     }
+  };
+
+  const removeFile = (idxToRemove, e) => {
+    if (e) e.stopPropagation();
+    const updatedFiles = selectedFiles.filter((_, idx) => idx !== idxToRemove);
+    const updatedUrls = previewUrls.filter((_, idx) => idx !== idxToRemove);
+    setSelectedFiles(updatedFiles);
+    setPreviewUrls(updatedUrls);
+    setActivePreviewIdx((prev) => Math.max(0, Math.min(prev, updatedFiles.length - 1)));
+  };
+
+  const clearAllFiles = () => {
+    setSelectedFiles([]);
+    setPreviewUrls([]);
+    setActivePreviewIdx(0);
   };
 
   // 1-Click Synthetic Defect Presets Generator
@@ -119,8 +164,9 @@ export default function Upload() {
 
       canvas.toBlob((blob) => {
         const file = new File([blob], `preset_${defectType}.png`, { type: 'image/png' });
-        setSelectedFile(file);
-        setPreviewUrl(URL.createObjectURL(file));
+        setSelectedFiles([file]);
+        setPreviewUrls([URL.createObjectURL(file)]);
+        setActivePreviewIdx(0);
         setErrorMsg('');
       }, 'image/png');
     } catch (e) {
@@ -128,10 +174,38 @@ export default function Upload() {
     }
   };
 
+  const handleCreateZone = async (e) => {
+    e.preventDefault();
+    if (!newZoneName.trim()) {
+      setZoneError('Platform zone name is required.');
+      return;
+    }
+    setSavingZone(true);
+    setZoneError('');
+    try {
+      const created = await apiClient('/zones', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: newZoneName.trim(),
+          asset_description: newZoneDesc.trim() || 'Naval defense platform coating strake'
+        })
+      });
+      setZones((prev) => [...prev, created]);
+      setSelectedZoneId(created.id);
+      setNewZoneName('');
+      setNewZoneDesc('');
+      setIsZoneModalOpen(false);
+    } catch (err) {
+      setZoneError(err.message || 'Failed to register new platform zone.');
+    } finally {
+      setSavingZone(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
-    if (!selectedFile) {
-      setErrorMsg('Please upload a specimen image or click one of the preset defect buttons.');
+    if (selectedFiles.length === 0) {
+      setErrorMsg('Please upload one or more specimen images or click a defect preset.');
       return;
     }
 
@@ -140,8 +214,12 @@ export default function Upload() {
 
     try {
       const formData = new FormData();
-      formData.append('image', selectedFile);
-      formData.append('file', selectedFile);
+      selectedFiles.forEach((file) => {
+        formData.append('images', file);
+      });
+      // Backward compatibility keys
+      formData.append('image', selectedFiles[0]);
+      formData.append('file', selectedFiles[0]);
       formData.append('zone_id', selectedZoneId);
 
       const response = await apiClient('/inspections', {
@@ -157,12 +235,13 @@ export default function Upload() {
     }
   };
 
-  const selectedZone = ZONES.find((z) => z.id === Number(selectedZoneId)) || ZONES[0];
+  const selectedZone = zones.find((z) => z.id === Number(selectedZoneId)) || zones[0] || { id: 1, name: 'Zone 1' };
+  const currentPreviewUrl = previewUrls[activePreviewIdx] || '';
 
   return (
     <div className="space-y-6">
       
-      {/* Main Studio Card Container matching Screenshot 2 */}
+      {/* Main Studio Card Container */}
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden">
         
         {/* Top Segmented Horizontal Tab Bar */}
@@ -225,7 +304,7 @@ export default function Upload() {
           </button>
         </div>
 
-        {/* Studio Content matching Screenshot 2 */}
+        {/* Studio Content */}
         <div className="p-6 sm:p-8">
           
           {/* TAB 1: AI DEFECT INSPECTION */}
@@ -238,15 +317,19 @@ export default function Upload() {
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
                     NAVAL PLATFORM ZONES
                   </h3>
-                  <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                    Active: {selectedZone.name}
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setIsZoneModalOpen(true)}
+                    className="text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full border border-blue-200 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>+ Add Platform</span>
+                  </button>
                 </div>
 
-                <div className="space-y-2.5">
-                  {ZONES.map((zone) => {
+                <div className="space-y-2.5 max-h-[460px] overflow-y-auto pr-1 scrollbar-thin">
+                  {zones.map((zone) => {
                     const isSelected = Number(selectedZoneId) === zone.id;
-                    const desc = DEFECT_DESCRIPTIONS[zone.id] || "Naval platform coating section";
+                    const desc = zone.asset_description || DEFECT_DESCRIPTIONS[zone.id] || "Naval platform coating section";
 
                     return (
                       <button
@@ -297,7 +380,7 @@ export default function Upload() {
                     Specimen Ingestion
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Upload local naval coating photograph or trigger 1-click test defect presets.
+                    Upload multiple perspectives/strakes or trigger 1-click test defect presets.
                   </p>
                 </div>
 
@@ -311,13 +394,14 @@ export default function Upload() {
                 <input
                   ref={fileInputRef}
                   type="file"
+                  multiple
                   accept="image/jpeg,image/png"
                   onChange={handleFileChange}
                   className="hidden"
                 />
 
-                {/* Dropzone matching Screenshot 2 */}
-                {!previewUrl ? (
+                {/* Dropzone or Multi-Image Preview Container */}
+                {selectedFiles.length === 0 ? (
                   <div
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
@@ -330,50 +414,110 @@ export default function Upload() {
                       </svg>
                     </div>
                     <span className="text-sm font-bold text-slate-900">
-                      Upload Marine Coating Specimen
+                      Upload Marine Coating Specimen(s)
                     </span>
-                    <span className="text-xs text-slate-500 mt-1">
-                      Drag & drop platform photo or click to browse (JPG, PNG up to 20 MB)
+                    <span className="text-xs text-slate-500 mt-1 max-w-sm">
+                      Drag & drop single photo or multiple perspective photos (JPG, PNG up to 20 MB each)
                     </span>
                     <span className="mt-3 px-5 py-2 rounded-full bg-slate-900 group-hover:bg-slate-800 text-white text-xs font-semibold shadow-xs group-hover:shadow-md group-hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
-                      Select Photo
+                      Select Photos (Multiple Allowed)
                     </span>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
+                    {/* Active Image Main Preview */}
                     <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-black">
                       <img
-                        src={previewUrl}
+                        src={currentPreviewUrl}
                         alt="Specimen Preview"
                         className="w-full h-64 object-contain"
                       />
                       {loading && (
                         <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-2xs flex flex-col items-center justify-center text-white gap-2">
                           <Spinner size="md" className="text-emerald-400" />
-                          <span className="text-xs font-mono text-emerald-300">Reconstructing Open3D Mesh & Grading...</span>
+                          <span className="text-xs font-mono text-emerald-300">
+                            Reconstructing Open3D Composite Mesh & Grading...
+                          </span>
                         </div>
                       )}
+                      <div className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-xs text-white text-[11px] font-mono px-2.5 py-1 rounded-md border border-slate-700">
+                        Angle #{activePreviewIdx + 1} of {selectedFiles.length}
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                        {selectedFile?.name} ({(selectedFile?.size / 1024).toFixed(1)} KB)
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedFile(null);
-                          setPreviewUrl('');
-                        }}
-                        className="text-slate-500 hover:text-rose-600 underline font-medium transition-colors cursor-pointer"
-                      >
-                        Change Photo
-                      </button>
+                    {/* Multi-Image Thumbnail Strip & Management Bar */}
+                    <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-800">
+                            📸 {selectedFiles.length} Specimen{selectedFiles.length > 1 ? 's' : ''} Staged
+                          </span>
+                          <span className="text-[11px] font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300">
+                            Multi-Strake 3D Composite
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="text-xs font-semibold text-blue-700 hover:text-blue-900 transition-colors cursor-pointer"
+                          >
+                            + Add More Photos
+                          </button>
+                          <span className="text-slate-300">|</span>
+                          <button
+                            type="button"
+                            onClick={clearAllFiles}
+                            className="text-xs font-medium text-rose-600 hover:text-rose-800 transition-colors cursor-pointer"
+                          >
+                            Clear All
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Thumbnails Row */}
+                      <div className="flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-thin">
+                        {selectedFiles.map((file, idx) => {
+                          const isCurrent = activePreviewIdx === idx;
+                          const url = previewUrls[idx];
+                          return (
+                            <div
+                              key={idx}
+                              onClick={() => setActivePreviewIdx(idx)}
+                              className={`group relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
+                                isCurrent
+                                  ? 'border-emerald-600 ring-2 ring-emerald-400/40 scale-102 shadow-sm'
+                                  : 'border-slate-300 opacity-75 hover:opacity-100 hover:border-slate-400'
+                              }`}
+                            >
+                              <img src={url} alt={`Specimen ${idx + 1}`} className="w-full h-full object-cover" />
+                              <span className="absolute bottom-0 inset-x-0 bg-slate-950/85 text-[10px] text-white text-center font-mono py-0.5">
+                                #{idx + 1}
+                              </span>
+                              {/* Remove individual photo button */}
+                              <button
+                                type="button"
+                                title="Remove this photo"
+                                onClick={(e) => removeFile(idx, e)}
+                                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-[11px] font-bold opacity-0 group-hover:opacity-100 hover:bg-rose-700 transition-opacity shadow-xs cursor-pointer"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono pt-1 border-t border-slate-200">
+                        <span>Active: {selectedFiles[activePreviewIdx]?.name}</span>
+                        <span>{(selectedFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(2)} MB total</span>
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* 1-Click Test Defect Buttons matching Screenshot 2 */}
+                {/* 1-Click Test Defect Buttons */}
                 <div className="pt-2">
                   <span className="text-xs text-slate-500 font-medium block mb-2">
                     Or evaluate with 1-click test defect buttons:
@@ -398,14 +542,14 @@ export default function Upload() {
                   </div>
                 </div>
 
-                {/* Primary Action Button matching Screenshot 2 */}
+                {/* Primary Action Button */}
                 <div className="pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={loading || !selectedFile}
+                    disabled={loading || selectedFiles.length === 0}
                     className={`group w-full py-3.5 px-6 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
-                      loading || !selectedFile
+                      loading || selectedFiles.length === 0
                         ? 'bg-slate-200 text-slate-400 cursor-not-allowed border border-slate-200'
                         : 'bg-slate-900 hover:bg-slate-800 text-white shadow-md hover:shadow-xl hover:shadow-slate-900/25 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 cursor-pointer'
                     }`}
@@ -413,11 +557,13 @@ export default function Upload() {
                     {loading ? (
                       <>
                         <Spinner size="sm" className="text-emerald-400" />
-                        <span>Executing Inspection Pipeline...</span>
+                        <span>Reconstructing 3D Micro-Topography & Analyzing...</span>
                       </>
                     ) : (
                       <>
-                        <span>Run Full Defense Coating Inspection</span>
+                        <span>
+                          Run Defense Coating Inspection {selectedFiles.length > 1 ? `(${selectedFiles.length} Angles)` : ''}
+                        </span>
                         <span className="group-hover:translate-x-1.5 transition-transform duration-200">→</span>
                       </>
                     )}
@@ -450,15 +596,35 @@ export default function Upload() {
                 </button>
               </div>
 
+              {previewUrls.length > 1 && (
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-mono">
+                  <span className="text-slate-500 flex-shrink-0">Preview Angle:</span>
+                  {previewUrls.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActivePreviewIdx(idx)}
+                      className={`px-2.5 py-1 rounded-md border text-xs cursor-pointer ${
+                        activePreviewIdx === idx
+                          ? 'bg-emerald-600 text-white border-emerald-600 font-bold'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      Angle #{idx + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <Interactive3DTopography
-                imageUrl={previewUrl}
+                imageUrl={currentPreviewUrl}
                 title="Marine Coating Surface Roughness & Depth Profile"
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
                   <span className="text-slate-400 block mb-0.5">Algorithm</span>
-                  <span className="text-slate-800 font-bold">Poisson Surface Recon</span>
+                  <span className="text-slate-800 font-bold">Surface Heightfield Mesh</span>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
                   <span className="text-slate-400 block mb-0.5">Topography Scale</span>
@@ -586,6 +752,84 @@ export default function Upload() {
         </div>
 
       </div>
+
+      {/* Modal: Add Defense Platform Zone */}
+      {isZoneModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-2xs p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 font-serif">
+                  Register Naval Platform Zone
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Add a new hull strake, tank compartment, or flight deck section.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsZoneModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 text-lg cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            {zoneError && (
+              <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
+                {zoneError}
+              </div>
+            )}
+
+            <form onSubmit={handleCreateZone} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Platform Section Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Keel Strake 4, Sonar Dome Compartment"
+                  value={newZoneName}
+                  onChange={(e) => setNewZoneName(e.target.value)}
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Asset Description & Coating Spec
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="e.g. High-velocity splash zone titanium alloy with anti-cavitation barrier"
+                  value={newZoneDesc}
+                  onChange={(e) => setNewZoneDesc(e.target.value)}
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsZoneModalOpen(false)}
+                  className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingZone}
+                  className="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white shadow-xs cursor-pointer flex items-center gap-1.5"
+                >
+                  {savingZone && <Spinner size="xs" />}
+                  <span>Save Defense Zone</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );

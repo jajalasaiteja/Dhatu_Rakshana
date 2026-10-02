@@ -19,12 +19,20 @@ router = APIRouter(prefix="/inspections", tags=["inspections"])
 async def create_inspection(
     file: Optional[UploadFile] = File(None),
     image: Optional[UploadFile] = File(None),
+    images: list[UploadFile] = File(default=[]),
     zone_id: int = Form(...),
     session: Session = Depends(get_session)
 ):
-    upload_file = image or file
-    if not upload_file:
-        raise HTTPException(status_code=400, detail="Missing required image file.")
+    upload_files: list[UploadFile] = []
+    if images:
+        upload_files.extend([f for f in images if f.filename])
+    if image and image.filename and image not in upload_files:
+        upload_files.append(image)
+    if file and file.filename and file not in upload_files:
+        upload_files.append(file)
+
+    if not upload_files:
+        raise HTTPException(status_code=400, detail="Missing required image file(s).")
 
     # 1. Validate zone exists or fallback to first
     zone = session.get(Zone, zone_id)
@@ -38,22 +46,39 @@ async def create_inspection(
             session.add(new_zone)
             session.commit()
 
-    # 2. Read and save image
-    contents = await upload_file.read()
-    image_key, abs_image_path = storage.save_bytes(contents, upload_file.filename or "scan.png", subfolder="images")
+    # 2. Read and save all images
+    saved_keys: list[str] = []
+    saved_abs_paths: list[Path] = []
+
+    for uf in upload_files:
+        try:
+            contents = await uf.read()
+            if contents:
+                key, abs_path = storage.save_bytes(contents, uf.filename or "scan.png", subfolder="images")
+                saved_keys.append(key)
+                saved_abs_paths.append(abs_path)
+        except Exception as e:
+            print(f"[Warning] Failed to read/save image {uf.filename}: {e}")
+
+    if not saved_abs_paths:
+        raise HTTPException(status_code=400, detail="Could not process any valid image files.")
+
+    primary_key = saved_keys[0]
+    primary_abs_path = saved_abs_paths[0]
+    combined_image_path = ",".join(saved_keys)
 
     try:
-        with Image.open(str(abs_image_path)) as img:
+        with Image.open(str(primary_abs_path)) as img:
             img_w, img_h = img.size
     except Exception:
         img_w, img_h = 640, 640
 
-    # 3. 3D Surface Reconstruction
+    # 3. 3D Surface Reconstruction (Multi-image composite micro-topography)
     mesh_key = None
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
             reconstruct_result = reconstruct_surface_mesh(
-                image_path=abs_image_path,
+                image_path=saved_abs_paths,
                 output_dir=Path(tmp_dir),
                 base_filename="surface_mesh"
             )
@@ -66,8 +91,8 @@ async def create_inspection(
     except Exception as e:
         print(f"[Warning] 3D mesh reconstruction skipped: {e}")
 
-    # 4. Defect Detection
-    raw_detections = detect(str(abs_image_path))
+    # 4. Defect Detection on primary image
+    raw_detections = detect(str(primary_abs_path))
 
     # 5. Standards Grading
     graded_items = []
@@ -82,7 +107,7 @@ async def create_inspection(
 
     # 6. Database Transaction
     inspection = Inspection(
-        image_path=image_key,
+        image_path=combined_image_path,
         mesh_path=mesh_key,
         timestamp=datetime.now(timezone.utc),
         zone_id=zone_id,
@@ -120,6 +145,7 @@ async def create_inspection(
     return {
         "inspection_id": inspection.id,
         "overall_verdict": inspection.overall_verdict,
+        "image_count": len(saved_keys),
         "status": "COMPLETED"
     }
 
@@ -136,7 +162,9 @@ def list_inspections(
     results = []
     for insp in inspections:
         zone_name = insp.zone.name if insp.zone else f"Zone {insp.zone_id}"
-        img_url = storage.get_public_url(insp.image_path)
+        keys = [k.strip() for k in insp.image_path.split(",") if k.strip()]
+        first_key = keys[0] if keys else insp.image_path
+        img_url = storage.get_public_url(first_key)
         results.append({
             "id": insp.id,
             "timestamp": insp.timestamp.isoformat(),
@@ -146,6 +174,7 @@ def list_inspections(
             "image_url": img_url,
             "thumbnail_url": img_url,
             "mesh_url": storage.get_public_url(insp.mesh_path) if insp.mesh_path else None,
+            "image_count": len(keys),
             "defect_count": len(insp.detections)
         })
     return results
@@ -183,7 +212,10 @@ def get_inspection_detail(
             "graded_records": records_data
         })
 
-    img_url = storage.get_public_url(insp.image_path)
+    keys = [k.strip() for k in insp.image_path.split(",") if k.strip()]
+    first_key = keys[0] if keys else insp.image_path
+    img_url = storage.get_public_url(first_key)
+    all_urls = [storage.get_public_url(k) for k in keys]
     mesh_url = storage.get_public_url(insp.mesh_path) if insp.mesh_path else None
 
     return {
@@ -194,6 +226,7 @@ def get_inspection_detail(
         "overall_verdict": insp.overall_verdict,
         "image_url": img_url,
         "thumbnail_url": img_url,
+        "image_urls": all_urls,
         "mesh_url": mesh_url,
         "detections": detections_data,
         "graded_results": graded_results

@@ -3,7 +3,29 @@ from sqlmodel import Session, select
 from db.db import get_session
 from db.models import Zone, Inspection, Detection, GradedDefectRecord
 
+from pydantic import BaseModel
+from typing import Optional
+
 router = APIRouter(prefix="/zones", tags=["zones"])
+
+class ZoneCreate(BaseModel):
+    name: str
+    asset_description: Optional[str] = ""
+
+@router.post("", status_code=201)
+def create_zone(zone_in: ZoneCreate, session: Session = Depends(get_session)):
+    """POST /zones - creates a new naval platform zone."""
+    if not zone_in.name or not zone_in.name.strip():
+        raise HTTPException(status_code=400, detail="Zone name cannot be empty.")
+    
+    zone = Zone(
+        name=zone_in.name.strip(),
+        asset_description=zone_in.asset_description.strip() if zone_in.asset_description else ""
+    )
+    session.add(zone)
+    session.commit()
+    session.refresh(zone)
+    return zone.to_dict()
 
 @router.get("")
 def list_zones(session: Session = Depends(get_session)):

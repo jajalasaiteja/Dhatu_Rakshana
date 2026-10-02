@@ -1,4 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const RAW_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+// On Windows, 'localhost' in fetch() resolves to IPv6 [::1] which fails if the server binds to IPv4 127.0.0.1.
+// Normalizing to 127.0.0.1 guarantees seamless browser connectivity.
+const BASE_URL = RAW_URL.replace('localhost', '127.0.0.1');
 
 function getAuthToken() {
   return sessionStorage.getItem('access_token') || sessionStorage.getItem('dhatu_access_token');

@@ -14,6 +14,7 @@ export default function Result() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [pollCount, setPollCount] = useState(0);
+  const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [hoveredDetId, setHoveredDetId] = useState(null);
   const [show3DViewer, setShow3DViewer] = useState(false);
 
@@ -90,7 +91,10 @@ export default function Result() {
     return null;
   };
 
-  const imageUrl = resolveMediaUrl(inspection.image_url || inspection.thumbnail_url);
+  const rawImageUrls = inspection.image_urls || (inspection.image_url ? [inspection.image_url] : []);
+  const currentImageUrl = rawImageUrls[activeImageIdx]
+    ? resolveMediaUrl(rawImageUrls[activeImageIdx])
+    : resolveMediaUrl(inspection.image_url || inspection.thumbnail_url);
   const meshUrl = inspection.mesh_url ? resolveMediaUrl(inspection.mesh_url) : null;
   const isPending = inspection.overall_verdict === 'pending';
 
@@ -127,6 +131,12 @@ export default function Result() {
             <span className="text-slate-500">Zone: </span>
             <strong className="text-slate-800">{inspection.zone?.name || inspection.zone_name || `Zone ${inspection.zone_id}`}</strong>
           </div>
+          {rawImageUrls.length > 1 && (
+            <div>
+              <span className="text-slate-500">Angles: </span>
+              <strong className="text-emerald-700 font-mono">{rawImageUrls.length} Views</strong>
+            </div>
+          )}
           <div>
             <span className="text-slate-500">Detections: </span>
             <strong className="text-slate-800">{detections.length}</strong>
@@ -137,9 +147,9 @@ export default function Result() {
               target="_blank"
               rel="noopener noreferrer"
               download="coating_mesh.ply"
-              className="text-slate-900 hover:underline font-semibold focus:outline-hidden focus:ring-2 focus:ring-slate-400 rounded-sm"
+              className="text-slate-900 hover:underline font-semibold focus:outline-hidden focus:ring-2 focus:ring-slate-400 rounded-sm flex items-center gap-1"
             >
-              View 3D mesh
+              <span>📦 Download 3D Mesh (.ply)</span>
             </a>
           )}
         </div>
@@ -152,28 +162,66 @@ export default function Result() {
         <div className="lg:col-span-7 bg-white rounded-xl border border-[#e2e8f0] p-5 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-700">
-              Coating Surface Specimen
+              Coating Surface Specimen {rawImageUrls.length > 1 ? `(Angle ${activeImageIdx + 1} of ${rawImageUrls.length})` : ''}
             </span>
             {meshUrl && (
               <button
                 type="button"
                 onClick={() => setShow3DViewer(!show3DViewer)}
-                className="text-xs text-slate-700 hover:text-slate-950 font-medium underline"
+                className="text-xs text-slate-700 hover:text-slate-950 font-medium underline cursor-pointer"
               >
                 {show3DViewer ? 'Switch to 2D Bounding Boxes' : 'Interactive 3D Topography'}
               </button>
             )}
           </div>
 
+          {/* Multi-angle thumbnail carousel when >1 images uploaded */}
+          {rawImageUrls.length > 1 && (
+            <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <span>📸</span>
+                  <span>Multi-Perspective Views ({rawImageUrls.length} Angles / Specimens)</span>
+                </span>
+                <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  Viewing View #{activeImageIdx + 1}
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-thin">
+                {rawImageUrls.map((url, idx) => {
+                  const isCurrent = activeImageIdx === idx;
+                  const resolved = resolveMediaUrl(url);
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveImageIdx(idx)}
+                      className={`group relative flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'border-emerald-600 ring-2 ring-emerald-400/40 scale-102 shadow-sm'
+                          : 'border-slate-300 opacity-70 hover:opacity-100 hover:border-slate-400'
+                      }`}
+                    >
+                      <img src={resolved} alt={`Angle ${idx + 1}`} className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 inset-x-0 bg-slate-950/80 text-[10px] text-white text-center font-mono py-0.5 group-hover:bg-slate-950">
+                        Angle #{idx + 1}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {show3DViewer ? (
             <Interactive3DTopography
-              imageUrl={imageUrl}
+              imageUrl={currentImageUrl}
               meshUrl={meshUrl}
             />
           ) : (
             <BoundingBoxOverlay
-              imageUrl={imageUrl}
-              detections={detections}
+              imageUrl={currentImageUrl}
+              detections={activeImageIdx === 0 ? detections : []}
               hoveredId={hoveredDetId}
               onHover={setHoveredDetId}
               onClick={setHoveredDetId}
@@ -181,7 +229,9 @@ export default function Result() {
           )}
 
           <p className="text-[11px] text-slate-400 text-center font-mono">
-            Bounding boxes scaled to original image dimensions. Defect = Red, Particle = Blue.
+            {activeImageIdx === 0
+              ? 'Primary specimen overlay with calibrated defect bounding boxes.'
+              : `Perspective angle #${activeImageIdx + 1}. Switch back to Angle #1 to inspect primary bounding boxes.`}
           </p>
         </div>
 
