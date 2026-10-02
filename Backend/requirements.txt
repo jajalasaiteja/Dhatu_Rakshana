@@ -1,0 +1,24 @@
+# Exact Core Backend & ML Stack for Dhatu Rakshana
+fastapi==0.115.6
+uvicorn==0.34.0
+pydantic==2.10.5
+sqlmodel==0.0.22
+psycopg2-binary==2.9.10
+alembic==1.14.1
+python-dotenv==1.0.1
+PyYAML==6.0.2
+open3d==0.18.0
+
+numpy==1.26.4
+Pillow==10.4.0
+scikit-learn==1.5.2
+torch==2.5.1
+torchvision==0.20.1
+ultralytics==8.3.50
+reportlab==4.2.5
+opencv-python-headless==4.10.0.84
+
+# Authentication & Transport
+pyjwt>=2.10.1
+bcrypt>=4.2.0
+python-multipart>=0.0.20

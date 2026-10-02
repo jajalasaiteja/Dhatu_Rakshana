@@ -1,0 +1,53 @@
+default_model: "marine_hybrid_v1"
+
+models:
+  marine_yolo_v8:
+    name: "marine_yolo_v8"
+    version: "1.0.0"
+    framework: "ultralytics"
+    model_type: "yolov8"
+    weights_path: "models/detection/marine_coating_yolov8.pt"
+    confidence_threshold: 0.45
+    iou_threshold: 0.50
+    input_size: [640, 640]
+    device: "auto"
+    classes:
+      0: "corrosion"
+      1: "blister"
+      2: "scratch"
+      3: "pinhole"
+      4: "inclusion"
+      5: "contamination"
+      6: "dust_particle"
+
+  marine_classical_cv:
+    name: "marine_classical_cv"
+    version: "1.2.0"
+    framework: "opencv"
+    model_type: "classical_cv"
+    weights_path: null
+    confidence_threshold: 0.50
+    device: "cpu"
+    classes:
+      0: "corrosion"
+      1: "blister"
+      2: "scratch"
+      3: "pinhole"
+      4: "inclusion"
+      5: "contamination"
+      6: "dust_particle"
+
+  marine_hybrid_v1:
+    name: "marine_hybrid_v1"
+    version: "1.5.0"
+    framework: "hybrid"
+    model_type: "yolo_plus_opencv_refinement"
+    weights_path: "models/detection/marine_coating_yolov8.pt"
+    fallback_to_cv: true
+    confidence_threshold: 0.45
+    device: "auto"
+
+inference:
+  batch_size: 1
+  max_detections_per_image: 30
+  enable_morphological_refinement: true

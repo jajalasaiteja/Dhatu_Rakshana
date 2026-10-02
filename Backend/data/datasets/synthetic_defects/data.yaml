@@ -1,0 +1,16 @@
+# YOLOv8 Dataset Configuration for Dhatu Rakshana Synthetic Defects
+path: /workspace/Project Dhatu Rakshana/Backend/data/datasets/synthetic_defects
+train: images
+val: images
+
+names:
+  0: defect
+  1: particle
+
+subtypes:
+  - pinhole
+  - scratch
+  - inclusion
+  - contamination
+  - dust_particle
+  - no_defect
