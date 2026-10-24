@@ -33,6 +33,8 @@ from app.models import (
     ProcessingJob,
     ProcessingArtifact,
     InspectionReport,
+    Visitor,
+    VisitorAccessLog,
 )
 from app.db.session import engine
 

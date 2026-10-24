@@ -1,13 +1,13 @@
 """Security utilities: password hashing, verification, and signed JWT token operations."""
 
-import datetime
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 import hashlib
 import bcrypt
 import jwt
 
 from app.core.config import settings
+from app.core.timezone import get_ist_now
 
 def hash_password(password: str) -> str:
     """Hash password using bcrypt with salt."""
@@ -36,7 +36,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     """Generate signed JWT access token."""
     to_encode = data.copy()
-    now = datetime.now(timezone.utc)
+    now = get_ist_now()
     if expires_delta:
         expire = now + expires_delta
     else:
@@ -46,6 +46,29 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
         "exp": expire,
         "iat": now,
         "iss": "dhatu-rakshana-auth"
+    })
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+
+def create_visitor_token(visitor_username: str, session_id: str, expires_delta: Optional[timedelta] = None) -> str:
+    """Generate signed JWT access token specifically for visitor read-only access."""
+    to_encode = {
+        "sub": f"visitor:{visitor_username}",
+        "visitor_username": visitor_username,
+        "session_id": session_id,
+        "role": "visitor",
+        "type": "visitor",
+        "scope": "visitor_records"
+    }
+    now = get_ist_now()
+    if expires_delta:
+        expire = now + expires_delta
+    else:
+        expire = now + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    to_encode.update({
+        "exp": expire,
+        "iat": now,
+        "iss": "dhatu-rakshana-visitor-auth"
     })
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 

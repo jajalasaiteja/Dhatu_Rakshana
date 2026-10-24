@@ -5,7 +5,7 @@ import os
 import argparse
 import getpass
 from pathlib import Path
-from datetime import datetime, timezone
+from app.core.timezone import get_ist_now
 
 # Ensure backend root is on sys.path
 backend_root = Path(__file__).resolve().parent.parent
@@ -49,7 +49,7 @@ def create_admin(
             user.role = "admin"
             user.is_active = True
             user.full_name = full_name or user.full_name
-            user.updated_at = datetime.now(timezone.utc)
+            user.updated_at = get_ist_now()
             session.add(user)
             session.commit()
             session.refresh(user)
@@ -63,7 +63,7 @@ def create_admin(
                 full_name=full_name or "Platform Administrator",
                 role="admin",
                 is_active=True,
-                created_at=datetime.now(timezone.utc)
+                created_at=get_ist_now()
             )
             session.add(new_admin)
             session.commit()

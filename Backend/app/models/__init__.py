@@ -12,6 +12,9 @@ from app.models.job import ProcessingJob
 from app.models.artifact import ProcessingArtifact
 from app.models.report import InspectionReport
 from app.models.topology import TopologyFile
+from app.models.visitor import Visitor
+from app.models.visitor_access_log import VisitorAccessLog
+from app.models.evaluation import InspectionMeasurement, EvaluationHistory
 
 __all__ = [
     "User",
@@ -25,5 +28,9 @@ __all__ = [
     "ProcessingJob",
     "ProcessingArtifact",
     "InspectionReport",
-    "TopologyFile"
+    "TopologyFile",
+    "Visitor",
+    "VisitorAccessLog",
+    "InspectionMeasurement",
+    "EvaluationHistory"
 ]

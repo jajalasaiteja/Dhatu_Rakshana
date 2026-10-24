@@ -7,15 +7,22 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse
 from sqlmodel import Session, select
-from datetime import datetime, timezone
 import logging
+
+from app.core.timezone import get_ist_now
 
 from app.db.session import get_session
 from app.models.user import User
 from app.models.inspection import Inspection
 from app.models.topology import TopologyFile
 from app.schemas.topology import TopologyRead, TopologyUploadResponse, TopologyDetail
-from app.api.deps import get_current_user, require_inspector, require_viewer, require_admin
+from app.api.deps import (
+    get_current_user,
+    require_inspector,
+    require_viewer,
+    require_admin,
+    get_current_viewer_or_visitor
+)
 from app.storage.topology_storage import topology_storage
 
 logger = logging.getLogger("dhatu_rakshana.api.topology")
@@ -101,7 +108,7 @@ async def upload_inspection_topology(
             select(TopologyFile).where(TopologyFile.inspection_id == inspection_id)
         ).first()
 
-        now = datetime.now(timezone.utc)
+        now = get_ist_now()
         if existing_topology:
             existing_topology.original_filename = storage_meta["original_filename"]
             existing_topology.stored_filename = storage_meta["stored_filename"]
@@ -162,7 +169,7 @@ async def upload_inspection_topology(
 )
 def get_inspection_topology_metadata(
     inspection_id: int,
-    current_user: User = Depends(require_viewer),
+    current_user = Depends(get_current_viewer_or_visitor),
     session: Session = Depends(get_session)
 ):
     """
@@ -206,7 +213,7 @@ def get_inspection_topology_metadata(
 @router.get("/inspections/{inspection_id}/topology/file")
 def retrieve_inspection_topology_file(
     inspection_id: int,
-    current_user: User = Depends(require_viewer),
+    current_user = Depends(get_current_viewer_or_visitor),
     session: Session = Depends(get_session)
 ):
     """
@@ -239,7 +246,8 @@ def retrieve_inspection_topology_file(
             detail="Topology PLY file missing from secure storage."
         )
 
-    logger.info(f"Topology retrieved for inspection #{inspection_id} by user {current_user.email}")
+    actor_label = getattr(current_user, 'email', None) or getattr(current_user, 'username', 'authenticated_user')
+    logger.info(f"Topology retrieved for inspection #{inspection_id} by {actor_label}")
 
     return FileResponse(
         path=str(file_path),

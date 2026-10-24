@@ -1,9 +1,10 @@
 """ProcessingJob entity tracking asynchronous inspection pipeline progress."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 import uuid
 from typing import Optional, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import ISTDateTime, get_ist_now, format_ist_iso
 
 class ProcessingJob(SQLModel, table=True):
     __tablename__ = "processing_jobs"
@@ -19,8 +20,8 @@ class ProcessingJob(SQLModel, table=True):
     error_code: Optional[str] = Field(default=None, max_length=100)
     error_message: Optional[str] = Field(default=None)
 
-    started_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    completed_at: Optional[datetime] = Field(default=None)
+    started_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
+    completed_at: Optional[datetime] = Field(default=None, sa_type=ISTDateTime)
 
     inspection: Optional["Inspection"] = Relationship(back_populates="jobs")
 
@@ -34,6 +35,6 @@ class ProcessingJob(SQLModel, table=True):
             "current_stage": self.current_stage,
             "error_code": self.error_code,
             "error_message": self.error_message,
-            "started_at": self.started_at.isoformat() if self.started_at else None,
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None
+            "started_at": format_ist_iso(self.started_at),
+            "completed_at": format_ist_iso(self.completed_at)
         }

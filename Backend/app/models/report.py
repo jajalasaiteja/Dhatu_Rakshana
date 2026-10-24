@@ -1,8 +1,9 @@
 """InspectionReport entity representing generated PDF inspection audit reports."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import ISTDateTime, get_ist_now, format_ist_iso
 
 class InspectionReport(SQLModel, table=True):
     __tablename__ = "inspection_reports"
@@ -14,7 +15,7 @@ class InspectionReport(SQLModel, table=True):
     storage_key: str = Field(max_length=500, index=True)
     checksum_sha256: Optional[str] = Field(default=None, max_length=64)
     file_size_bytes: int = Field(default=0)
-    generated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    generated_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
 
     inspection: Optional["Inspection"] = Relationship(back_populates="reports")
 
@@ -26,5 +27,5 @@ class InspectionReport(SQLModel, table=True):
             "storage_key": self.storage_key,
             "file_size_bytes": self.file_size_bytes,
             "checksum_sha256": self.checksum_sha256,
-            "generated_at": self.generated_at.isoformat() if self.generated_at else None
+            "generated_at": format_ist_iso(self.generated_at)
         }

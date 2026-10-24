@@ -1,8 +1,9 @@
 """ProcessingArtifact entity tracking generated meshes, annotated images, reports, and masks."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import ISTDateTime, get_ist_now, format_ist_iso
 
 class ProcessingArtifact(SQLModel, table=True):
     __tablename__ = "processing_artifacts"
@@ -15,7 +16,7 @@ class ProcessingArtifact(SQLModel, table=True):
     mime_type: str = Field(default="application/octet-stream", max_length=100)
     file_size_bytes: int = Field(default=0)
     checksum_sha256: Optional[str] = Field(default=None, max_length=64)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
 
     inspection: Optional["Inspection"] = Relationship(back_populates="artifacts")
 
@@ -28,5 +29,5 @@ class ProcessingArtifact(SQLModel, table=True):
             "mime_type": self.mime_type,
             "file_size_bytes": self.file_size_bytes,
             "checksum_sha256": self.checksum_sha256,
-            "created_at": self.created_at.isoformat() if self.created_at else None
+            "created_at": format_ist_iso(self.created_at)
         }

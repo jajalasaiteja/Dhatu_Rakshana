@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 export default function BoundingBoxCanvas({
   imageUrl,
@@ -90,11 +90,11 @@ export default function BoundingBoxCanvas({
   }, [imageLoaded, detections, selectedId, showLabels]);
 
   return (
-    <div ref={containerRef} className="w-full relative rounded-lg overflow-hidden border border-trout bg-blackDiamond shadow-technical">
+    <div ref={containerRef} className="w-full relative rounded-lg overflow-hidden border border-white/10 bg-surface-darker shadow-technical">
       {!imageLoaded && (
-        <div className="h-96 flex flex-col items-center justify-center text-murky gap-2.5 bg-darkGraphite">
-          <div className="w-7 h-7 border-2 border-antiqueBrown border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs font-mono text-murky-muted">Loading inspection image...</span>
+        <div className="h-96 flex flex-col items-center justify-center text-greige gap-2.5 bg-surface-dark">
+          <div className="w-7 h-7 border-2 border-grayGreen border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs font-mono text-greige">Loading inspection image...</span>
         </div>
       )}
       <canvas

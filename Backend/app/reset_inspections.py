@@ -32,11 +32,13 @@ def reset_inspections() -> None:
     tables_to_clear = [
         "graded_defect_records",
         "defect_measurements",
+        "inspection_measurements",
+        "evaluation_histories",
         "detections",
-        "topology_files",
         "inspection_reports",
         "processing_artifacts",
         "processing_jobs",
+        "topology_files",
         "inspection_images",
         "inspections"
     ]
@@ -54,6 +56,34 @@ def reset_inspections() -> None:
 
     conn.commit()
     print(f"[*] Total records removed: {total_deleted}")
+
+    # Reset SQLite sequence counter for inspection tables safely (preserving users, visitors, zones, etc.)
+    try:
+        cur.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'")
+        if cur.fetchone():
+            cur.execute("""
+                DELETE FROM sqlite_sequence 
+                WHERE name IN (
+                    'inspections', 'inspection_images', 'processing_jobs', 
+                    'processing_artifacts', 'inspection_reports', 'topology_files', 
+                    'detections', 'defect_measurements', 'graded_defect_records', 
+                    'inspection_measurements', 'evaluation_histories'
+                )
+            """)
+            conn.commit()
+            print("  - Reset sqlite_sequence for inspection tables (preserved user and system sequences)")
+    except sqlite3.OperationalError as e:
+        print(f"  - sqlite_sequence reset skipped ({e})")
+
+    print("[*] Verifying SQLite foreign keys and integrity...")
+    fk_violations = cur.execute("PRAGMA foreign_key_check;").fetchall()
+    if fk_violations:
+        print(f"[!] Warning: Foreign key check failed with violations: {fk_violations}")
+    else:
+        print("  - PRAGMA foreign_key_check: OK (0 violations)")
+
+    integrity = cur.execute("PRAGMA integrity_check;").fetchall()
+    print(f"  - PRAGMA integrity_check: {integrity[0][0] if integrity else 'unknown'}")
 
     print("[*] Running SQLite VACUUM optimization...")
     cur.execute("VACUUM;")
@@ -98,8 +128,9 @@ def reset_inspections() -> None:
                             item.unlink()
                             cleaned_files += 1
                         elif item.is_dir():
+                            files_in_dir = sum(1 for p in item.rglob("*") if p.is_file())
                             shutil.rmtree(item)
-                            cleaned_files += 1
+                            cleaned_files += files_in_dir
                     except Exception as ex:
                         print(f"  [!] Failed to delete {item}: {ex}")
             else:

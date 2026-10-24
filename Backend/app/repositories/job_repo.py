@@ -1,12 +1,12 @@
 """ProcessingJob and Artifact repositories."""
 
 from typing import Optional, List
-from datetime import datetime, timezone
 from sqlmodel import Session, select
 
 from app.models.job import ProcessingJob
 from app.models.artifact import ProcessingArtifact
 from app.repositories.base import BaseRepository
+from app.core.timezone import get_ist_now
 
 class JobRepository(BaseRepository[ProcessingJob]):
     def __init__(self, session: Session):
@@ -35,7 +35,7 @@ class JobRepository(BaseRepository[ProcessingJob]):
         if status:
             job.status = status
             if status in ("COMPLETED", "FAILED", "CANCELLED"):
-                job.completed_at = datetime.now(timezone.utc)
+                job.completed_at = get_ist_now()
         self.session.add(job)
         self.session.commit()
         self.session.refresh(job)

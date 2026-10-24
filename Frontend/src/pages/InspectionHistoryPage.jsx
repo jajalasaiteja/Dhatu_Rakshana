@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { History, ArrowRight, Calendar, Box } from 'lucide-react';
 import api, { getMediaUrl } from '../api';
 import StatusBadge from '../components/StatusBadge';
+import { formatISTDate } from '../utils/dateTime';
+import { filterGenuineInspections } from '../utils/inspectionFilters';
 
 export default function InspectionHistoryPage() {
   const [inspections, setInspections] = useState([]);
@@ -17,12 +19,14 @@ export default function InspectionHistoryPage() {
       api.get('/zones')
     ])
       .then(([inspRes, zonesRes]) => {
-        setInspections(inspRes.data || []);
+        const valid = filterGenuineInspections(inspRes.data || []);
+        setInspections(valid);
         setZones(zonesRes.data || []);
         setLoading(false);
       })
       .catch((err) => {
         console.error('Failed to load history:', err);
+        setInspections([]);
         setLoading(false);
       });
   }, []);
@@ -131,10 +135,12 @@ export default function InspectionHistoryPage() {
                   {/* Body Details */}
                   <div className="p-5 space-y-2">
                     <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
-                      <span className="font-bold text-slate-700">ID #{insp.id}</span>
+                      <span className="font-bold text-slate-700">
+                        {insp.display_label || `Record ${insp.id}`}
+                      </span>
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {new Date(insp.timestamp).toLocaleDateString()}
+                        {formatISTDate(insp.timestamp)}
                       </span>
                     </div>
 

@@ -7,6 +7,8 @@ import ErrorPanel from '../components/ErrorPanel';
 import StatusBadge from '../components/StatusBadge';
 import Dropzone from '../components/Dropzone';
 import Interactive3DTopography from '../components/Interactive3DTopography';
+import { formatISTDateTime } from '../utils/dateTime';
+import { filterGenuineInspections } from '../utils/inspectionFilters';
 import {
   Shield,
   FileCheck2,
@@ -73,15 +75,31 @@ export default function Upload() {
 
   // 2. Fetch history feed when Tab 4 is opened
   useEffect(() => {
-    if (activeTab === 'history') {
-      setHistoryLoading(true);
-      apiClient('/inspections')
-        .then((data) => {
-          setHistoryList(Array.isArray(data) ? data : []);
-          setHistoryLoading(false);
-        })
-        .catch(() => setHistoryLoading(false));
-    }
+    const loadHistory = () => {
+      if (activeTab === 'history') {
+        setHistoryLoading(true);
+        apiClient('/inspections')
+          .then((data) => {
+            const valid = filterGenuineInspections(Array.isArray(data) ? data : []);
+            setHistoryList(valid);
+            setHistoryLoading(false);
+          })
+          .catch(() => {
+            setHistoryList([]);
+            setHistoryLoading(false);
+          });
+      }
+    };
+
+    loadHistory();
+
+    const handleSync = () => {
+      loadHistory();
+    };
+    window.addEventListener('inspection:deleted', handleSync);
+    return () => {
+      window.removeEventListener('inspection:deleted', handleSync);
+    };
   }, [activeTab]);
 
   const handleFileSelect = (file) => {
@@ -608,7 +626,7 @@ export default function Upload() {
                       <th className="py-2.5 px-3 font-semibold">Platform Zone</th>
                       <th className="py-2.5 px-3 font-semibold">Verdict</th>
                       <th className="py-2.5 px-3 font-semibold">Defect Count</th>
-                      <th className="py-2.5 px-3 font-semibold">Timestamp</th>
+                      <th className="py-2.5 px-3 font-semibold">Timestamp (IST)</th>
                       <th className="py-2.5 px-3 font-semibold text-right">Action</th>
                     </tr>
                   </thead>
@@ -616,7 +634,7 @@ export default function Upload() {
                     {historyList.slice(0, 10).map((insp) => (
                       <tr key={insp.id} className="hover:bg-surface-dark/60 nav-transition">
                         <td className="py-3 px-3 font-bold text-fullWhite">
-                          #{insp.id}
+                          {insp.display_label || `Record ${insp.id}`}
                         </td>
                         <td className="py-3 px-3 text-fullWhite">
                           {insp.zone_name || `Zone ${insp.zone_id}`}
@@ -628,7 +646,7 @@ export default function Upload() {
                           {insp.defect_count ?? 0}
                         </td>
                         <td className="py-3 px-3 text-[11px] text-greige">
-                          {new Date(insp.timestamp).toLocaleString()}
+                          {formatISTDateTime(insp.timestamp)}
                         </td>
                         <td className="py-3 px-3 text-right">
                           <button

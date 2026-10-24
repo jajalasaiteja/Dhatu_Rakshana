@@ -2,11 +2,13 @@
 
 from pathlib import Path
 from typing import List, Optional, Dict, Any, Tuple
-from datetime import datetime, timezone
+from datetime import datetime
 import uuid
 import logging
-from sqlmodel import Session, select
+from sqlmodel import Session, select, func, text
 from fastapi import UploadFile, BackgroundTasks
+
+from app.core.timezone import get_ist_now, format_ist_iso
 
 from app.models.zone import Zone
 from app.models.inspection import Inspection
@@ -14,6 +16,8 @@ from app.models.inspection_image import InspectionImage
 from app.models.job import ProcessingJob
 from app.models.artifact import ProcessingArtifact
 from app.models.report import InspectionReport
+from app.models.evaluation import InspectionMeasurement
+from app.standards.iso_evaluator import iso_evaluation_engine, EVALUATION_ENGINE_VERSION
 from app.storage.local import storage
 from app.ml.preprocess import validate_image_bytes, load_and_preprocess_image
 from app.workers.inspection_task import execute_inspection_pipeline
@@ -101,14 +105,26 @@ class InspectionService:
         combined_keys = ",".join([info["storage_key"] for info in saved_images_info])
 
         # 3. Create Inspection record
+        # Ensure sequential indexing starts cleanly from 1 when empty, or max_id + 1
+        max_id = self.session.exec(select(func.max(Inspection.id))).one()
+        next_id = 1 if max_id is None else (max_id + 1)
+
+        if next_id == 1:
+            try:
+                self.session.execute(text("DELETE FROM sqlite_sequence WHERE name = 'inspections'"))
+                self.session.commit()
+            except Exception:
+                pass
+
         inspection = Inspection(
+            id=next_id,
             zone_id=zone_id,
             inspector_id=inspector_id,
             image_path=combined_keys,
             mesh_path=None,
             status="PENDING",
             overall_verdict="PENDING",
-            timestamp=datetime.now(timezone.utc)
+            timestamp=get_ist_now()
         )
         self.session.add(inspection)
         self.session.commit()
@@ -207,6 +223,7 @@ class InspectionService:
 
         detections_data = []
         graded_results = []
+        dets_for_eval = []
 
         for d in inspection.detections:
             det_dict = d.to_dict()
@@ -219,9 +236,48 @@ class InspectionService:
             det_dict["graded_records"] = records_data
             detections_data.append(det_dict)
 
+            m_dict = d.measurement.to_dict() if d.measurement else {}
+            dets_for_eval.append({
+                "class": d.class_name,
+                "subtype": d.subtype,
+                "confidence": d.confidence,
+                "area_pct": d.area_pct,
+                "measurement": m_dict,
+                "bbox": d.bbox
+            })
+
+        # Structured measurements from DB or evaluation engine
+        stored_measurements = self.session.exec(
+            select(InspectionMeasurement).where(InspectionMeasurement.inspection_id == inspection.id)
+        ).all()
+
+        iso_res = iso_evaluation_engine.evaluate_inspection(
+            inspection_id=inspection.id,
+            image_records=inspection.images,
+            detections=dets_for_eval,
+            topology_record=inspection.topology,
+            evaluation_timestamp=inspection.recalculated_at or inspection.timestamp
+        )
+
+        if stored_measurements:
+            measurements_data = [m.to_dict() for m in stored_measurements]
+        else:
+            measurements_data = []
+            for m in iso_res["measurements"]:
+                m_copy = dict(m)
+                if isinstance(m_copy.get("evaluation_timestamp"), datetime):
+                    m_copy["evaluation_timestamp"] = format_ist_iso(m_copy["evaluation_timestamp"])
+                measurements_data.append(m_copy)
+
+        evaluation_summary = iso_res["evaluation_summary"]
+        display_id = inspection.id
+        display_label = f"Record {inspection.id}"
+
         return {
             "id": inspection.id,
-            "timestamp": inspection.timestamp.isoformat() if inspection.timestamp else None,
+            "display_id": display_id,
+            "display_label": display_label,
+            "timestamp": format_ist_iso(inspection.timestamp),
             "zone_id": inspection.zone_id,
             "zone": inspection.zone.to_dict() if inspection.zone else {"name": f"Zone {inspection.zone_id}"},
             "overall_verdict": inspection.overall_verdict,
@@ -233,18 +289,24 @@ class InspectionService:
             "topology_available": topology_available,
             "topology_info": topology_info,
             "detections": detections_data,
-            "graded_results": graded_results
+            "graded_results": graded_results,
+            "measurements": measurements_data,
+            "evaluation_summary": evaluation_summary,
+            "evaluation_engine_version": inspection.evaluation_engine_version or EVALUATION_ENGINE_VERSION,
+            "recalculated_at": format_ist_iso(inspection.recalculated_at) if inspection.recalculated_at else None
         }
 
     def list_inspections(self, zone_id: Optional[int] = None, skip: int = 0, limit: int = 100) -> List[Dict[str, Any]]:
         """Returns ordered list of all inspections."""
-        query = select(Inspection).order_by(Inspection.timestamp.desc())
+        query = select(Inspection).order_by(Inspection.id.asc())
         if zone_id is not None:
             query = query.where(Inspection.zone_id == zone_id)
 
         inspections = self.session.exec(query.offset(skip).limit(limit)).all()
         results = []
         for insp in inspections:
+            display_id = insp.id
+            display_label = f"Record {insp.id}"
             zone_name = insp.zone.name if insp.zone else f"Zone {insp.zone_id}"
             keys = [k.strip() for k in insp.image_path.split(",") if k.strip()] if insp.image_path else []
             first_key = keys[0] if keys else (insp.image_path if insp.image_path else None)
@@ -266,7 +328,9 @@ class InspectionService:
 
             results.append({
                 "id": insp.id,
-                "timestamp": insp.timestamp.isoformat() if insp.timestamp else None,
+                "display_id": display_id,
+                "display_label": display_label,
+                "timestamp": format_ist_iso(insp.timestamp),
                 "zone_id": insp.zone_id,
                 "zone_name": zone_name,
                 "overall_verdict": insp.overall_verdict,
@@ -277,7 +341,9 @@ class InspectionService:
                 "topology_available": topo_available,
                 "topology_info": topo_info,
                 "image_count": len(keys),
-                "defect_count": len(insp.detections) if insp.detections else 0
+                "defect_count": len(insp.detections) if insp.detections else 0,
+                "evaluation_engine_version": insp.evaluation_engine_version or EVALUATION_ENGINE_VERSION,
+                "recalculated_at": format_ist_iso(insp.recalculated_at) if insp.recalculated_at else None
             })
         return results
 

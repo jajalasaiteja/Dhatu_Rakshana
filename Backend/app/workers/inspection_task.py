@@ -2,10 +2,11 @@
 
 import tempfile
 from pathlib import Path
-from datetime import datetime, timezone
 import logging
 from sqlmodel import Session, select
 from PIL import Image
+
+from app.core.timezone import get_ist_now, format_ist_iso
 
 from app.db.session import engine
 from app.models.inspection import Inspection
@@ -13,6 +14,7 @@ from app.models.inspection_image import InspectionImage
 from app.models.detection import Detection
 from app.models.measurement import DefectMeasurement
 from app.models.grading import GradedDefectRecord
+from app.models.evaluation import InspectionMeasurement
 from app.models.job import ProcessingJob
 from app.models.artifact import ProcessingArtifact
 from app.models.report import InspectionReport
@@ -24,6 +26,7 @@ from app.ml.preprocess import load_and_preprocess_image, PREPROCESSING_VERSION
 from app.vision.measurement.service import compute_defect_measurements
 from app.vision.reconstruction.service import reconstruct_surface_mesh
 from app.standards.engine import standards_engine
+from app.standards.iso_evaluator import iso_evaluation_engine, EVALUATION_ENGINE_VERSION
 from app.reports.generator import generate_pdf_report
 from app.core.logging import log_stage_timing
 
@@ -128,7 +131,7 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                             existing_topo = session.exec(
                                 select(TopologyFile).where(TopologyFile.inspection_id == inspection_id)
                             ).first()
-                            now = datetime.now(timezone.utc)
+                            now = get_ist_now()
                             if existing_topo:
                                 existing_topo.original_filename = topo_meta["original_filename"]
                                 existing_topo.stored_filename = topo_meta["stored_filename"]
@@ -177,10 +180,12 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
             # Stage 6: GRADING (AMPP / NACE / SSPC / ISO Standards Evaluation)
             # -------------------------------------------------------------
             graded_results = []
+            detections_for_eval = []
             with log_stage_timing("GRADING", inspection_id):
                 update_job("GRADING", 85)
                 for item in measured_items:
                     cand = item["candidate"]
+                    meas = item["measurements"]
                     grade_res = standards_engine.grade_detection(
                         subtype=cand.subtype,
                         area_pct=cand.area_pct,
@@ -189,8 +194,24 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                     cand.severity = grade_res["severity"]
                     graded_results.append(grade_res)
                     item["grade"] = grade_res
+                    detections_for_eval.append({
+                        "class": cand.class_name,
+                        "subtype": cand.subtype,
+                        "confidence": cand.confidence,
+                        "area_pct": cand.area_pct,
+                        "measurement": meas,
+                        "bbox": cand.bbox
+                    })
 
-                overall_verdict = standards_engine.determine_overall_verdict(graded_results)
+                # Comprehensive ISO Evaluation
+                topo_rec = session.exec(select(TopologyFile).where(TopologyFile.inspection_id == inspection_id)).first()
+                iso_eval = iso_evaluation_engine.evaluate_inspection(
+                    inspection_id=inspection_id,
+                    image_records=images,
+                    detections=detections_for_eval,
+                    topology_record=topo_rec
+                )
+                overall_verdict = iso_eval["overall_verdict"]
 
             # -------------------------------------------------------------
             # Persist Detections, Measurements & Grading to Database
@@ -198,6 +219,7 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
             inspection.mesh_path = f"/api/v1/inspections/{inspection_id}/topology/file" if mesh_artifact_id else None
             inspection.overall_verdict = overall_verdict
             inspection.preprocessing_version = PREPROCESSING_VERSION
+            inspection.evaluation_engine_version = EVALUATION_ENGINE_VERSION
             session.add(inspection)
             session.commit()
 
@@ -254,6 +276,14 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                 det_dict["graded_records"] = [grade_record.to_dict()]
                 created_detections_for_report.append(det_dict)
 
+            # Persist structured ISO inspection measurements
+            persisted_measurements_dicts = []
+            for m_data in iso_eval["measurements"]:
+                m_record = InspectionMeasurement(**m_data)
+                session.add(m_record)
+                persisted_measurements_dicts.append(m_data)
+            session.commit()
+
             # -------------------------------------------------------------
             # Stage 7: REPORTING (Generate PDF Audit Report)
             # -------------------------------------------------------------
@@ -264,11 +294,14 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                     "zone_id": inspection.zone_id,
                     "zone": inspection.zone.to_dict() if inspection.zone else {"name": f"Zone {inspection.zone_id}"},
                     "overall_verdict": inspection.overall_verdict,
-                    "timestamp": inspection.timestamp.isoformat() if inspection.timestamp else datetime.now(timezone.utc).isoformat(),
+                    "timestamp": format_ist_iso(inspection.timestamp) or format_ist_iso(get_ist_now()),
                     "image_url": storage.get_public_url(primary_img_record.storage_key),
                     "mesh_url": storage.get_public_url(mesh_storage_key) if mesh_storage_key else None,
                     "detections": created_detections_for_report,
-                    "graded_results": [g.to_dict() for g in session.exec(select(GradedDefectRecord).join(Detection).where(Detection.inspection_id == inspection.id)).all()]
+                    "graded_results": [g.to_dict() for g in session.exec(select(GradedDefectRecord).join(Detection).where(Detection.inspection_id == inspection.id)).all()],
+                    "measurements": persisted_measurements_dicts,
+                    "evaluation_summary": iso_eval["evaluation_summary"],
+                    "evaluation_engine_version": EVALUATION_ENGINE_VERSION
                 }
 
                 pdf_bytes = generate_pdf_report(report_context)
@@ -307,7 +340,7 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
             job.status = "COMPLETED"
             job.current_stage = "COMPLETED"
             job.progress_pct = 100
-            job.completed_at = datetime.now(timezone.utc)
+            job.completed_at = get_ist_now()
             session.add(job)
             session.commit()
 
@@ -321,6 +354,6 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
             job.status = "FAILED"
             job.error_code = type(exc).__name__
             job.error_message = str(exc)
-            job.completed_at = datetime.now(timezone.utc)
+            job.completed_at = get_ist_now()
             session.add(job)
             session.commit()

@@ -5,6 +5,14 @@ import StatusBadge from '../components/StatusBadge';
 import Spinner from '../components/Spinner';
 import ErrorPanel from '../components/ErrorPanel';
 import {
+  formatISTDateTime,
+  formatISTDate,
+  formatISTTime,
+  compareDatesAsc,
+  compareDatesDesc
+} from '../utils/dateTime';
+import { filterGenuineInspections } from '../utils/inspectionFilters';
+import {
   Shield,
   Search,
   Filter,
@@ -28,17 +36,24 @@ export default function History() {
   const [errorMsg, setErrorMsg] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [verdictFilter, setVerdictFilter] = useState('ALL');
-  const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'defects'
+  const [sortBy, setSortBy] = useState('oldest'); // 'oldest' | 'newest' | 'defects'
   const [viewMode, setViewMode] = useState('table'); // 'table' | 'grid'
+
+  const getRecordLabel = (insp) => {
+    if (insp.display_label) return insp.display_label;
+    return `Record ${insp.id}`;
+  };
 
   const fetchInspections = async () => {
     setLoading(true);
     setErrorMsg('');
     try {
       const data = await apiClient('/inspections');
-      setInspections(Array.isArray(data) ? data : []);
+      const valid = filterGenuineInspections(Array.isArray(data) ? data : []);
+      setInspections(valid);
       setLoading(false);
     } catch (err) {
+      setInspections([]);
       setLoading(false);
       setErrorMsg(err.message || 'UNABLE TO LOAD INSPECTION HISTORY');
     }
@@ -46,12 +61,26 @@ export default function History() {
 
   useEffect(() => {
     fetchInspections();
+
+    const handleSync = () => {
+      fetchInspections();
+    };
+    window.addEventListener('inspection:deleted', handleSync);
+    window.addEventListener('popstate', handleSync);
+    window.addEventListener('focus', handleSync);
+    return () => {
+      window.removeEventListener('inspection:deleted', handleSync);
+      window.removeEventListener('popstate', handleSync);
+      window.removeEventListener('focus', handleSync);
+    };
   }, []);
 
   const filteredAndSorted = inspections
     .filter((insp) => {
       const zoneName = (insp.zone_name || `Zone ${insp.zone_id}`).toLowerCase();
-      const idMatch = String(insp.id).includes(searchTerm.trim());
+      const label = getRecordLabel(insp).toLowerCase();
+      const idMatch = String(insp.id).includes(searchTerm.trim()) ||
+                      label.includes(searchTerm.toLowerCase().trim());
       const matchesSearch = zoneName.includes(searchTerm.toLowerCase().trim()) || idMatch;
       const matchesVerdict =
         verdictFilter === 'ALL' ||
@@ -59,13 +88,13 @@ export default function History() {
       return matchesSearch && matchesVerdict;
     })
     .sort((a, b) => {
-      if (sortBy === 'oldest') {
-        return new Date(a.timestamp) - new Date(b.timestamp);
+      if (sortBy === 'newest') {
+        return compareDatesDesc(a.timestamp, b.timestamp);
       }
       if (sortBy === 'defects') {
         return (b.defect_count ?? 0) - (a.defect_count ?? 0);
       }
-      return new Date(b.timestamp) - new Date(a.timestamp);
+      return compareDatesAsc(a.timestamp, b.timestamp);
     });
 
   // Telemetry metrics
@@ -170,8 +199,8 @@ export default function History() {
               onChange={(e) => setSortBy(e.target.value)}
               className="px-2.5 py-1.5 rounded border border-white/10 text-xs font-mono text-fullWhite bg-surface-dark focus:outline-hidden focus:ring-1 focus:ring-grayGreen cursor-pointer"
             >
+              <option value="oldest">Sequence (Oldest First)</option>
               <option value="newest">Newest Analyses First</option>
-              <option value="oldest">Oldest Analyses First</option>
               <option value="defects">Defect Count (High → Low)</option>
             </select>
           </div>
@@ -242,10 +271,10 @@ export default function History() {
             <Shield className="w-5 h-5 text-matteSage" />
           </div>
           <h2 className="text-sm font-mono font-bold text-fullWhite uppercase tracking-wide">
-            NO COMPLETED ANALYSES
+            NO INSPECTION RECORDS AVAILABLE
           </h2>
           <p className="text-xs text-greige leading-relaxed font-sans">
-            Completed inspection analyses will appear here once processing has finished.
+            No inspection records available. Upload an inspection image to begin a new analysis.
           </p>
           <div className="pt-2">
             <Link
@@ -280,7 +309,7 @@ export default function History() {
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="bg-surface-dark border-b border-white/10 text-greige font-mono uppercase tracking-wider text-[10px]">
-                <th className="py-3 px-3.5 font-semibold">Inspection ID</th>
+                <th className="py-3 px-3.5 font-semibold">Inspection Record</th>
                 <th className="py-3 px-3.5 font-semibold">Asset / Sample</th>
                 <th className="py-3 px-3.5 font-semibold">Date</th>
                 <th className="py-3 px-3.5 font-semibold">Status</th>
@@ -299,20 +328,25 @@ export default function History() {
                 >
                   {/* Inspection ID */}
                   <td className="py-3 px-3.5 font-bold text-fullWhite whitespace-nowrap">
-                    #{insp.id}
+                    {getRecordLabel(insp)}
                   </td>
 
                   {/* Asset / Sample */}
                   <td className="py-3 px-3.5 text-fullWhite">
-                    <div className="font-semibold">{insp.zone_name || `Zone ${insp.zone_id}`}</div>
+                    <div className="font-semibold flex items-center gap-2">
+                      <span>{insp.zone_name || `Zone ${insp.zone_id}`}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-surface-dark border border-matteSage/30 text-[9px] text-matteSage font-mono font-semibold">
+                        {insp.evaluation_engine_version ? `v${insp.evaluation_engine_version}` : 'v2.0.0-iso'}
+                      </span>
+                    </div>
                     <div className="text-[10px] text-greige">
-                      Specimen #{insp.id}
+                      Specimen {getRecordLabel(insp)}
                     </div>
                   </td>
 
                   {/* Date */}
                   <td className="py-3 px-3.5 text-[11px] text-greige whitespace-nowrap">
-                    {new Date(insp.timestamp).toLocaleString()}
+                    {formatISTDateTime(insp.timestamp)}
                   </td>
 
                   {/* Status */}
@@ -391,7 +425,7 @@ export default function History() {
                       <StatusBadge status={insp.overall_verdict} size="sm" />
                     </div>
                     <div className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded bg-surface-darker/90 border border-white/15 text-fullWhite font-mono text-[9px] font-bold">
-                      INSPECTION #{insp.id}
+                      {getRecordLabel(insp).toUpperCase()}
                     </div>
                   </div>
 
@@ -400,9 +434,9 @@ export default function History() {
                     <div className="flex items-center justify-between text-[10px] font-mono text-greige">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        <span>{new Date(insp.timestamp).toLocaleDateString()}</span>
+                        <span>{formatISTDate(insp.timestamp)}</span>
                       </span>
-                      <span>{new Date(insp.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span>{formatISTTime(insp.timestamp)}</span>
                     </div>
 
                     <h3 className="text-xs font-semibold text-fullWhite line-clamp-1 font-sans">

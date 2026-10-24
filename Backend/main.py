@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import List, Optional
 from datetime import datetime
+from app.core.timezone import get_ist_now
 from fastapi import FastAPI, Depends, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
@@ -183,7 +184,7 @@ def update_artifact(
     update_data = artifact_update.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(artifact, field, value)
-    artifact.updated_at = datetime.utcnow()
+    artifact.updated_at = get_ist_now()
     session.add(artifact)
     session.commit()
     session.refresh(artifact)

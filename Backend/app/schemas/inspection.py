@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from app.schemas.zone import ZoneRead
 from app.schemas.detection import DetectionRead
 from app.schemas.grading import GradedRecordRead
+from app.schemas.measurement import InspectionMeasurementRead
 
 class InspectionCreateResponse(BaseModel):
     id: Optional[int] = None
@@ -16,6 +17,8 @@ class InspectionCreateResponse(BaseModel):
 
 class InspectionRead(BaseModel):
     id: int
+    display_id: Optional[int] = None
+    display_label: Optional[str] = None
     timestamp: str
     zone_id: int
     zone_name: str
@@ -28,9 +31,13 @@ class InspectionRead(BaseModel):
     topology_info: Optional[Dict[str, Any]] = None
     image_count: int
     defect_count: int
+    evaluation_engine_version: Optional[str] = "2.0.0-iso-aligned"
+    recalculated_at: Optional[str] = None
 
 class InspectionDetail(BaseModel):
     id: int
+    display_id: Optional[int] = None
+    display_label: Optional[str] = None
     timestamp: str
     zone_id: int
     zone: Optional[Dict[str, Any]] = None
@@ -44,6 +51,10 @@ class InspectionDetail(BaseModel):
     topology_info: Optional[Dict[str, Any]] = None
     detections: List[DetectionRead] = Field(default_factory=list)
     graded_results: List[GradedRecordRead] = Field(default_factory=list)
+    measurements: List[InspectionMeasurementRead] = Field(default_factory=list)
+    evaluation_summary: Optional[Dict[str, Any]] = None
+    evaluation_engine_version: Optional[str] = "2.0.0-iso-aligned"
+    recalculated_at: Optional[str] = None
 
 class InspectionStatusResponse(BaseModel):
     inspection_id: int

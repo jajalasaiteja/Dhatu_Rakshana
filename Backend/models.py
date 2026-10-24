@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import get_ist_now, ISTDateTime
 
 
 # ---------------------------------------------------------------------------
@@ -16,8 +17,8 @@ class Artifact(SQLModel, table=True):
     location: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
     preservation_state: str = Field(default="Under Observation", index=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
-    updated_at: Optional[datetime] = Field(default=None)
+    created_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime, nullable=False)
+    updated_at: Optional[datetime] = Field(default=None, sa_type=ISTDateTime)
 
     # Relationships
     inspections: List["Inspection"] = Relationship(back_populates="artifact")
@@ -35,7 +36,7 @@ class Inspection(SQLModel, table=True):
     point_cloud_path: Optional[str] = Field(default=None)
     findings: Optional[str] = Field(default=None)
     recommendations: Optional[str] = Field(default=None)
-    created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    created_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime, nullable=False)
 
     # Relationships
     artifact: Optional[Artifact] = Relationship(back_populates="inspections")

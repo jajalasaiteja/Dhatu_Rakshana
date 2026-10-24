@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, LogOut, Menu, X, Plus, History as HistoryIcon } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
+import { Shield, LogOut, Menu, X, Plus, History as HistoryIcon, BookOpen, Users } from 'lucide-react';
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -75,6 +76,19 @@ export default function Navbar() {
                 <HistoryIcon className="w-3.5 h-3.5 text-matteSage" />
                 <span>Analysis History</span>
               </Link>
+
+              <Link
+                to="/visitor-logs"
+                title="Review recorded external visitor access audit events."
+                className={`px-3 py-1.5 rounded border nav-transition font-mono text-xs flex items-center gap-1.5 ${
+                  isCurrent('/visitor-logs')
+                    ? 'bg-grayGreen border-matteSage/60 text-fullWhite font-semibold shadow-technical'
+                    : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-panel hover:border-grayGreen/40'
+                }`}
+              >
+                <Users className="w-3.5 h-3.5 text-matteSage" />
+                <span>Visitor Logs</span>
+              </Link>
             </>
           ) : (
             <Link
@@ -90,18 +104,35 @@ export default function Navbar() {
             </Link>
           )}
 
-          {/* Reference Standards Telemetry Indicator */}
-          <div
-            title="Active reference criteria: AMPP, ISO 4628, SSPC-PA 2"
-            className="ml-3 px-2.5 py-1 rounded border border-grayGreen/30 bg-surface-dark text-greige font-mono text-[10px] flex items-center gap-2 cursor-default"
+          {/* Dedicated ISO Rulebase Navigation Link */}
+          <Link
+            to="/standards"
+            title="Technical reference for ISO coating inspection, surface preparation, and defect assessment standards."
+            className={`px-3 py-1.5 rounded border nav-transition font-mono text-xs flex items-center gap-1.5 ${
+              isCurrent('/standards')
+                ? 'bg-grayGreen border-matteSage/60 text-fullWhite font-semibold shadow-technical'
+                : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-panel hover:border-grayGreen/40'
+            }`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-matteSage"></span>
-            <span>AMPP • ISO 4628 • SSPC-PA 2</span>
-          </div>
+            <BookOpen className="w-3.5 h-3.5 text-matteSage" />
+            <span>ISO Rulebase</span>
+          </Link>
+
+          {/* Reference Standards Telemetry Indicator */}
+          {!isAuthenticated && (
+            <div
+              title="Active reference criteria: AMPP, ISO 4628, SSPC-PA 2"
+              className="ml-3 px-2.5 py-1 rounded border border-grayGreen/30 bg-surface-dark text-greige font-mono text-[10px] flex items-center gap-2 cursor-default"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-matteSage"></span>
+              <span>AMPP • ISO 4628 • SSPC-PA 2</span>
+            </div>
+          )}
         </nav>
 
         {/* Right Inspector Profile / Session Controls */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
               <div className="text-right">
@@ -131,13 +162,13 @@ export default function Navbar() {
                 to="/login"
                 className="px-3.5 py-1.5 rounded border border-white/10 bg-surface-dark hover:bg-surface-panel text-fullWhite text-xs font-mono nav-transition"
               >
-                Inspector Sign In
+                Inspector Access
               </Link>
               <Link
-                to="/register"
+                to="/visitor-access"
                 className="px-3.5 py-1.5 rounded border border-grayGreen/80 bg-grayGreen hover:bg-grayGreen-light text-fullWhite text-xs font-mono font-semibold nav-transition shadow-technical"
               >
-                Register
+                Visitor Access
               </Link>
             </div>
           )}
@@ -145,6 +176,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation Trigger */}
         <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -180,6 +212,24 @@ export default function Navbar() {
               >
                 Analysis History
               </Link>
+              <Link
+                to="/visitor-logs"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded text-xs font-mono ${
+                  isCurrent('/visitor-logs') ? 'bg-grayGreen text-fullWhite font-semibold border border-matteSage/40' : 'text-greige hover:bg-surface-dark'
+                }`}
+              >
+                Visitor Logs
+              </Link>
+              <Link
+                to="/standards"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded text-xs font-mono ${
+                  isCurrent('/standards') ? 'bg-grayGreen text-fullWhite font-semibold border border-matteSage/40' : 'text-greige hover:bg-surface-dark'
+                }`}
+              >
+                ISO Rulebase
+              </Link>
               <div className="pt-2 border-t border-white/10 flex items-center justify-between">
                 <span className="text-xs text-greige font-mono">{user?.full_name || 'Inspector'}</span>
                 <button
@@ -197,18 +247,27 @@ export default function Navbar() {
           ) : (
             <>
               <Link
+                to="/standards"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block w-full text-center px-3 py-2 rounded border border-white/10 text-xs font-mono mb-1 ${
+                  isCurrent('/standards') ? 'bg-grayGreen text-fullWhite font-semibold' : 'bg-surface-dark text-fullWhite'
+                }`}
+              >
+                ISO Rulebase
+              </Link>
+              <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block w-full text-center px-3 py-2 rounded border border-white/10 bg-surface-dark text-fullWhite text-xs font-mono"
               >
-                Inspector Sign In
+                Inspector Access
               </Link>
               <Link
-                to="/register"
+                to="/visitor-access"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block w-full text-center px-3 py-2 rounded bg-grayGreen text-fullWhite text-xs font-mono font-semibold"
               >
-                Register Credentials
+                Visitor Access
               </Link>
             </>
           )}

@@ -128,3 +128,705 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   CSS Custom Properties for Dhatu Rakshana
+   Light & Dark Theme Design Tokens
+   ========================================================================== */
+
+:root {
+  --text-primary: #FFFFFF;
+  --text-secondary: #CBC2B8;
+  --text-muted: #8E9196;
+  --accent-sage-text: #95A47B;
+  --accent-straw-text: #D5C188;
+  --accent-tan-text: #B58A58;
+  --accent-green-light-text: #70937A;
+
+  --surface-page: #16171A;
+  --surface-card: #1E2024;
+  --surface-well: #121315;
+  --surface-nav: #18191C;
+  --surface-input: #121315;
+
+  --border-default: rgba(255, 255, 255, 0.10);
+  --border-input: rgba(255, 255, 255, 0.10);
+  --divider-muted: rgba(255, 255, 255, 0.20);
+}
+
+html.light,
+[data-theme="light"] {
+  --text-primary: #18191C;
+  --text-secondary: #474B51;
+  --text-muted: #5D6168;
+  --accent-sage-text: #2D4C36;
+  --accent-straw-text: #6E4712;
+  --accent-tan-text: #6B441B;
+  --accent-green-light-text: #2D4C36;
+
+  --surface-page: #F4F3EE;
+  --surface-card: #FFFFFF;
+  --surface-well: #E8E6E0;
+  --surface-nav: #ECE9E2;
+  --surface-input: #FFFFFF;
+
+  --border-default: rgba(28, 30, 32, 0.15);
+  --border-input: #9B948A;
+  --divider-muted: #8E9298;
+
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+  color-scheme: light;
+}
+
+html.light body,
+[data-theme="light"] body {
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+}
+
+html.light ::selection,
+[data-theme="light"] ::selection {
+  background-color: rgba(92, 121, 100, 0.25);
+  color: #18191C;
+}
+
+/* Light mode scrollbars */
+html.light ::-webkit-scrollbar-track,
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #E8E6E0;
+}
+
+html.light ::-webkit-scrollbar-thumb,
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #9B948A;
+  border-radius: 2px;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover,
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #5C7964;
+}
+
+/* Light mode technical inspection patterns */
+html.light .bg-inspection-grid,
+[data-theme="light"] .bg-inspection-grid {
+  background-image: 
+    linear-gradient(to right, rgba(92, 121, 100, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(92, 121, 100, 0.08) 1px, transparent 1px);
+}
+
+html.light .bg-dot-grid,
+[data-theme="light"] .bg-dot-grid {
+  background-image: radial-gradient(rgba(127, 85, 75, 0.15) 1px, transparent 1px);
+}
+
+html.light .bg-topography-lines,
+[data-theme="light"] .bg-topography-lines {
+  background-image: radial-gradient(circle at 50% 50%, rgba(92, 121, 100, 0.06) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(92, 121, 100, 0.08) 20px);
+}
+
+/* Surface hierarchy for light theme */
+html.light .bg-surface,
+[data-theme="light"] .bg-surface {
+  background-color: #F4F3EE;
+}
+
+html.light .bg-surface-panel,
+[data-theme="light"] .bg-surface-panel {
+  background-color: #FFFFFF;
+}
+
+html.light [class*="bg-surface-panel/90"],
+[data-theme="light"] [class*="bg-surface-panel/90"] {
+  background-color: #FFFFFF;
+}
+
+html.light [class*="bg-surface-panel/80"],
+[data-theme="light"] [class*="bg-surface-panel/80"] {
+  background-color: #F8F7F3;
+}
+
+html.light [class*="bg-surface-panel/60"],
+[data-theme="light"] [class*="bg-surface-panel/60"] {
+  background-color: #FFFFFF;
+}
+
+html.light [class*="bg-surface-panel/40"],
+html.light [class*="bg-surface-panel/30"],
+[data-theme="light"] [class*="bg-surface-panel/40"],
+[data-theme="light"] [class*="bg-surface-panel/30"] {
+  background-color: #F0ECE4;
+}
+
+html.light .bg-surface-subpanel,
+[data-theme="light"] .bg-surface-subpanel {
+  background-color: #ECEAE4;
+}
+
+html.light .bg-surface-dark,
+[data-theme="light"] .bg-surface-dark {
+  background-color: #E8E6E0;
+}
+
+html.light [class*="bg-surface-dark/90"],
+html.light [class*="bg-surface-dark/80"],
+html.light [class*="bg-surface-dark/70"],
+[data-theme="light"] [class*="bg-surface-dark/90"],
+[data-theme="light"] [class*="bg-surface-dark/80"],
+[data-theme="light"] [class*="bg-surface-dark/70"] {
+  background-color: #E8E6E0;
+}
+
+html.light [class*="bg-surface-dark/60"],
+html.light [class*="bg-surface-dark/50"],
+[data-theme="light"] [class*="bg-surface-dark/60"],
+[data-theme="light"] [class*="bg-surface-dark/50"] {
+  background-color: #ECEAE4;
+}
+
+html.light .bg-surface-elevated,
+[data-theme="light"] .bg-surface-elevated {
+  background-color: #FFFFFF;
+}
+
+/* Visibly distinct highlighted/hovered table rows */
+html.light tbody tr.bg-surface-elevated,
+[data-theme="light"] tbody tr.bg-surface-elevated {
+  background-color: #ECEAE3;
+}
+
+/* Navigation bar background & sub-header in light mode */
+html.light header.bg-\[\#18191C\],
+html.light .bg-\[\#18191C\],
+[data-theme="light"] header.bg-\[\#18191C\],
+[data-theme="light"] .bg-\[\#18191C\] {
+  background-color: #ECE9E2;
+}
+
+html.light .bg-\[\#121315\],
+[data-theme="light"] .bg-\[\#121315\] {
+  background-color: #DFDCD4;
+}
+
+html.light .bg-\[\#141517\],
+[data-theme="light"] .bg-\[\#141517\] {
+  background-color: #E2DFD6;
+}
+
+/* Hover surfaces in light mode */
+html.light .hover\:bg-surface-panel:hover,
+[data-theme="light"] .hover\:bg-surface-panel:hover {
+  background-color: #F2EFE9;
+}
+
+html.light .hover\:bg-surface-panel\/40:hover,
+[data-theme="light"] .hover\:bg-surface-panel\/40:hover {
+  background-color: #EDEAE2;
+}
+
+html.light .hover\:bg-surface-panel\/60:hover,
+[data-theme="light"] .hover\:bg-surface-panel\/60:hover {
+  background-color: #EDEAE2;
+}
+
+html.light [class*="hover:bg-surface-panel/"]:hover,
+[data-theme="light"] [class*="hover:bg-surface-panel/"]:hover {
+  background-color: #EDEAE2;
+}
+
+html.light .hover\:bg-surface-dark:hover,
+[data-theme="light"] .hover\:bg-surface-dark:hover {
+  background-color: #DFDCD4;
+}
+
+html.light [class*="hover:bg-surface-dark/"]:hover,
+[data-theme="light"] [class*="hover:bg-surface-dark/"]:hover {
+  background-color: #DFDCD4;
+}
+
+html.light .hover\:bg-surface-elevated:hover,
+[data-theme="light"] .hover\:bg-surface-elevated:hover {
+  background-color: #ECEAE3;
+}
+
+/* ==========================================================================
+   Typography in Light Mode (WCAG 2.2 AA / AAA Compliant Contrast)
+   ========================================================================== */
+
+/* Primary text (contrast > 15:1 against #FFFFFF and #F4F3EE) */
+html.light .text-fullWhite,
+html.light .text-white,
+html.light .text-content-primary,
+html.light h1.text-white,
+html.light h2.text-white,
+html.light h3.text-white,
+html.light h4.text-white,
+html.light span.text-white,
+html.light p.text-white,
+html.light div.text-white,
+[data-theme="light"] .text-fullWhite,
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-content-primary {
+  color: #18191C;
+}
+
+/* Secondary text (contrast > 8.5:1 against #FFFFFF, > 7.5:1 against #F4F3EE) */
+html.light .text-greige,
+html.light .text-content-secondary,
+[data-theme="light"] .text-greige,
+[data-theme="light"] .text-content-secondary {
+  color: #474B51;
+}
+
+/* Muted annotations (contrast > 5.8:1 against #FFFFFF, > 5.2:1 against #F4F3EE) */
+html.light .text-content-muted,
+[data-theme="light"] .text-content-muted {
+  color: #5D6168;
+}
+
+/* High contrast hover states */
+html.light .hover\:text-fullWhite:hover,
+html.light .hover\:text-white:hover,
+[data-theme="light"] .hover\:text-fullWhite:hover,
+[data-theme="light"] .hover\:text-white:hover {
+  color: #000000;
+}
+
+/* Slashed white text adaptations */
+html.light .text-white\/95,
+html.light .text-white\/90,
+html.light .text-white\/80,
+html.light .text-white\/70,
+[data-theme="light"] .text-white\/95,
+[data-theme="light"] .text-white\/90,
+[data-theme="light"] .text-white\/80,
+[data-theme="light"] .text-white\/70 {
+  color: #18191C;
+}
+
+/* Muted dividers (contrast > 3.0:1) */
+html.light .text-white\/20,
+html.light .text-white\/15,
+html.light .text-white\/10,
+html.light .text-white\/30,
+html.light .text-white\/40,
+[data-theme="light"] .text-white\/20,
+[data-theme="light"] .text-white\/15,
+[data-theme="light"] .text-white\/10,
+[data-theme="light"] .text-white\/30,
+[data-theme="light"] .text-white\/40 {
+  color: #8E9298;
+}
+
+/* Slashed greige text adaptations */
+html.light .text-greige\/80,
+html.light .text-greige\/70,
+[data-theme="light"] .text-greige\/80,
+[data-theme="light"] .text-greige\/70 {
+  color: #474B51;
+}
+
+html.light .text-greige\/60,
+html.light .text-greige\/50,
+html.light .text-greige\/40,
+[data-theme="light"] .text-greige\/60,
+[data-theme="light"] .text-greige\/50,
+[data-theme="light"] .text-greige\/40 {
+  color: #5D6168;
+}
+
+/* ==========================================================================
+   Accent Text Adaptations (High-Contrast Theme-Specific Variations)
+   ========================================================================== */
+
+/* Matte Sage text -> Dark Military Sage (#2D4C36, contrast 9.49:1 on #FFFFFF) */
+html.light .text-matteSage,
+html.light a.text-matteSage,
+html.light button.text-matteSage,
+[data-theme="light"] .text-matteSage,
+[data-theme="light"] a.text-matteSage,
+[data-theme="light"] button.text-matteSage {
+  color: #2D4C36;
+}
+
+html.light a.text-matteSage:hover,
+html.light button.text-matteSage:hover,
+[data-theme="light"] a.text-matteSage:hover,
+[data-theme="light"] button.text-matteSage:hover {
+  color: #193222;
+}
+
+/* Straw Beige text -> Dark Technical Amber (#6E4712, contrast 8.01:1 on #FFFFFF) */
+html.light .text-strawBeige,
+html.light .text-strawBeige\/70,
+html.light .text-strawBeige\/80,
+[data-theme="light"] .text-strawBeige,
+[data-theme="light"] .text-strawBeige\/70,
+[data-theme="light"] .text-strawBeige\/80 {
+  color: #6E4712;
+}
+
+/* Rich Tan text -> Dark Technical Tan (#6B441B, contrast 8.33:1 on #FFFFFF) */
+html.light .text-richTan,
+[data-theme="light"] .text-richTan {
+  color: #6B441B;
+}
+
+/* Gray-Green Light text -> Dark Military Green (#2D4C36, contrast 9.49:1 on #FFFFFF) */
+html.light .text-grayGreen-light,
+[data-theme="light"] .text-grayGreen-light {
+  color: #2D4C36;
+}
+
+/* Dull Coffee text -> Deep Technical Brown (#57352D, contrast 9.1:1 on #FFFFFF) */
+html.light .text-dullCoffee,
+[data-theme="light"] .text-dullCoffee {
+  color: #57352D;
+}
+
+/* ==========================================================================
+   Buttons and Action Controls
+   ========================================================================== */
+
+/* Preserve crisp white text on primary grayGreen buttons & chips in both modes */
+html.light .bg-grayGreen,
+html.light .bg-grayGreen-light,
+html.light button.bg-grayGreen,
+html.light a.bg-grayGreen,
+html.light .bg-grayGreen > span,
+html.light .bg-grayGreen > svg,
+html.light .bg-grayGreen-light > span,
+html.light .bg-grayGreen-light > svg,
+html.light .bg-grayGreen svg,
+html.light .bg-grayGreen-light svg,
+html.light .bg-grayGreen .text-matteSage,
+html.light .bg-grayGreen-light .text-matteSage,
+[data-theme="light"] .bg-grayGreen,
+[data-theme="light"] .bg-grayGreen-light,
+[data-theme="light"] button.bg-grayGreen,
+[data-theme="light"] a.bg-grayGreen,
+[data-theme="light"] .bg-grayGreen svg,
+[data-theme="light"] .bg-grayGreen-light svg,
+[data-theme="light"] .bg-grayGreen .text-matteSage,
+[data-theme="light"] .bg-grayGreen-light .text-matteSage {
+  color: #FFFFFF;
+}
+
+/* GrayGreen button hover state in light mode */
+html.light .bg-grayGreen:hover,
+[data-theme="light"] .bg-grayGreen:hover {
+  background-color: #47604F;
+}
+
+/* Secondary & ghost buttons in light mode */
+html.light .bg-surface-dark.text-fullWhite,
+[data-theme="light"] .bg-surface-dark.text-fullWhite {
+  color: #18191C;
+}
+
+/* Focus indicator in light mode */
+html.light :focus-visible,
+[data-theme="light"] :focus-visible {
+  outline-color: #2D4C36;
+}
+
+/* ==========================================================================
+   Borders and Separators in Light Mode (WCAG Non-Text Contrast >= 3:1)
+   ========================================================================== */
+
+html.light .border-white\/5,
+[data-theme="light"] .border-white\/5 {
+  border-color: rgba(28, 30, 32, 0.08);
+}
+
+html.light .border-white\/10,
+[data-theme="light"] .border-white\/10 {
+  border-color: rgba(28, 30, 32, 0.16);
+}
+
+html.light .border-white\/15,
+[data-theme="light"] .border-white\/15 {
+  border-color: rgba(28, 30, 32, 0.20);
+}
+
+html.light .border-white\/20,
+[data-theme="light"] .border-white\/20 {
+  border-color: rgba(28, 30, 32, 0.25);
+}
+
+html.light .border-white\/30,
+[data-theme="light"] .border-white\/30 {
+  border-color: rgba(28, 30, 32, 0.32);
+}
+
+/* ==========================================================================
+   Form Inputs, Controls & Placeholders (WCAG 2.2 AA Contrast)
+   ========================================================================== */
+
+html.light input[type="text"],
+html.light input[type="email"],
+html.light input[type="password"],
+html.light input[type="search"],
+html.light input[type="number"],
+html.light textarea,
+html.light select,
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="email"],
+[data-theme="light"] input[type="password"],
+[data-theme="light"] input[type="search"],
+[data-theme="light"] input[type="number"],
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  background-color: #FFFFFF;
+  color: #18191C;
+  border-color: #9B948A;
+}
+
+html.light select option,
+[data-theme="light"] select option {
+  background-color: #FFFFFF;
+  color: #18191C;
+}
+
+html:not(.light) select option {
+  background-color: #18191C;
+  color: #FFFFFF;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder,
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #5D6168;
+}
+
+html.light input:focus,
+html.light textarea:focus,
+html.light select:focus,
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus,
+[data-theme="light"] select:focus {
+  border-color: #2D4C36;
+  outline: none;
+  box-shadow: 0 0 0 1.5px #2D4C36;
+}
+
+html.light label.text-greige,
+html.light label,
+[data-theme="light"] label.text-greige,
+[data-theme="light"] label {
+  color: #242923;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Status Badges & Tokens in Light Mode (WCAG AAA Contrast)
+   ========================================================================== */
+
+/* PASS: text #144522 on bg #E8F3EA -> Contrast 9.4:1 (AAA) */
+html.light .bg-status-pass,
+html.light .bg-status-pass\/40,
+[data-theme="light"] .bg-status-pass,
+[data-theme="light"] .bg-status-pass\/40 {
+  background-color: #E8F3EA;
+}
+html.light .border-status-passBorder,
+html.light .border-status-passBorder\/80,
+[data-theme="light"] .border-status-passBorder,
+[data-theme="light"] .border-status-passBorder\/80 {
+  border-color: #3E6B48;
+}
+html.light .text-status-passText,
+html.light .text-status-passText svg,
+[data-theme="light"] .text-status-passText,
+[data-theme="light"] .text-status-passText svg {
+  color: #144522;
+}
+
+/* REVIEW: text #6E430D on bg #FDF4E7 -> Contrast 8.2:1 (AAA) */
+html.light .bg-status-review,
+html.light .bg-status-review\/40,
+html.light .bg-status-review\/30,
+[data-theme="light"] .bg-status-review,
+[data-theme="light"] .bg-status-review\/40,
+[data-theme="light"] .bg-status-review\/30 {
+  background-color: #FDF4E7;
+}
+html.light .border-status-reviewBorder,
+[data-theme="light"] .border-status-reviewBorder {
+  border-color: #B58A58;
+}
+html.light .text-status-reviewText,
+html.light .text-status-reviewText svg,
+[data-theme="light"] .text-status-reviewText,
+[data-theme="light"] .text-status-reviewText svg {
+  color: #6E430D;
+}
+
+/* Demonstration Data Badge in Light Mode (WCAG AAA Contrast: #6E430D on #FDF4E7 / #E8E6E0) */
+html.light .demo-data-badge,
+[data-theme="light"] .demo-data-badge {
+  background-color: #FDF4E7;
+  border-color: #B58A58;
+  color: #6E430D;
+}
+
+html.light .demo-data-badge span.bg-amber-600,
+[data-theme="light"] .demo-data-badge span.bg-amber-600 {
+  background-color: #B58A58;
+}
+
+/* FAIL & CRITICAL: text #801827 on bg #FDECEE -> Contrast 9.0:1 (AAA) */
+html.light .bg-status-fail,
+html.light .bg-status-fail\/40,
+html.light .bg-status-fail\/60,
+html.light .bg-status-fail\/70,
+[data-theme="light"] .bg-status-fail,
+[data-theme="light"] .bg-status-fail\/40,
+[data-theme="light"] .bg-status-fail\/60,
+[data-theme="light"] .bg-status-fail\/70 {
+  background-color: #FDECEE;
+}
+html.light .border-status-failBorder,
+html.light .border-status-failBorder\/60,
+html.light .border-status-failBorder\/70,
+html.light .border-status-failBorder\/80,
+[data-theme="light"] .border-status-failBorder,
+[data-theme="light"] .border-status-failBorder\/60,
+[data-theme="light"] .border-status-failBorder\/70,
+[data-theme="light"] .border-status-failBorder\/80 {
+  border-color: #B9485A;
+}
+html.light .text-status-failText,
+html.light .text-status-failText svg,
+[data-theme="light"] .text-status-failText,
+[data-theme="light"] .text-status-failText svg {
+  color: #801827;
+}
+
+/* PENDING / IN PROGRESS: text #57352D on bg #F4F0E8 -> Contrast 9.1:1 (AAA) */
+html.light .border-dullCoffee\/70,
+[data-theme="light"] .border-dullCoffee\/70 {
+  border-color: #8F6E60;
+}
+
+/* ==========================================================================
+   Table & Metadata Refinement in Light Mode
+   ========================================================================== */
+
+html.light thead.bg-\[\#141517\],
+html.light thead.bg-surface-dark,
+html.light thead tr.bg-surface-dark,
+[data-theme="light"] thead.bg-\[\#141517\],
+[data-theme="light"] thead.bg-surface-dark,
+[data-theme="light"] thead tr.bg-surface-dark {
+  background-color: #E8E6E0;
+  color: #18191C;
+}
+
+html.light th,
+[data-theme="light"] th {
+  color: #18191C;
+}
+
+/* ==========================================================================
+   3D Viewport Dedicated Dark Cavity & Dark Overlays Preservation
+   ========================================================================== */
+
+html.light .bg-surface-darker,
+html.light [class*="bg-surface-darker"],
+html.light .bg-\[\#0E0F11\],
+[data-theme="light"] .bg-surface-darker,
+[data-theme="light"] [class*="bg-surface-darker"],
+[data-theme="light"] .bg-\[\#0E0F11\] {
+  background-color: #0E0F11;
+  color: #FFFFFF;
+}
+
+html.light [class*="bg-surface-darker/90"],
+[data-theme="light"] [class*="bg-surface-darker/90"] {
+  background-color: rgba(14, 15, 17, 0.90);
+}
+
+html.light [class*="bg-surface-darker/95"],
+[data-theme="light"] [class*="bg-surface-darker/95"] {
+  background-color: rgba(14, 15, 17, 0.95);
+}
+
+/* Light text and indicators inside dark cavities and dark overlays */
+html.light .bg-surface-darker .text-fullWhite,
+html.light .bg-surface-darker strong.text-fullWhite,
+html.light .bg-surface-darker .text-white,
+html.light [class*="bg-surface-darker"] .text-fullWhite,
+html.light [class*="bg-surface-darker"] strong.text-fullWhite,
+html.light [class*="bg-surface-darker"] .text-white,
+html.light [class*="bg-surface-darker"].text-fullWhite,
+html.light [class*="bg-surface-darker"].text-white,
+html.light [class*="bg-black/"] .text-white,
+html.light [class*="bg-black/"] .text-fullWhite,
+html.light [class*="bg-black/"].text-white,
+html.light .bg-\[\#0E0F11\] .text-fullWhite,
+html.light .bg-\[\#0E0F11\] .text-white,
+[data-theme="light"] .bg-surface-darker .text-fullWhite,
+[data-theme="light"] .bg-surface-darker strong.text-fullWhite,
+[data-theme="light"] .bg-surface-darker .text-white,
+[data-theme="light"] [class*="bg-surface-darker"] .text-fullWhite,
+[data-theme="light"] [class*="bg-surface-darker"] strong.text-fullWhite,
+[data-theme="light"] [class*="bg-surface-darker"] .text-white,
+[data-theme="light"] [class*="bg-surface-darker"].text-fullWhite,
+[data-theme="light"] [class*="bg-surface-darker"].text-white,
+[data-theme="light"] [class*="bg-black/"] .text-white,
+[data-theme="light"] [class*="bg-black/"] .text-fullWhite,
+[data-theme="light"] [class*="bg-black/"].text-white,
+[data-theme="light"] .bg-\[\#0E0F11\] .text-fullWhite,
+[data-theme="light"] .bg-\[\#0E0F11\] .text-white {
+  color: #FFFFFF;
+}
+
+html.light .bg-surface-darker .text-greige,
+html.light [class*="bg-surface-darker"] .text-greige,
+html.light .bg-\[\#0E0F11\] .text-greige,
+[data-theme="light"] .bg-surface-darker .text-greige,
+[data-theme="light"] [class*="bg-surface-darker"] .text-greige,
+[data-theme="light"] .bg-\[\#0E0F11\] .text-greige {
+  color: #CBC2B8;
+}
+
+html.light .bg-surface-darker .text-matteSage,
+html.light [class*="bg-surface-darker"] .text-matteSage,
+html.light .bg-\[\#0E0F11\] .text-matteSage,
+[data-theme="light"] .bg-surface-darker .text-matteSage,
+[data-theme="light"] [class*="bg-surface-darker"] .text-matteSage,
+[data-theme="light"] .bg-\[\#0E0F11\] .text-matteSage {
+  color: #95A47B;
+}
+
+html.light .bg-surface-darker .text-strawBeige,
+html.light [class*="bg-surface-darker"] .text-strawBeige,
+html.light .bg-\[\#0E0F11\] .text-strawBeige,
+[data-theme="light"] .bg-surface-darker .text-strawBeige,
+[data-theme="light"] [class*="bg-surface-darker"] .text-strawBeige,
+[data-theme="light"] .bg-\[\#0E0F11\] .text-strawBeige {
+  color: #D5C188;
+}
+
+/* ==========================================================================
+   Shadow Refinements in Light Mode
+   ========================================================================== */
+
+html.light .shadow-panel,
+[data-theme="light"] .shadow-panel {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+}
+
+html.light .shadow-elevated,
+[data-theme="light"] .shadow-elevated {
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.09);
+}
+
+html.light .shadow-technical,
+[data-theme="light"] .shadow-technical {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+}

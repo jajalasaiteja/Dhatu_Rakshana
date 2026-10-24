@@ -1,9 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import apiClient, { setAuthToken, clearAuthToken } from '../api/client';
+import apiClient, {
+  setAuthToken,
+  clearAuthToken,
+  setVisitorToken,
+  clearVisitorToken
+} from '../api/client';
+import { formatISTDateTime } from '../utils/dateTime';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+  // Certified Inspector Authentication State
   const [user, setUser] = useState(() => {
     try {
       const saved = sessionStorage.getItem('user');
@@ -15,13 +22,33 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => sessionStorage.getItem('access_token'));
   const [loading, setLoading] = useState(true);
 
+  // Dedicated Visitor Authentication State (Logically Separate)
+  const [visitorUser, setVisitorUser] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('visitor_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [visitorToken, setVisitorTokenState] = useState(() => sessionStorage.getItem('visitor_token'));
+
   useEffect(() => {
     const handleUnauthorized = () => {
       setUser(null);
       setToken(null);
     };
+    const handleVisitorUnauthorized = () => {
+      setVisitorUser(null);
+      setVisitorTokenState(null);
+    };
+
     window.addEventListener('auth:unauthorized', handleUnauthorized);
-    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    window.addEventListener('visitor:unauthorized', handleVisitorUnauthorized);
+    return () => {
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+      window.removeEventListener('visitor:unauthorized', handleVisitorUnauthorized);
+    };
   }, []);
 
   useEffect(() => {
@@ -59,6 +86,7 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
+  // Inspector Authentication Methods
   const login = async (identifier, password) => {
     const payload = identifier.includes('@')
       ? { email: identifier, password }
@@ -92,7 +120,40 @@ export function AuthProvider({ children }) {
     setToken(null);
   };
 
+  // Dedicated Visitor Authentication Methods
+  const loginVisitor = async (username) => {
+    const trimmed = (username || '').trim();
+    if (!trimmed) {
+      throw new Error('Visitor username is required.');
+    }
+
+    const data = await apiClient('/visitors/access', {
+      method: 'POST',
+      body: JSON.stringify({ username: trimmed })
+    });
+
+    const vUser = {
+      username: data.username,
+      session_id: data.session_id,
+      role: 'visitor',
+      accessed_at: data.accessed_at || formatISTDateTime(new Date())
+    };
+
+    setVisitorToken(data.access_token, vUser);
+    setVisitorTokenState(data.access_token);
+    setVisitorUser(vUser);
+
+    return data;
+  };
+
+  const logoutVisitor = () => {
+    clearVisitorToken();
+    setVisitorUser(null);
+    setVisitorTokenState(null);
+  };
+
   const value = {
+    // Inspector session
     user,
     token,
     role: user?.role || 'inspector',
@@ -100,7 +161,14 @@ export function AuthProvider({ children }) {
     loading,
     login,
     register,
-    logout
+    logout,
+
+    // Visitor session
+    visitorUser,
+    visitorToken,
+    isVisitorAuthenticated: Boolean(visitorToken),
+    loginVisitor,
+    logoutVisitor
   };
 
   return (

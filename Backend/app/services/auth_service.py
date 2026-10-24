@@ -2,8 +2,9 @@
 
 from typing import Dict, Any, Optional
 from sqlmodel import Session, select, or_
-from datetime import datetime, timezone
 import logging
+
+from app.core.timezone import get_ist_now
 
 from app.models.user import User
 from app.core.security import hash_password, verify_password, create_access_token
@@ -43,7 +44,7 @@ class AuthService:
             full_name=full_name.strip() or "Naval Defense Inspector",
             role=role,
             is_active=True,
-            created_at=datetime.now(timezone.utc)
+            created_at=get_ist_now()
         )
         self.session.add(new_user)
         self.session.commit()

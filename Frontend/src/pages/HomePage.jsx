@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { DEFECT_STANDARDS_REFERENCE } from '../config/zones';
 import Interactive3DTopography from '../components/Interactive3DTopography';
+import ThemeToggle from '../components/ThemeToggle';
 import {
   Shield,
   Box,
@@ -54,13 +54,14 @@ export default function HomePage() {
             <a href="#workflow" className="hover:text-fullWhite nav-transition">
               Analysis Workflow
             </a>
-            <a href="#standards" className="hover:text-fullWhite nav-transition">
-              Standards Reference
-            </a>
+            <Link to="/standards" className="hover:text-fullWhite nav-transition">
+              ISO Rulebase
+            </Link>
           </nav>
 
           {/* Action CTAs */}
           <div className="flex items-center gap-2.5 font-mono text-xs">
+            <ThemeToggle className="mr-0.5" />
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <Link
@@ -78,20 +79,20 @@ export default function HomePage() {
                 </Link>
               </div>
             ) : (
-              <>
+              <div className="flex items-center gap-2">
                 <Link
                   to="/login"
                   className="px-3.5 py-1.5 rounded border border-white/10 bg-surface-dark hover:bg-surface-panel text-fullWhite nav-transition"
                 >
-                  Inspector Sign In
+                  Inspector Access
                 </Link>
                 <Link
-                  to="/register"
-                  className="hidden sm:inline-flex px-3.5 py-1.5 rounded border border-grayGreen/80 bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold nav-transition shadow-technical"
+                  to="/visitor-access"
+                  className="px-3.5 py-1.5 rounded border border-grayGreen/80 bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold nav-transition shadow-technical"
                 >
-                  Register
+                  Visitor Access
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
@@ -138,7 +139,7 @@ export default function HomePage() {
               </div>
 
               {/* Detailed Substantive Introductory Description */}
-              <p className="text-sm sm:text-base text-fullWhite/95 leading-relaxed font-sans">
+              <p className="text-sm sm:text-base text-content-secondary dark:text-fullWhite/95 leading-relaxed font-sans">
                 Dhatu Rakshana is a marine coating inspection and surface analysis platform designed to support the examination of coating condition through inspection imagery, defect identification, surface characterization, three-dimensional topography analysis, and standards-based assessment.
               </p>
 
@@ -155,28 +156,50 @@ export default function HomePage() {
 
               {/* Action Row */}
               <div className="flex flex-wrap items-center gap-3 font-mono text-xs pt-1">
-                <Link
-                  to={isAuthenticated ? "/dashboard" : "/login"}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded border border-grayGreen bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold shadow-technical nav-transition cursor-pointer"
-                >
-                  <span>Start New Inspection</span>
-                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded border border-grayGreen bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold shadow-technical nav-transition cursor-pointer"
+                    >
+                      <span>Start New Inspection</span>
+                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                    </Link>
+
+                    <Link
+                      to="/inspections"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded border border-white/15 bg-surface-panel hover:bg-surface-elevated text-fullWhite nav-transition cursor-pointer"
+                    >
+                      <HistoryIcon className="w-3.5 h-3.5 text-matteSage" />
+                      <span>View Analysis History</span>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded border border-white/15 bg-surface-panel hover:bg-surface-elevated text-fullWhite font-semibold nav-transition cursor-pointer"
+                    >
+                      <Shield className="w-3.5 h-3.5 text-matteSage" />
+                      <span>Inspector Access</span>
+                    </Link>
+
+                    <Link
+                      to="/visitor-access"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded border border-grayGreen bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold shadow-technical nav-transition cursor-pointer"
+                    >
+                      <span>Visitor Access</span>
+                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                    </Link>
+                  </>
+                )}
 
                 <Link
-                  to={isAuthenticated ? "/inspections" : "/login"}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded border border-white/15 bg-surface-panel hover:bg-surface-elevated text-fullWhite nav-transition cursor-pointer"
-                >
-                  <HistoryIcon className="w-3.5 h-3.5 text-matteSage" />
-                  <span>View Analysis History</span>
-                </Link>
-
-                <a
-                  href="#standards"
+                  to="/standards"
                   className="px-5 py-2.5 rounded border border-white/10 bg-surface-dark hover:bg-surface-panel text-greige hover:text-fullWhite nav-transition"
                 >
-                  Review Reference Standards
-                </a>
+                  Explore ISO Rulebase
+                </Link>
               </div>
 
               {/* Technical Inspection Evidence Summary Strip */}
@@ -199,25 +222,11 @@ export default function HomePage() {
             <div className="lg:col-span-5 space-y-4">
               
               {/* Interactive 3D Surface Micro-Topography Viewer Component */}
-              <div className="shadow-technical rounded-lg overflow-hidden border border-white/15 bg-surface-panel">
-                <div className="px-3.5 py-2 border-b border-white/10 bg-surface-dark/90 flex items-center justify-between font-mono text-xs">
-                  <div className="flex items-center gap-2">
-                    <Box className="w-3.5 h-3.5 text-matteSage" />
-                    <span className="font-semibold text-fullWhite text-[11px]">
-                      Interactive Surface Topography Visualization
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-greige">
-                    Left Drag: Rotate • Wheel: Zoom
-                  </span>
-                </div>
-
-                <Interactive3DTopography
-                  imageUrl=""
-                  heightScale={0.35}
-                  title="Specimen Topography Model"
-                />
-              </div>
+              <Interactive3DTopography
+                isSampleModel={true}
+                heightScale={0.35}
+                title="Specimen Topography Model"
+              />
 
               {/* Analytical Modalities Card */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono">
@@ -336,15 +345,19 @@ export default function HomePage() {
                     <FileCheck2 className="w-3.5 h-3.5 text-greige" />
                   </div>
                   <h3 className="text-xs font-semibold text-fullWhite font-sans">
-                    Standards and Assessment References
+                    ISO Rulebase & Assessment References
                   </h3>
                   <p className="text-[11px] text-greige mt-2 font-sans leading-relaxed">
                     Applicable standards and reference criteria are presented alongside the analysis to provide context for inspection findings. Objective threshold criteria from ISO 4628, SSPC-PA 2, and NACE SP0188 inform compliance verdicts.
                   </p>
                 </div>
-                <div className="mt-4 pt-2 border-t border-white/10 text-[10px] text-grayGreen-light font-mono">
-                  Deterministic Compliance Grading
-                </div>
+                <Link
+                  to="/standards"
+                  className="mt-4 pt-2 border-t border-white/10 text-[10px] text-grayGreen-light hover:text-fullWhite font-mono flex items-center justify-between nav-transition"
+                >
+                  <span>Explore ISO Rulebase</span>
+                  <ChevronRight className="w-3 h-3 text-matteSage" />
+                </Link>
               </div>
 
               {/* Capability 5: Inspection History */}
@@ -444,69 +457,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Standards and Assessment References Section */}
-        <section id="standards" className="py-14 max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-3">
-            <div className="max-w-3xl">
-              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-matteSage">
-                STANDARDS AND ASSESSMENT REFERENCES
-              </div>
-              <h2 className="text-xl sm:text-2xl font-mono font-bold text-fullWhite mt-1">
-                Applied Marine Coating Inspection Standards
-              </h2>
-              <p className="text-xs text-greige mt-1 font-medium leading-relaxed font-sans">
-                Review the inspection standards and reference criteria associated with coating condition assessment and defect classification.
-              </p>
-            </div>
-
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-matteSage hover:text-fullWhite nav-transition shrink-0"
-            >
-              <span>Start New Inspection</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          {/* Structured Data Table Making Full Use of Width */}
-          <div className="bg-surface-panel rounded border border-white/10 overflow-hidden shadow-technical">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="bg-surface-dark border-b border-white/10 text-greige font-mono uppercase tracking-wider text-[10px]">
-                    <th className="py-3 px-4 font-semibold whitespace-nowrap">Standard Code</th>
-                    <th className="py-3 px-4 font-semibold">Title / Designation</th>
-                    <th className="py-3 px-4 font-semibold">Inspection Scope</th>
-                    <th className="py-3 px-4 font-semibold">Assessment Compliance Threshold</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5 font-mono text-xs">
-                  {DEFECT_STANDARDS_REFERENCE.map((std, idx) => (
-                    <tr key={std.code} className={idx % 2 === 0 ? 'bg-surface-panel' : 'bg-surface-dark/50'}>
-                      <td className="py-3.5 px-4 font-bold text-fullWhite whitespace-nowrap">
-                        {std.code}
-                      </td>
-                      <td className="py-3.5 px-4 font-semibold text-fullWhite">
-                        {std.title}
-                      </td>
-                      <td className="py-3.5 px-4 text-greige font-sans text-xs">
-                        {std.scope}
-                      </td>
-                      <td className="py-3.5 px-4 text-fullWhite">
-                        <span className="inline-block px-2.5 py-0.5 rounded border border-grayGreen/30 bg-surface-dark text-matteSage font-mono text-[10px]">
-                          {std.threshold}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </section>
-
       </main>
 
       {/* Footer */}
@@ -527,7 +477,7 @@ export default function HomePage() {
           <div className="flex flex-wrap items-center gap-4 text-greige text-xs">
             <Link to="/login" className="hover:text-fullWhite nav-transition">Inspector Portal</Link>
             <Link to="/inspections" className="hover:text-fullWhite nav-transition">Analysis History</Link>
-            <a href="#standards" className="hover:text-fullWhite nav-transition">Standards Criteria</a>
+            <Link to="/standards" className="hover:text-fullWhite nav-transition">ISO Rulebase</Link>
             <span className="text-matteSage">ISO 4628 • SSPC-PA 2 COMPLIANT</span>
           </div>
         </div>

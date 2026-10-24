@@ -1,8 +1,9 @@
 """GradedDefectRecord entity for defense coating standard evaluations."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import ISTDateTime, get_ist_now
 
 class GradedDefectRecord(SQLModel, table=True):
     __tablename__ = "graded_defect_records"
@@ -14,7 +15,7 @@ class GradedDefectRecord(SQLModel, table=True):
     severity: str = Field(max_length=50)
     pass_fail: str = Field(max_length=50)
     notes: Optional[str] = Field(default=None, max_length=500)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
 
     detection: Optional["Detection"] = Relationship(back_populates="graded_records")
 

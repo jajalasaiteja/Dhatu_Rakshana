@@ -4,10 +4,11 @@ import os
 import uuid
 import hashlib
 import shutil
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Tuple, Optional
 import re
+
+from app.core.timezone import get_ist_now
 
 from app.core.config import settings
 from app.core.exceptions import StorageError, FileValidationError
@@ -48,7 +49,7 @@ class LocalStorageAdapter(BaseStorageAdapter):
         return clean or "scan.png"
 
     def _generate_s3_key(self, filename: str, subfolder: str = "images") -> str:
-        now = datetime.now(timezone.utc)
+        now = get_ist_now()
         clean_name = self._sanitize_filename(filename)
         unique_prefix = uuid.uuid4().hex[:10]
         return f"{subfolder}/{now.year:04d}/{now.month:02d}/{now.day:02d}/{unique_prefix}_{clean_name}"
@@ -122,6 +123,18 @@ class LocalStorageAdapter(BaseStorageAdapter):
             return False
         try:
             return self.get_absolute_path(key).exists()
+        except Exception:
+            return False
+
+    def delete(self, key: str) -> bool:
+        if not key:
+            return False
+        try:
+            target_path = self.get_absolute_path(key)
+            if target_path.is_file():
+                target_path.unlink()
+                return True
+            return False
         except Exception:
             return False
 

@@ -8,6 +8,14 @@ from app.schemas.measurement import MeasurementRead
 from app.schemas.grading import GradedRecordRead
 from app.schemas.report import ReportRead, ModelVersionRead
 from app.schemas.common import StatusResponse, HealthResponse, PaginatedResponse
+from app.schemas.visitor import (
+    VisitorAccessRequest,
+    VisitorTokenResponse,
+    VisitorRecordItem,
+    VisitorRecordDetail,
+    VisitorAccessLogItem,
+    VisitorLogsResponse,
+)
 
 __all__ = [
     "RegisterRequest",
@@ -28,5 +36,11 @@ __all__ = [
     "ModelVersionRead",
     "StatusResponse",
     "HealthResponse",
-    "PaginatedResponse"
+    "PaginatedResponse",
+    "VisitorAccessRequest",
+    "VisitorTokenResponse",
+    "VisitorRecordItem",
+    "VisitorRecordDetail",
+    "VisitorAccessLogItem",
+    "VisitorLogsResponse",
 ]

@@ -1,8 +1,9 @@
 """DefectMeasurement entity for quantitative computer vision geometry."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import ISTDateTime, get_ist_now
 
 class DefectMeasurement(SQLModel, table=True):
     __tablename__ = "defect_measurements"
@@ -22,7 +23,7 @@ class DefectMeasurement(SQLModel, table=True):
     surface_depth_proxy: Optional[float] = Field(default=None)
     roughness_index: Optional[float] = Field(default=None)
 
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
 
     detection: Optional["Detection"] = Relationship(back_populates="measurement")
 

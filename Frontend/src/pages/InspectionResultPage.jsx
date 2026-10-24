@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Box, Download, ShieldCheck, CheckCircle2, AlertTriangle, XCircle, Sparkles } from 'lucide-react';
 import api, { getMediaUrl } from '../api';
 import StatusBadge from '../components/StatusBadge';
+import { formatISTDateTime } from '../utils/dateTime';
+import { isObsoleteHistoricalRecord } from '../utils/inspectionFilters';
 import BoundingBoxCanvas from '../components/BoundingBoxCanvas';
 import MeshViewer from '../components/MeshViewer';
 import Interactive3DTopography from '../components/Interactive3DTopography';
@@ -20,6 +22,12 @@ export default function InspectionResultPage() {
     setLoading(true);
     api.get(`/inspections/${id}`)
       .then((res) => {
+        if (isObsoleteHistoricalRecord(res.data)) {
+          setErrorMsg(`Inspection record #${id} not found.`);
+          setInspection(null);
+          setLoading(false);
+          return;
+        }
         setInspection(res.data);
         if (res.data?.detections?.length > 0) {
           setSelectedDetectionId(res.data.detections[0].id);
@@ -78,7 +86,7 @@ export default function InspectionResultPage() {
               <StatusBadge status={inspection.overall_verdict} size="lg" />
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Zone: <span className="font-semibold text-slate-800">{inspection.zone?.name || 'Unspecified'}</span> • {new Date(inspection.timestamp).toLocaleString()}
+              Zone: <span className="font-semibold text-slate-800">{inspection.zone?.name || 'Unspecified'}</span> • {formatISTDateTime(inspection.timestamp)}
             </p>
           </div>
         </div>

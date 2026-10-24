@@ -98,7 +98,9 @@ def init_db():
         ProcessingJob,
         ProcessingArtifact,
         InspectionReport,
-        TopologyFile
+        TopologyFile,
+        Visitor,
+        VisitorAccessLog
     )
     SQLModel.metadata.create_all(engine)
     logger.info("Database schema verified and tables initialized via SQLModel metadata.")
@@ -121,14 +123,16 @@ def run_migrations():
             with engine.connect() as conn:
                 inspector = inspect(conn)
                 tables = inspector.get_table_names()
+                has_users = "users" in tables
+                has_alembic = "alembic_version" in tables
 
-                # If tables already exist without alembic_version, stamp as head
-                if "users" in tables and "alembic_version" not in tables:
-                    command.stamp(alembic_cfg, "head")
-                    logger.info("Existing database schema stamped with current Alembic revision.")
-                else:
-                    command.upgrade(alembic_cfg, "head")
-                    logger.info("Database schema migrated to latest Alembic revision.")
+            # Execute alembic commands outside of active connection context to prevent nested locks on SQLite
+            if has_users and not has_alembic:
+                command.stamp(alembic_cfg, "head")
+                logger.info("Existing database schema stamped with current Alembic revision.")
+            else:
+                command.upgrade(alembic_cfg, "head")
+                logger.info("Database schema migrated to latest Alembic revision.")
             return
         except Exception as exc:
             logger.warning(f"Alembic migration encountered notice: {exc}. Ensuring schema via SQLModel create_all...")
@@ -176,7 +180,8 @@ def backup_database(destination_path: Path = None) -> Path:
     if destination_path is None:
         backup_dir = DATA_DIR / "backups"
         backup_dir.mkdir(parents=True, exist_ok=True)
-        timestamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
+        from app.core.timezone import get_ist_now
+        timestamp = get_ist_now().strftime("%Y%m%d_%H%M%S_IST")
         destination_path = backup_dir / f"dhatu_rakshana_backup_{timestamp}.db"
     else:
         destination_path = Path(destination_path)

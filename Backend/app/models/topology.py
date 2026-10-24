@@ -1,8 +1,9 @@
 """TopologyFile SQLModel entity storing metadata and hashes for 3D micro-topography PLY meshes."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
+from app.core.timezone import ISTDateTime, get_ist_now, format_ist_iso
 
 class TopologyFile(SQLModel, table=True):
     __tablename__ = "topology_files"
@@ -16,8 +17,8 @@ class TopologyFile(SQLModel, table=True):
     file_size: int = Field(default=0)
     file_hash: str = Field(max_length=64, index=True)  # SHA-256 hex digest
 
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
+    updated_at: Optional[datetime] = Field(default_factory=get_ist_now, sa_type=ISTDateTime)
 
     # Relationship to parent inspection
     inspection: Optional["Inspection"] = Relationship(back_populates="topology")
@@ -31,6 +32,6 @@ class TopologyFile(SQLModel, table=True):
             "stored_filename": self.stored_filename,
             "file_size": self.file_size,
             "file_hash": self.file_hash,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "created_at": format_ist_iso(self.created_at),
+            "updated_at": format_ist_iso(self.updated_at),
         }

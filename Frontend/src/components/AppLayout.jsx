@@ -28,6 +28,20 @@ export default function AppLayout() {
         badge: 'RECORD ARCHIVE',
       };
     }
+    if (location.pathname.startsWith('/visitor-logs')) {
+      return {
+        title: 'Visitor Access Audit Logs',
+        subtitle: 'Audit trail of external visitor activity, timestamps, and accessed records',
+        badge: 'SECURITY AUDIT',
+      };
+    }
+    if (location.pathname.startsWith('/standards')) {
+      return {
+        title: 'ISO Rulebase',
+        subtitle: 'Technical reference for ISO coating inspection, surface preparation, and defect assessment standards',
+        badge: 'STANDARDS REFERENCE',
+      };
+    }
     return {
       title: 'Marine Coating Inspection Platform',
       subtitle: 'Technical inspection platform for coating integrity and defect analysis',

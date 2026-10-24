@@ -1,6 +1,5 @@
 """Detection entity representing an AI/CV identified defect in a coating scan."""
 
-from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 import json
 from sqlmodel import SQLModel, Field, Relationship
