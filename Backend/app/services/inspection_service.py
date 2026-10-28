@@ -33,6 +33,7 @@ class InspectionService:
         self,
         upload_files: List[UploadFile],
         zone_id: int,
+        operation_mode: str = "balanced",
         inspector_id: Optional[int] = None,
         background_tasks: Optional[BackgroundTasks] = None,
         run_synchronous: bool = True
@@ -121,6 +122,7 @@ class InspectionService:
             zone_id=zone_id,
             inspector_id=inspector_id,
             image_path=combined_keys,
+            operation_mode=operation_mode,
             mesh_path=None,
             status="PENDING",
             overall_verdict="PENDING",
@@ -168,12 +170,12 @@ class InspectionService:
 
         # 6. Execute pipeline
         if run_synchronous:
-            execute_inspection_pipeline(inspection.id, job_id)
+            execute_inspection_pipeline(inspection.id, job_id, operation_mode=operation_mode)
             self.session.refresh(inspection)
         elif background_tasks:
-            background_tasks.add_task(execute_inspection_pipeline, inspection.id, job_id)
+            background_tasks.add_task(execute_inspection_pipeline, inspection.id, job_id, operation_mode=operation_mode)
         else:
-            execute_inspection_pipeline(inspection.id, job_id)
+            execute_inspection_pipeline(inspection.id, job_id, operation_mode=operation_mode)
             self.session.refresh(inspection)
 
         return {
@@ -181,7 +183,8 @@ class InspectionService:
             "overall_verdict": inspection.overall_verdict,
             "image_count": len(saved_images_info),
             "status": inspection.status,
-            "job_id": job_id
+            "job_id": job_id,
+            "operation_mode": inspection.operation_mode or operation_mode
         }
 
     def get_inspection_detail(self, inspection_id: int) -> Dict[str, Any]:

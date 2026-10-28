@@ -25,6 +25,46 @@ export default function Upload() {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('inspection'); // 'inspection' | '3d' | 'standards' | 'history'
+  const [operationMode, setOperationMode] = useState('balanced');
+
+  const OPERATION_MODES = [
+    {
+      id: 'balanced',
+      name: 'Balanced Standard',
+      badge: 'RECOMMENDED',
+      badgeColor: 'border-matteSage/60 text-matteSage bg-matteSage/10',
+      recall: '86.7%',
+      yoloConf: '0.18',
+      description: 'Optimal standard QC balance: 86.7% defect recall with 72.5% clean surface pass rate.'
+    },
+    {
+      id: 'safety',
+      name: 'Safety / High-Recall',
+      badge: 'CRITICAL',
+      badgeColor: 'border-status-failBorder text-status-failText bg-status-fail/10',
+      recall: '93.3%',
+      yoloConf: '0.08',
+      description: 'Critical defense structures. 93.3% recall, catches micro-pinholes & hairline scratches.'
+    },
+    {
+      id: 'precision',
+      name: 'High-Precision',
+      badge: 'AUTOMATED',
+      badgeColor: 'border-status-passBorder text-status-passText bg-status-pass/10',
+      recall: '80.0%',
+      yoloConf: '0.35',
+      description: 'Automated continuous line: 90.6% clean pass rate with virtually zero false alarms.'
+    },
+    {
+      id: 'dense_porosity',
+      name: 'Dense Porosity',
+      badge: 'POROSITY',
+      badgeColor: 'border-status-reviewBorder text-status-reviewText bg-status-review/10',
+      recall: '95.0%+',
+      yoloConf: '0.03',
+      description: 'Specialized for dense solvent popping, spray bubbling, and micro-void cluster fields.'
+    }
+  ];
   const [zones, setZones] = useState(DEFAULT_ZONES);
   const [selectedZoneId, setSelectedZoneId] = useState(DEFAULT_ZONES[0].id);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -184,6 +224,7 @@ export default function Upload() {
 
       const formData = new FormData();
       formData.append('zone_id', selectedZoneId);
+      formData.append('operation_mode', operationMode);
       if (selectedFiles.length > 1) {
         for (const f of selectedFiles) {
           formData.append('images', f);
@@ -360,6 +401,69 @@ export default function Upload() {
                           <span className="font-semibold text-matteSage flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3 text-matteSage" />
                             <span>ACTIVE</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Operational Inspection Mode Selector */}
+            <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/10">
+                <div>
+                  <h3 className="text-xs font-mono font-bold text-fullWhite uppercase tracking-wide">
+                    Operational Inspection Mode (Sensitivity Calibration)
+                  </h3>
+                  <p className="text-xs text-greige font-medium mt-0.5 font-sans">
+                    Select AI detection sensitivity calibrated for coating condition and operational risk:
+                  </p>
+                </div>
+                <span className="text-xs font-mono text-matteSage font-bold uppercase">
+                  {OPERATION_MODES.find(m => m.id === operationMode)?.name} ACTIVE
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {OPERATION_MODES.map((mode) => {
+                  const isSelected = mode.id === operationMode;
+                  return (
+                    <div
+                      key={mode.id}
+                      onClick={() => setOperationMode(mode.id)}
+                      className={`p-3.5 rounded border nav-transition cursor-pointer flex flex-col justify-between ${
+                        isSelected
+                          ? 'border-grayGreen bg-surface-elevated text-fullWhite ring-1 ring-grayGreen shadow-panel'
+                          : 'border-white/10 bg-surface-dark text-greige hover:border-matteSage/50 hover:bg-surface-dark/80'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between text-[10px] font-mono mb-1.5">
+                          <span className={`px-1.5 py-0.5 rounded border text-[9px] font-mono font-bold ${mode.badgeColor}`}>
+                            {mode.badge}
+                          </span>
+                          <span className="text-greige font-mono text-[10px]">
+                            Conf: {mode.yoloConf}
+                          </span>
+                        </div>
+                        <h4 className="text-xs font-semibold text-fullWhite font-sans">
+                          {mode.name}
+                        </h4>
+                        <p className="text-[11px] text-greige mt-1 leading-relaxed font-sans">
+                          {mode.description}
+                        </p>
+                      </div>
+
+                      <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono">
+                        <span className="text-matteSage">
+                          Recall: {mode.recall}
+                        </span>
+                        {isSelected && (
+                          <span className="font-semibold text-matteSage flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-matteSage" />
+                            <span>SELECTED</span>
                           </span>
                         )}
                       </div>

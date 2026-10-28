@@ -97,6 +97,8 @@ class LocalStorageAdapter(BaseStorageAdapter):
 
         return key, target_path, checksum
 
+    save_file = save_file_from_path
+
     def get_absolute_path(self, key: str) -> Path:
         # Sanitize against path traversal attacks in key parameter
         clean_key = Path(key.lstrip("/\\"))

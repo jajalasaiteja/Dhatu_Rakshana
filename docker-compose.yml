@@ -1,0 +1,104 @@
+services:
+  # ----------------------------------------------------------------------------
+  # 1. Primary PostgreSQL 16 Relational Database
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: dhatu_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dhatu_secure_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-marine_defect_db}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-marine_defect_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dhatu_network
+
+  # ----------------------------------------------------------------------------
+  # 2. Dhatu Rakshana FastAPI Backend & Multi-Stage ML Pipeline
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dhatu_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_NAME: "Dhatu Rakshana"
+      APP_ENV: "production"
+      DEBUG: "False"
+      LOG_LEVEL: "INFO"
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      API_V1_PREFIX: "/api/v1"
+      DATABASE_URL: "postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-dhatu_secure_pass_2026}@postgres:5432/${POSTGRES_DB:-marine_defect_db}"
+      STORAGE_BACKEND: "local"
+      STORAGE_DIR: "/app/storage"
+      STORAGE_BUCKET: "marine-inspections"
+      TOPOLOGY_STORAGE_DIR: "/app/storage/topology"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dhatu-rakshana-secure-jwt-secret-key-change-in-production-2026}
+      SECRET_KEY: ${SECRET_KEY:-dhatu-rakshana-secure-jwt-secret-key-change-in-production-2026}
+      DEFAULT_MODEL_NAME: "marine_twostage_v2"
+      ML_DEVICE: "${ML_DEVICE:-cpu}"
+      CONFIDENCE_THRESHOLD: "0.18"
+      MAX_IMAGE_UPLOAD_SIZE_MB: "100"
+      MAX_IMAGES_PER_INSPECTION: "20"
+      RECONSTRUCTION_MAX_DIM: "220"
+      CORS_ORIGINS: '["*"]'
+    volumes:
+      - inspection_storage:/app/storage
+      - ./models:/app/models:ro
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - dhatu_network
+
+  # ----------------------------------------------------------------------------
+  # 3. High-Performance Nginx Reverse Proxy & Static Asset Accelerator
+  # ----------------------------------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: dhatu_nginx
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - dhatu_network
+
+# ------------------------------------------------------------------------------
+# Persistent Volume Definitions
+# ------------------------------------------------------------------------------
+volumes:
+  postgres_data:
+    name: dhatu_postgres_data
+  inspection_storage:
+    name: dhatu_inspection_storage
+
+# ------------------------------------------------------------------------------
+# Internal Bridge Network
+# ------------------------------------------------------------------------------
+networks:
+  dhatu_network:
+    name: dhatu_network
+    driver: bridge

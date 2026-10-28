@@ -103,6 +103,12 @@ def init_db():
         VisitorAccessLog
     )
     SQLModel.metadata.create_all(engine)
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE inspections ADD COLUMN operation_mode VARCHAR(50) DEFAULT 'balanced'"))
+            conn.commit()
+    except Exception:
+        pass
     logger.info("Database schema verified and tables initialized via SQLModel metadata.")
 
 def run_migrations():

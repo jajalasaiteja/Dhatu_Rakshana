@@ -20,7 +20,7 @@ FastAPI Backend (/api/v1 & compatibility routes)
 Inspection Processing Engine
         │
         ├── 1. Validation & Preprocessing (EXIF, Normalization)
-        ├── 2. ML Inference (Model Registry -> YOLOv8 / Classical CV)
+        ├── 2. 2-Stage ML Inference (YOLOv8 Sliced 640x640 Tiling + ResNet18 Subtype Classifier)
         ├── 3. OpenCV Morphology & Boundary Refinement
         ├── 4. Quantitative Measurements (Aspect ratio, Area %, Centroid, Depth proxy)
         ├── 5. Open3D 3D Micro-Topography (.ply mesh generation)

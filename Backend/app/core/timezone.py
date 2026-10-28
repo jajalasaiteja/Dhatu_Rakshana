@@ -4,14 +4,21 @@ Standardizes all timestamp creation, conversion, storage serialization, and form
 to Indian Standard Time (IST, Asia/Kolkata, UTC+05:30) across the entire platform.
 """
 
-from datetime import datetime, timezone
-from zoneinfo import ZoneInfo
+from datetime import datetime, timezone, timedelta
+try:
+    from zoneinfo import ZoneInfo
+    try:
+        IST = ZoneInfo("Asia/Kolkata")
+    except Exception:
+        IST = timezone(timedelta(hours=5, minutes=30), name="Asia/Kolkata")
+except ImportError:
+    IST = timezone(timedelta(hours=5, minutes=30), name="Asia/Kolkata")
+
 from typing import Optional, Union, Any
 import sqlalchemy as sa
 from sqlalchemy.types import TypeDecorator
 
 # Canonical IST Timezone identifier (Asia/Kolkata, UTC+05:30)
-IST = ZoneInfo("Asia/Kolkata")
 IST_TIMEZONE_STR = "Asia/Kolkata"
 IST_OFFSET_STR = "+05:30"
 IST_LABEL = "IST"

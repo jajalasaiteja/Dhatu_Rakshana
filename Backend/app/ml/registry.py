@@ -11,6 +11,7 @@ from app.ml.base import BaseInferenceEngine
 from app.ml.inference.classical_cv_runner import ClassicalCVRunner
 from app.ml.inference.ultralytics_runner import UltralyticsRunner
 from app.ml.inference.hybrid_runner import HybridDefectRunner
+from app.ml.inference.two_stage_runner import TwoStageInspectionRunner
 
 logger = logging.getLogger("dhatu_rakshana.registry")
 
@@ -43,8 +44,8 @@ class ModelRegistry:
         models_cfg = self._config.get("models", {})
         cfg = models_cfg.get(target_name, {})
 
-        framework = cfg.get("framework", "hybrid")
-        version = cfg.get("version", "1.0.0")
+        framework = cfg.get("framework", "two_stage")
+        version = cfg.get("version", "2.0.0")
         weights_rel = cfg.get("weights_path")
         weights_path = None
         if weights_rel:
@@ -59,7 +60,29 @@ class ModelRegistry:
                 weights_path = PROJECT_ROOT / p
 
         runner: BaseInferenceEngine
-        if framework == "ultralytics":
+        if framework in ("two_stage", "twostage", "2stage"):
+            cls_rel = cfg.get("classifier_weights_path", "models/resnet_classifier.pt")
+            cls_path = None
+            if cls_rel:
+                cp = Path(cls_rel)
+                if cp.is_absolute() and cp.exists():
+                    cls_path = cp
+                elif (PROJECT_ROOT / cp).exists():
+                    cls_path = PROJECT_ROOT / cp
+                elif (BACKEND_DIR / cp).exists():
+                    cls_path = BACKEND_DIR / cp
+                else:
+                    cls_path = PROJECT_ROOT / cp
+
+            runner = TwoStageInspectionRunner(
+                name=target_name,
+                version=version,
+                yolo_weights_path=weights_path,
+                resnet_weights_path=cls_path,
+                default_mode=cfg.get("mode", "balanced"),
+                device=self.device
+            )
+        elif framework == "ultralytics":
             runner = UltralyticsRunner(
                 name=target_name,
                 version=version,
@@ -92,7 +115,7 @@ class ModelRegistry:
             result.append({
                 "name": name,
                 "version": info.get("version", "1.0.0"),
-                "framework": info.get("framework", "hybrid"),
+                "framework": info.get("framework", "two_stage"),
                 "is_loaded": name in self._instances,
                 "device": self.device
             })

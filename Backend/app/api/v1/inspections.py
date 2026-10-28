@@ -5,7 +5,7 @@ from fastapi import (
     APIRouter, Depends, UploadFile, File, Form, HTTPException, status,
     BackgroundTasks, Response
 )
-from sqlmodel import Session, select, func, text
+from sqlmodel import Session, select
 import logging
 
 from app.db.session import get_session
@@ -18,7 +18,6 @@ from app.api.deps import (
 )
 from app.models.user import User
 from app.models.inspection import Inspection
-from app.models.inspection_image import InspectionImage
 from app.models.detection import Detection
 from app.models.artifact import ProcessingArtifact
 from app.models.report import InspectionReport
@@ -26,7 +25,6 @@ from app.models.topology import TopologyFile
 from app.storage.local import storage
 from app.storage.topology_storage import topology_storage
 from app.reports.generator import generate_pdf_report
-from app.core.timezone import get_ist_now
 
 logger = logging.getLogger("dhatu_rakshana.api.inspections")
 
@@ -39,6 +37,7 @@ async def create_inspection(
     image: Optional[UploadFile] = File(None),
     images: List[UploadFile] = File(default=[]),
     zone_id: int = Form(...),
+    operation_mode: str = Form("balanced"),
     background_tasks: BackgroundTasks = None,
     current_user: User = Depends(require_inspector),
     session: Session = Depends(get_session)
@@ -67,6 +66,7 @@ async def create_inspection(
     result = await service.ingest_and_create_inspection(
         upload_files=upload_files,
         zone_id=zone_id,
+        operation_mode=operation_mode,
         inspector_id=current_user.id,
         background_tasks=background_tasks,
         run_synchronous=True
@@ -80,12 +80,12 @@ async def create_inspection(
         overall_verdict=result["overall_verdict"],
         image_count=result["image_count"],
         status=result["status"],
-        job_id=result.get("job_id")
+        job_id=result.get("job_id"),
+        operation_mode=result.get("operation_mode", "balanced")
     )
 
 @router.get("", response_model=List[InspectionRead])
 def list_inspections(
-    response: Response,
     zone_id: Optional[int] = None,
     skip: int = 0,
     limit: int = 100,
@@ -96,15 +96,11 @@ def list_inspections(
     GET /inspections: Returns ordered history of past coating inspections.
     Protected: requires authenticated user.
     """
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
     service = InspectionService(session)
     return service.list_inspections(zone_id=zone_id, skip=skip, limit=limit)
 
 @router.get("/history", response_model=List[InspectionRead])
 def get_inspection_history(
-    response: Response,
     zone_id: Optional[int] = None,
     skip: int = 0,
     limit: int = 100,
@@ -115,16 +111,12 @@ def get_inspection_history(
     GET /inspections/history: Canonical protected alias for analysis history.
     Protected: requires authenticated user.
     """
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
     service = InspectionService(session)
     return service.list_inspections(zone_id=zone_id, skip=skip, limit=limit)
 
 @router.get("/{inspection_id}", response_model=InspectionDetail)
 def get_inspection_detail(
     inspection_id: int,
-    response: Response,
     current_user: User = Depends(require_viewer),
     session: Session = Depends(get_session)
 ):
@@ -132,16 +124,12 @@ def get_inspection_detail(
     GET /inspections/{id}: Retrieves detailed defect bounding boxes, 3D mesh, and grading matrix.
     Protected: requires authenticated user.
     """
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
     service = InspectionService(session)
     return service.get_inspection_detail(inspection_id)
 
 @router.get("/{inspection_id}/status", response_model=InspectionStatusResponse)
 def get_inspection_status(
     inspection_id: int,
-    response: Response,
     current_user: User = Depends(require_viewer),
     session: Session = Depends(get_session)
 ):
@@ -149,32 +137,34 @@ def get_inspection_status(
     GET /inspections/{id}/status: Returns real-time processing status and progress.
     Protected: requires authenticated user.
     """
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
     service = InspectionService(session)
     return service.get_status(inspection_id)
 
 @router.get("/{inspection_id}/report")
 def download_inspection_report(
     inspection_id: int,
+    regenerate: bool = True,
     current_user: User = Depends(require_viewer),
     session: Session = Depends(get_session)
 ):
     """
-    GET /inspections/{id}/report: Streams or generates authoritative inspection PDF report.
+    GET /inspections/{id}/report: Streams or generates authoritative inspection PDF report
+    with color-coded PASS (green) / FAIL (red) compliance status and detailed timestamps.
     Protected: requires authenticated user.
     """
     service = InspectionService(session)
     insp_data = service.get_inspection_detail(inspection_id)
 
-    # Ensure authoritative inspection PDF report is generated with standardized IST timestamps
+    # Generate authoritative report with latest styling and timestamps
     pdf_bytes = generate_pdf_report(insp_data)
+
+    # Persist or update saved report artifact
     key, _, csum = storage.save_bytes(
         pdf_bytes,
         filename=f"dhatu-rakshana-report-{inspection_id}.pdf",
         subfolder="reports"
     )
+
     existing_report = session.exec(
         select(InspectionReport).where(InspectionReport.inspection_id == inspection_id)
     ).first()
@@ -182,7 +172,6 @@ def download_inspection_report(
         existing_report.storage_key = key
         existing_report.file_size_bytes = len(pdf_bytes)
         existing_report.checksum_sha256 = csum
-        existing_report.generated_at = get_ist_now()
         session.add(existing_report)
     else:
         new_report = InspectionReport(
@@ -190,8 +179,7 @@ def download_inspection_report(
             report_title=f"Coating Defect Audit Report #{inspection_id}",
             storage_key=key,
             file_size_bytes=len(pdf_bytes),
-            checksum_sha256=csum,
-            generated_at=get_ist_now()
+            checksum_sha256=csum
         )
         session.add(new_report)
     session.commit()
@@ -252,57 +240,19 @@ def delete_inspection(
             detail="Forbidden: You do not have permission to delete this inspection."
         )
 
-    # 1. Collect storage keys before deleting DB records for thorough physical file cleanup
-    file_keys = []
-    if insp.images:
-        file_keys.extend([img.storage_key for img in insp.images if img.storage_key])
-    if insp.reports:
-        file_keys.extend([rep.storage_key for rep in insp.reports if rep.storage_key])
-    if insp.artifacts:
-        file_keys.extend([art.storage_key for art in insp.artifacts if art.storage_key])
-    if insp.image_path:
-        file_keys.extend([k.strip() for k in insp.image_path.split(",") if k.strip()])
+    # 1. Clean up associated topology file record if exists
+    topo = session.exec(
+        select(TopologyFile).where(TopologyFile.inspection_id == inspection_id)
+    ).first()
+    if topo:
+        session.delete(topo)
 
-    # 2. Strict foreign-key ordered database deletion
-    for t in ['defect_measurements', 'graded_defect_records']:
-        session.execute(text(f'DELETE FROM {t} WHERE detection_id IN (SELECT id FROM detections WHERE inspection_id = :id)'), {"id": inspection_id})
-    for t in ['detections', 'inspection_measurements', 'inspection_images', 'topology_files', 'inspection_reports', 'processing_artifacts', 'processing_jobs', 'evaluation_histories']:
-        session.execute(text(f'DELETE FROM {t} WHERE inspection_id = :id'), {"id": inspection_id})
-    session.execute(text('DELETE FROM inspections WHERE id = :id'), {"id": inspection_id})
-    session.commit()
-
-    # 3. Clean up physical PLY file on filesystem safely
+    # 2. Clean up physical PLY file on filesystem safely
     topology_storage.delete_topology(inspection_id)
 
-    # If no inspection records remain, safely reset sequence counter for inspection tables
-    remaining = session.exec(select(func.count(Inspection.id))).one()
-    if remaining == 0:
-        try:
-            session.execute(text("""
-                DELETE FROM sqlite_sequence 
-                WHERE name IN (
-                    'inspections', 'inspection_images', 'processing_jobs', 
-                    'processing_artifacts', 'inspection_reports', 'topology_files', 
-                    'detections', 'defect_measurements', 'graded_defect_records', 
-                    'inspection_measurements', 'evaluation_histories'
-                )
-            """))
-            session.commit()
-        except Exception:
-            pass
+    # 3. Delete inspection record
+    session.delete(insp)
+    session.commit()
 
-    # 5. Safely clean up exclusively referenced storage files
-    for key in set(file_keys):
-        still_used = (
-            session.exec(select(InspectionImage).where(InspectionImage.storage_key == key)).first() or
-            session.exec(select(InspectionReport).where(InspectionReport.storage_key == key)).first() or
-            session.exec(select(ProcessingArtifact).where(ProcessingArtifact.storage_key == key)).first()
-        )
-        if not still_used:
-            try:
-                storage.delete(key)
-            except Exception as e:
-                logger.warning(f"Failed to delete storage file {key}: {e}")
-
-    logger.info(f"Inspection #{inspection_id} and all associated artifacts deleted by {current_user.email}")
+    logger.info(f"Inspection #{inspection_id} and all associated topology data deleted by {current_user.email}")
     return Response(status_code=status.HTTP_204_NO_CONTENT)

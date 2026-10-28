@@ -15,6 +15,8 @@ def find_project_root() -> Path:
     """Recursively locates repository root containing project markers or scripts."""
     current = Path(__file__).resolve().parent
     for candidate in [current] + list(current.parents):
+        if (candidate / "Backend").is_dir() and (candidate / "Frontend").is_dir():
+            return candidate
         if (candidate / "requirements.txt").exists() and (
             (candidate / "Project Dhatu Rakshana").exists() or (candidate / "Backend").exists()
         ):
@@ -31,28 +33,35 @@ PROJECT_ROOT = find_project_root()
 BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Check for Frontend directories
-FRONTEND_DIR = PROJECT_ROOT / "Project Dhatu Rakshana" / "Frontend"
+FRONTEND_DIR = PROJECT_ROOT / "Frontend"
 if not FRONTEND_DIR.exists():
-    FRONTEND_DIR = PROJECT_ROOT / "Frontend"
+    FRONTEND_DIR = PROJECT_ROOT / "Project Dhatu Rakshana" / "Frontend"
 
 FRONTEND_DIST = FRONTEND_DIR / "dist"
 
+def _normalize_storage_path(env_val: Optional[str], default_rel: str) -> Path:
+    if not env_val or env_val.strip() == "":
+        return PROJECT_ROOT / default_rel
+    clean_val = env_val.replace("\\", "/")
+    if clean_val.startswith("/workspace/"):
+        return PROJECT_ROOT / clean_val[len("/workspace/"):]
+    p = Path(env_val)
+    if not p.is_absolute():
+        return (PROJECT_ROOT / p).resolve()
+    return p
+
 # Local Data and Storage directories (created automatically on access)
-DATA_DIR = Path(os.getenv("DATA_DIR", str(PROJECT_ROOT / "data")))
+DATA_DIR = _normalize_storage_path(os.getenv("DATA_DIR"), "data")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-STORAGE_DIR = Path(os.getenv("STORAGE_DIR", str(PROJECT_ROOT / "storage")))
+STORAGE_DIR = _normalize_storage_path(os.getenv("STORAGE_DIR"), "storage")
 STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 
-MODELS_DIR = Path(os.getenv("MODELS_DIR", str(PROJECT_ROOT / "models")))
+MODELS_DIR = _normalize_storage_path(os.getenv("MODELS_DIR"), "models")
 MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 # 3D Micro-Topography PLY Storage Directory
-raw_topo_dir = os.getenv("TOPOLOGY_STORAGE_DIR", "storage/topology")
-if Path(raw_topo_dir).is_absolute():
-    TOPOLOGY_STORAGE_DIR = Path(raw_topo_dir)
-else:
-    TOPOLOGY_STORAGE_DIR = (PROJECT_ROOT / raw_topo_dir).resolve()
+TOPOLOGY_STORAGE_DIR = _normalize_storage_path(os.getenv("TOPOLOGY_STORAGE_DIR"), "storage/topology")
 TOPOLOGY_STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Config path resolution
@@ -68,6 +77,13 @@ def resolve_db_url(raw_url: Optional[str] = None) -> str:
     if not env_url or env_url.strip() == "":
         return f"sqlite:///{DEFAULT_SQLITE_PATH.resolve().as_posix()}"
     
+    clean_url = env_url.replace("\\", "/")
+    if clean_url.startswith("sqlite:////workspace/"):
+        rel_sub = clean_url[len("sqlite:////workspace/"):]
+        abs_db = (PROJECT_ROOT / rel_sub).resolve()
+        abs_db.parent.mkdir(parents=True, exist_ok=True)
+        return f"sqlite:///{abs_db.as_posix()}"
+
     # If explicitly sqlite relative path e.g. sqlite:///./data/... or sqlite:///data/...
     if env_url.startswith("sqlite:///./") or env_url.startswith("sqlite:///.\\"):
         rel_path = env_url[len("sqlite:///./"):]
@@ -158,10 +174,8 @@ try:
         @model_validator(mode="after")
         def _resolve_paths(self):
             self.DATABASE_URL = resolve_db_url(self.DATABASE_URL)
-            if not Path(self.STORAGE_DIR).is_absolute():
-                self.STORAGE_DIR = str((PROJECT_ROOT / self.STORAGE_DIR).resolve())
-            if not Path(self.TOPOLOGY_STORAGE_DIR).is_absolute():
-                self.TOPOLOGY_STORAGE_DIR = str((PROJECT_ROOT / self.TOPOLOGY_STORAGE_DIR).resolve())
+            self.STORAGE_DIR = str(_normalize_storage_path(self.STORAGE_DIR, "storage").resolve())
+            self.TOPOLOGY_STORAGE_DIR = str(_normalize_storage_path(self.TOPOLOGY_STORAGE_DIR, "storage/topology").resolve())
             return self
 
     settings = Settings()
@@ -218,10 +232,8 @@ except ImportError:
         @model_validator(mode="after")
         def _resolve_paths(self):
             self.DATABASE_URL = resolve_db_url(self.DATABASE_URL)
-            if not Path(self.STORAGE_DIR).is_absolute():
-                self.STORAGE_DIR = str((PROJECT_ROOT / self.STORAGE_DIR).resolve())
-            if not Path(self.TOPOLOGY_STORAGE_DIR).is_absolute():
-                self.TOPOLOGY_STORAGE_DIR = str((PROJECT_ROOT / self.TOPOLOGY_STORAGE_DIR).resolve())
+            self.STORAGE_DIR = str(_normalize_storage_path(self.STORAGE_DIR, "storage").resolve())
+            self.TOPOLOGY_STORAGE_DIR = str(_normalize_storage_path(self.TOPOLOGY_STORAGE_DIR, "storage/topology").resolve())
             return self
 
     settings = Settings()

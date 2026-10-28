@@ -17,6 +17,9 @@ class Inspection(SQLModel, table=True):
     image_path: str = Field(default="", max_length=1000)
     mesh_path: Optional[str] = Field(default=None, max_length=500)
 
+    # Operational Inspection Mode (balanced, safety, precision, dense_porosity)
+    operation_mode: Optional[str] = Field(default="balanced", max_length=50, index=True)
+
     # Processing state & auditability
     status: str = Field(default="COMPLETED", max_length=50, index=True)
     overall_verdict: str = Field(default="PENDING", max_length=50, index=True)
@@ -47,6 +50,7 @@ class Inspection(SQLModel, table=True):
             "id": self.id,
             "zone_id": self.zone_id,
             "zone_name": self.zone.name if self.zone else f"Zone {self.zone_id}",
+            "operation_mode": self.operation_mode or "balanced",
             "overall_verdict": self.overall_verdict,
             "status": self.status,
             "timestamp": format_ist_iso(self.timestamp),
@@ -58,4 +62,3 @@ class Inspection(SQLModel, table=True):
             "evaluation_engine_version": self.evaluation_engine_version,
             "recalculated_at": format_ist_iso(self.recalculated_at) if self.recalculated_at else None
         }
-

@@ -1,6 +1,7 @@
 """Worker task orchestrating the complete end-to-end inspection pipeline."""
 
 import tempfile
+from typing import Optional, List, Dict, Any
 from pathlib import Path
 import logging
 from sqlmodel import Session, select
@@ -32,8 +33,8 @@ from app.core.logging import log_stage_timing
 
 logger = logging.getLogger("dhatu_rakshana.pipeline")
 
-def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
-    """Executes the full inspection workflow asynchronously."""
+def execute_inspection_pipeline(inspection_id: int, job_id: str, operation_mode: Optional[str] = 'balanced') -> None:
+    """Executes the full inspection workflow asynchronously across all specimen images."""
     with Session(engine) as session:
         inspection = session.get(Inspection, inspection_id)
         job = session.exec(select(ProcessingJob).where(ProcessingJob.job_id == job_id)).first()
@@ -65,27 +66,52 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                     raise FileNotFoundError(f"Primary image missing at storage location: {primary_abs_path}")
 
             # -------------------------------------------------------------
-            # Stage 2: PREPROCESSING
+            # Stage 2: PREPROCESSING (All Uploaded Images)
             # -------------------------------------------------------------
+            preprocessed_images: List[Dict[str, Any]] = []
             with log_stage_timing("PREPROCESSING", inspection_id):
                 update_job("PREPROCESSING", 20)
-                primary_img_np, (img_w, img_h) = load_and_preprocess_image(primary_abs_path)
-                primary_img_record.width = img_w
-                primary_img_record.height = img_h
-                session.add(primary_img_record)
+                for img_rec in images:
+                    img_abs = storage.get_absolute_path(img_rec.storage_key)
+                    if not img_abs.exists():
+                        continue
+                    img_np, (w, h) = load_and_preprocess_image(img_abs)
+                    img_rec.width = w
+                    img_rec.height = h
+                    session.add(img_rec)
+                    preprocessed_images.append({
+                        "record": img_rec,
+                        "image_np": img_np,
+                        "width": w,
+                        "height": h
+                    })
                 session.commit()
 
             # -------------------------------------------------------------
-            # Stage 3: DETECTING (ML / CV Inference)
+            # Stage 3: DETECTING (ML / CV Inference across each specimen image)
             # -------------------------------------------------------------
+            detected_candidates: List[Dict[str, Any]] = []
             with log_stage_timing("DETECTING", inspection_id):
                 update_job("DETECTING", 40)
                 model_runner = model_registry.get_model()
-                inference_result = model_runner.predict(primary_img_np, confidence_threshold=0.45)
-                logger.info(
-                    f"Model '{inference_result.model_name}' ({inference_result.framework}) "
-                    f"identified {len(inference_result.detections)} candidate defects in {inference_result.inference_time_ms}ms."
-                )
+                effective_mode = operation_mode or getattr(inspection, "operation_mode", "balanced") or "balanced"
+
+                for item in preprocessed_images:
+                    img_rec = item["record"]
+                    img_np = item["image_np"]
+                    inference_result = model_runner.predict(img_np, mode=effective_mode)
+                    logger.info(
+                        f"Model '{inference_result.model_name}' on image {img_rec.original_filename} (id={img_rec.id}) "
+                        f"identified {len(inference_result.detections)} candidate defects in {inference_result.inference_time_ms}ms."
+                    )
+                    for det in inference_result.detections:
+                        detected_candidates.append({
+                            "candidate": det,
+                            "img_rec": img_rec,
+                            "image_np": img_np,
+                            "width": item["width"],
+                            "height": item["height"]
+                        })
 
             # -------------------------------------------------------------
             # Stage 4: MEASURING (Geometry & 3D Depth Proxy)
@@ -93,16 +119,20 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
             with log_stage_timing("MEASURING", inspection_id):
                 update_job("MEASURING", 60)
                 measured_items = []
-                for det in inference_result.detections:
+                for item in detected_candidates:
+                    det = item["candidate"]
                     meas = compute_defect_measurements(
                         bbox=det.bbox,
-                        image_width=img_w,
-                        image_height=img_h,
-                        image_np=primary_img_np
+                        image_width=item["width"],
+                        image_height=item["height"],
+                        image_np=item["image_np"]
                     )
-                    # Update candidate with calculated area percentage
                     det.area_pct = meas["area_pct"]
-                    measured_items.append({"candidate": det, "measurements": meas})
+                    measured_items.append({
+                        "candidate": det,
+                        "measurements": meas,
+                        "img_rec": item["img_rec"]
+                    })
 
             # -------------------------------------------------------------
             # Stage 5: MAPPING (3D Micro-Topography Reconstruction via Open3D)
@@ -141,7 +171,7 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                                 existing_topo.updated_at = now
                                 session.add(existing_topo)
                             else:
-                                topo_record = TopologyFile(
+                                new_topo = TopologyFile(
                                     inspection_id=inspection_id,
                                     original_filename=topo_meta["original_filename"],
                                     stored_filename=topo_meta["stored_filename"],
@@ -151,21 +181,21 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                                     created_at=now,
                                     updated_at=now
                                 )
-                                session.add(topo_record)
+                                session.add(new_topo)
                             session.commit()
                             logger.info(f"TopologyFile record persisted for inspection #{inspection_id}")
                         except Exception as topo_err:
-                            logger.error(f"Failed to persist topology file for inspection #{inspection_id}: {topo_err}")
+                            logger.warning(f"Failed to persist TopologyFile record for inspection #{inspection_id}: {topo_err}")
 
-                        # 2. Register legacy artifact for compatibility
+                        # 2. Save processing artifact
                         mesh_storage_key, _, mesh_sha256 = storage.save_file_from_path(
                             ply_path,
                             filename=f"surface_mesh_{inspection_id}.ply",
-                            subfolder="meshes"
+                            subfolder="topology"
                         )
                         mesh_artifact = ProcessingArtifact(
-                            inspection_id=inspection_id,
-                            artifact_type="MESH_PLY",
+                            inspection_id=inspection.id,
+                            artifact_type="SURFACE_MESH",
                             storage_key=mesh_storage_key,
                             mime_type="application/octet-stream",
                             file_size_bytes=ply_path.stat().st_size,
@@ -229,10 +259,11 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
                 cand = item["candidate"]
                 meas = item["measurements"]
                 gr = item["grade"]
+                target_img_rec = item["img_rec"]
 
                 det_record = Detection(
                     inspection_id=inspection.id,
-                    image_id=primary_img_record.id,
+                    image_id=target_img_rec.id,
                     class_name=cand.class_name,
                     subtype=cand.subtype,
                     bbox_raw="",
@@ -344,11 +375,12 @@ def execute_inspection_pipeline(inspection_id: int, job_id: str) -> None:
             session.add(job)
             session.commit()
 
-            logger.info(f"Inspection #{inspection_id} successfully completed all processing stages.")
+            logger.info(f"Inspection #{inspection_id} successfully completed all processing stages across {len(preprocessed_images)} images.")
 
         except Exception as exc:
             logger.error(f"Inspection #{inspection_id} failed during stage '{job.current_stage}': {exc}", exc_info=True)
             inspection.status = "FAILED"
+            inspection.overall_verdict = "FAILED"
             session.add(inspection)
 
             job.status = "FAILED"

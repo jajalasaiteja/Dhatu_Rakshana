@@ -46,6 +46,7 @@ class Detection(SQLModel, table=True):
         return {
             "id": self.id,
             "inspection_id": self.inspection_id,
+            "image_id": self.image_id,
             "class": self.class_name,
             "subtype": self.subtype,
             "bbox": self.bbox,

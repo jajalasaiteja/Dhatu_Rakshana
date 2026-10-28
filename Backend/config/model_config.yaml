@@ -1,24 +1,39 @@
-default_model: "marine_hybrid_v1"
+default_model: "marine_twostage_v2"
 
 models:
+  marine_twostage_v2:
+    name: "marine_twostage_v2"
+    version: "2.0.0"
+    framework: "two_stage"
+    model_type: "yolov8_sliced_plus_resnet18_classifier"
+    weights_path: "models/yolo_detector.pt"
+    classifier_weights_path: "models/resnet_classifier.pt"
+    mode: "balanced"
+    confidence_threshold: 0.18
+    clean_rejection_threshold: 0.65
+    tile_size: 512
+    tile_overlap: 128
+    device: "auto"
+    classes:
+      0: "contamination"
+      1: "inclusion"
+      2: "no_defect"
+      3: "pinhole"
+      4: "scratch"
+
   marine_yolo_v8:
     name: "marine_yolo_v8"
     version: "1.0.0"
     framework: "ultralytics"
     model_type: "yolov8"
-    weights_path: "models/detection/marine_coating_yolov8.pt"
-    confidence_threshold: 0.45
-    iou_threshold: 0.50
+    weights_path: "models/yolo_detector.pt"
+    confidence_threshold: 0.18
+    iou_threshold: 0.45
     input_size: [640, 640]
     device: "auto"
     classes:
-      0: "corrosion"
-      1: "blister"
-      2: "scratch"
-      3: "pinhole"
-      4: "inclusion"
-      5: "contamination"
-      6: "dust_particle"
+      0: "defect"
+      1: "particle"
 
   marine_classical_cv:
     name: "marine_classical_cv"
@@ -42,12 +57,12 @@ models:
     version: "1.5.0"
     framework: "hybrid"
     model_type: "yolo_plus_opencv_refinement"
-    weights_path: "models/detection/marine_coating_yolov8.pt"
+    weights_path: "models/yolo_detector.pt"
     fallback_to_cv: true
-    confidence_threshold: 0.45
+    confidence_threshold: 0.18
     device: "auto"
 
 inference:
   batch_size: 1
-  max_detections_per_image: 30
+  max_detections_per_image: 100
   enable_morphological_refinement: true

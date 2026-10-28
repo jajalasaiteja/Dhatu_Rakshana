@@ -14,6 +14,7 @@ class InspectionCreateResponse(BaseModel):
     image_count: int
     status: str
     job_id: Optional[str] = None
+    operation_mode: Optional[str] = "balanced"
 
 class InspectionRead(BaseModel):
     id: int
@@ -24,6 +25,7 @@ class InspectionRead(BaseModel):
     zone_name: str
     overall_verdict: str
     status: Optional[str] = "COMPLETED"
+    operation_mode: Optional[str] = "balanced"
     image_url: Optional[str] = None
     thumbnail_url: Optional[str] = None
     mesh_url: Optional[str] = None
@@ -43,6 +45,7 @@ class InspectionDetail(BaseModel):
     zone: Optional[Dict[str, Any]] = None
     overall_verdict: str
     status: Optional[str] = "COMPLETED"
+    operation_mode: Optional[str] = "balanced"
     image_url: Optional[str] = None
     thumbnail_url: Optional[str] = None
     image_urls: List[str] = Field(default_factory=list)

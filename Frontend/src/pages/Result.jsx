@@ -42,17 +42,18 @@ export default function Result() {
 
   const pollTimerRef = useRef(null);
 
-  const fetchInspection = async () => {
-    setLoading(true);
+  const fetchInspection = async (isBackground = false) => {
+    if (!isBackground) { setLoading(true); setInspection(null); }
+
     setErrorMsg('');
     setIsNotFound(false);
-    setInspection(null);
+
     try {
       const data = await apiClient(`/inspections/${id}`);
       if (isObsoleteHistoricalRecord(data)) {
         setIsNotFound(true);
         setErrorMsg(`Inspection record #${id} not found in the active database.`);
-        setInspection(null);
+    
         setLoading(false);
         return;
       }
@@ -62,7 +63,7 @@ export default function Result() {
       setIsNotFound(false);
 
       // Polling contract: if pending, poll every 3 s (max 40 tries)
-      const isPending = (data.overall_verdict || '').toLowerCase() === 'pending';
+      const isPending = (data.overall_verdict || '').toLowerCase() === 'pending' && (data.status || '').toLowerCase() !== 'failed';
       if (isPending && pollCount < 40) {
         pollTimerRef.current = setTimeout(() => {
           setPollCount((prev) => prev + 1);
@@ -70,7 +71,7 @@ export default function Result() {
       }
     } catch (err) {
       setLoading(false);
-      setInspection(null);
+  
       if (err.status === 404 || err.isNotFound) {
         setIsNotFound(true);
         setErrorMsg(err.message || `Inspection record #${id} not found in the active database.`);
@@ -81,7 +82,7 @@ export default function Result() {
   };
 
   useEffect(() => {
-    fetchInspection();
+    fetchInspection(pollCount > 0);
     return () => {
       if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
     };
@@ -89,7 +90,7 @@ export default function Result() {
 
   useEffect(() => {
     const handleFocusOrPop = () => {
-      fetchInspection();
+      fetchInspection(true);
     };
     window.addEventListener('popstate', handleFocusOrPop);
     window.addEventListener('focus', handleFocusOrPop);
@@ -106,7 +107,7 @@ export default function Result() {
     setDeleting(true);
     try {
       await apiClient.delete(`/inspections/${id}`);
-      setInspection(null);
+  
       window.dispatchEvent(new CustomEvent('inspection:deleted', { detail: { id } }));
       navigate('/inspections');
     } catch (err) {
@@ -268,12 +269,16 @@ export default function Result() {
   // Active image URL for current angle/perspective selection
   const safeImageIdx = activeImageIdx < resolvedImageUrls.length ? activeImageIdx : 0;
   const activeImageUrl = resolvedImageUrls[safeImageIdx] || '';
+  const currentImageRecord = (Array.isArray(inspection.images) ? inspection.images : [])[safeImageIdx] || null;
+  const currentImageId = currentImageRecord ? currentImageRecord.id : null;
+  const hasPerImageDetections = detections.some((d) => d.image_id != null);
+  const visibleDetections = (hasPerImageDetections && currentImageId) ? detections.filter((d) => d.image_id === currentImageId) : ((hasPerImageDetections && (inspection.images || []).length > 1) ? [] : detections);
 
   const hasTopology = Boolean(inspection.topology_available || inspection.mesh_url);
   const meshUrl = hasTopology
     ? resolveMediaUrl(inspection.mesh_url || `/api/v1/inspections/${id}/topology/file`)
     : null;
-  const isPending = (inspection.overall_verdict || '').toLowerCase() === 'pending';
+  const isPending = (inspection.overall_verdict || '').toLowerCase() === 'pending' && (inspection.status || '').toLowerCase() !== 'failed';
 
   return (
     <div className="space-y-5">
@@ -322,6 +327,11 @@ export default function Result() {
               <span className="px-2 py-0.5 rounded border border-white/15 bg-surface-dark font-mono text-xs font-bold text-matteSage">
                 {inspection.display_label ? inspection.display_label.toUpperCase() : `RECORD ${inspection.id}`}
               </span>
+              {inspection.operation_mode && (
+                <span className="px-2 py-0.5 rounded border border-grayGreen/50 bg-surface-dark font-mono text-xs font-bold text-matteSage uppercase">
+                  MODE: {inspection.operation_mode.replace('_', ' ')}
+                </span>
+              )}
               <StatusBadge status={inspection.overall_verdict} size="lg" />
             </div>
             <p className="text-xs text-greige mt-1 font-medium leading-relaxed font-sans">
@@ -508,7 +518,7 @@ export default function Result() {
             ) : activeImageUrl ? (
               <BoundingBoxOverlay
                 imageUrl={activeImageUrl}
-                detections={detections}
+                detections={visibleDetections}
                 hoveredId={hoveredDetId}
                 onHover={setHoveredDetId}
                 onClick={setHoveredDetId}

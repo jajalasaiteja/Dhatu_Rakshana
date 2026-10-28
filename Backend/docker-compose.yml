@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -7,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0000
+      POSTGRES_PASSWORD: postgrespassword
       POSTGRES_DB: marine_defect_db
     ports:
       - "5432:5432"
@@ -18,6 +16,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - backend_network
 
   api:
     build:
@@ -32,12 +32,21 @@ services:
       APP_ENV: production
       DEBUG: "False"
       STORAGE_DIR: /app/storage
+      MODELS_DIR: /app/models
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
       - inspection_storage:/app/storage
+      - ../models:/app/models:ro
+      - ../Frontend/dist:/app/Frontend/dist:ro
+    networks:
+      - backend_network
 
 volumes:
   postgres_data:
   inspection_storage:
+
+networks:
+  backend_network:
+    driver: bridge
