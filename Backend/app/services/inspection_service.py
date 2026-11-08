@@ -106,28 +106,56 @@ class InspectionService:
         combined_keys = ",".join([info["storage_key"] for info in saved_images_info])
 
         # 3. Create Inspection record
-        # Ensure sequential indexing starts cleanly from 1 when empty, or max_id + 1
-        max_id = self.session.exec(select(func.max(Inspection.id))).one()
-        next_id = 1 if max_id is None else (max_id + 1)
+        # Synchronize sequences and ensure clean indexing
+        is_postgres = False
+        try:
+            bind = self.session.get_bind()
+            if bind and bind.dialect.name == "postgresql":
+                is_postgres = True
+        except Exception:
+            pass
 
-        if next_id == 1:
+        if is_postgres:
             try:
-                self.session.execute(text("DELETE FROM sqlite_sequence WHERE name = 'inspections'"))
+                for table in ["inspections", "inspection_images", "detections", "defect_measurements", "graded_defect_records", "processing_jobs", "processing_artifacts", "inspection_reports", "topology_files"]:
+                    self.session.execute(text(f"SELECT setval(pg_get_serial_sequence('{table}', 'id'), coalesce(max(id), 1), max(id) IS NOT NULL) FROM {table}"))
                 self.session.commit()
-            except Exception:
-                pass
+            except Exception as seq_err:
+                logger.warning(f"PostgreSQL sequence sync warning: {seq_err}")
 
-        inspection = Inspection(
-            id=next_id,
-            zone_id=zone_id,
-            inspector_id=inspector_id,
-            image_path=combined_keys,
-            operation_mode=operation_mode,
-            mesh_path=None,
-            status="PENDING",
-            overall_verdict="PENDING",
-            timestamp=get_ist_now()
-        )
+            inspection = Inspection(
+                zone_id=zone_id,
+                inspector_id=inspector_id,
+                image_path=combined_keys,
+                operation_mode=operation_mode,
+                mesh_path=None,
+                status="PENDING",
+                overall_verdict="PENDING",
+                timestamp=get_ist_now()
+            )
+        else:
+            max_id = self.session.exec(select(func.max(Inspection.id))).one()
+            next_id = 1 if max_id is None else (max_id + 1)
+
+            if next_id == 1:
+                try:
+                    self.session.execute(text("DELETE FROM sqlite_sequence WHERE name = 'inspections'"))
+                    self.session.commit()
+                except Exception:
+                    pass
+
+            inspection = Inspection(
+                id=next_id,
+                zone_id=zone_id,
+                inspector_id=inspector_id,
+                image_path=combined_keys,
+                operation_mode=operation_mode,
+                mesh_path=None,
+                status="PENDING",
+                overall_verdict="PENDING",
+                timestamp=get_ist_now()
+            )
+
         self.session.add(inspection)
         self.session.commit()
         self.session.refresh(inspection)
@@ -193,9 +221,25 @@ class InspectionService:
         if not inspection:
             raise EntityNotFoundError("Inspection", inspection_id)
 
-        # Build list of URLs
+        # Build list of URLs from image_path and inspection.images records
+        img_records = inspection.images or []
         keys = [k.strip() for k in inspection.image_path.split(",") if k.strip()] if inspection.image_path else []
-        first_key = keys[0] if keys else (inspection.image_path if inspection.image_path else None)
+        if not keys and img_records:
+            keys = [img.storage_key for img in img_records]
+        elif img_records:
+            # Merge any image keys present in images table
+            for img in img_records:
+                if img.storage_key not in keys:
+                    keys.append(img.storage_key)
+
+        first_key = None
+        for candidate in keys:
+            if storage.exists(candidate):
+                first_key = candidate
+                break
+        if not first_key and keys:
+            first_key = keys[0]
+
         img_url = storage.get_public_url(first_key) if first_key else None
         all_urls = [storage.get_public_url(k) for k in keys if k] if keys else []
         # Resolve topology mesh URL and metadata
@@ -288,6 +332,7 @@ class InspectionService:
             "image_url": img_url,
             "thumbnail_url": img_url,
             "image_urls": all_urls,
+            "images": [img.to_dict() for img in (inspection.images or [])],
             "mesh_url": mesh_url,
             "topology_available": topology_available,
             "topology_info": topology_info,
@@ -311,8 +356,23 @@ class InspectionService:
             display_id = insp.id
             display_label = f"Record {insp.id}"
             zone_name = insp.zone.name if insp.zone else f"Zone {insp.zone_id}"
+            img_records = insp.images or []
             keys = [k.strip() for k in insp.image_path.split(",") if k.strip()] if insp.image_path else []
-            first_key = keys[0] if keys else (insp.image_path if insp.image_path else None)
+            if not keys and img_records:
+                keys = [im.storage_key for im in img_records]
+            elif img_records:
+                for im in img_records:
+                    if im.storage_key not in keys:
+                        keys.append(im.storage_key)
+
+            first_key = None
+            for candidate in keys:
+                if storage.exists(candidate):
+                    first_key = candidate
+                    break
+            if not first_key and keys:
+                first_key = keys[0]
+
             img_url = storage.get_public_url(first_key) if first_key else None
 
             topo = insp.topology

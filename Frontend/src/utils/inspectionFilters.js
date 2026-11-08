@@ -2,7 +2,7 @@
  * Dhatu Rakshana — Inspection Verification & Obsolete Record Filtering
  *
  * Enforces frontend display rules to permanently eliminate obsolete historical inspection
- * entries (specifically historical test scans dated October 3, October 6, and October 23, 2026)
+ * entries (specifically historical test scans dated before October 27, 2026)
  * while preserving genuine inspections created through the normal upload workflow.
  */
 
@@ -26,9 +26,14 @@ export function isObsoleteHistoricalRecord(record) {
   ).toLowerCase();
 
   if (
+    imagePath.includes('/2026/10/01/') ||
     imagePath.includes('/2026/10/02/') ||
     imagePath.includes('/2026/10/03/') ||
     imagePath.includes('/2026/10/06/') ||
+    imagePath.includes('/2026/10/07/') ||
+    imagePath.includes('/2026/10/09/') ||
+    imagePath.includes('preset_particulate') ||
+    imagePath.includes('pg_test') ||
     imagePath.includes('7c98894408_sample_scratch_specimen') ||
     imagePath.includes('4a1270885e_scratch_test') ||
     imagePath.includes('062d072113_sample_test_image_1') ||
@@ -37,10 +42,7 @@ export function isObsoleteHistoricalRecord(record) {
     return true;
   }
 
-  // 2. Match exact obsolete historical timestamps:
-  // - Records 1–6 dated October 3, 2026 (or UTC 2026-10-02 22:* / 23:*)
-  // - Record 7 dated October 6, 2026 (2026-10-06)
-  // - Record 8 dated October 23, 2026 (2026-10-23)
+  // 2. Match exact obsolete historical timestamps (any test scan prior to 2026-10-27)
   const ts = String(
     record.timestamp ||
     record.created_at ||
@@ -48,20 +50,16 @@ export function isObsoleteHistoricalRecord(record) {
     ''
   ).trim();
 
+  // If timestamp starts with an early October 2026 date:
   if (
-    ts.startsWith('2026-10-02 22:') ||
-    ts.startsWith('2026-10-02 23:') ||
-    ts.startsWith('2026-10-02T22:') ||
-    ts.startsWith('2026-10-02T23:') ||
+    ts.startsWith('2026-10-01') ||
+    ts.startsWith('2026-10-02') ||
     ts.startsWith('2026-10-03') ||
-    ts.includes('03 Oct 2026') ||
-    ts.includes('October 3, 2026') ||
     ts.startsWith('2026-10-06') ||
-    ts.includes('06 Oct 2026') ||
-    ts.includes('October 6, 2026') ||
-    ts.startsWith('2026-10-23') ||
-    ts.includes('23 Oct 2026') ||
-    ts.includes('October 23, 2026')
+    ts.startsWith('2026-10-07') ||
+    ts.startsWith('2026-10-08') ||
+    ts.startsWith('2026-10-09') ||
+    ts.startsWith('2026-10-23')
   ) {
     return true;
   }

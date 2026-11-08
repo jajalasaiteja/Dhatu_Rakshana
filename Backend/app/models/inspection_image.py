@@ -22,10 +22,12 @@ class InspectionImage(SQLModel, table=True):
     inspection: Optional["Inspection"] = Relationship(back_populates="images")
 
     def to_dict(self) -> Dict[str, Any]:
+        clean_key = self.storage_key.lstrip("/\\").replace("\\", "/")
         return {
             "id": self.id,
             "inspection_id": self.inspection_id,
             "storage_key": self.storage_key,
+            "url": f"/files/{clean_key}",
             "original_filename": self.original_filename,
             "width": self.width,
             "height": self.height,

@@ -18,6 +18,7 @@ from app.api.deps import (
 )
 from app.models.user import User
 from app.models.inspection import Inspection
+from app.models.inspection_image import InspectionImage
 from app.models.detection import Detection
 from app.models.artifact import ProcessingArtifact
 from app.models.report import InspectionReport
@@ -250,7 +251,18 @@ def delete_inspection(
     # 2. Clean up physical PLY file on filesystem safely
     topology_storage.delete_topology(inspection_id)
 
-    # 3. Delete inspection record
+    # 3. Clean up detections and images first to satisfy PostgreSQL detections_image_id_fkey
+    dets = session.exec(select(Detection).where(Detection.inspection_id == inspection_id)).all()
+    for d in dets:
+        session.delete(d)
+    session.flush()
+
+    imgs = session.exec(select(InspectionImage).where(InspectionImage.inspection_id == inspection_id)).all()
+    for im in imgs:
+        session.delete(im)
+    session.flush()
+
+    # 4. Delete inspection record
     session.delete(insp)
     session.commit()
 

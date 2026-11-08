@@ -52,17 +52,29 @@ def _normalize_storage_path(env_val: Optional[str], default_rel: str) -> Path:
 
 # Local Data and Storage directories (created automatically on access)
 DATA_DIR = _normalize_storage_path(os.getenv("DATA_DIR"), "data")
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 STORAGE_DIR = _normalize_storage_path(os.getenv("STORAGE_DIR"), "storage")
-STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 MODELS_DIR = _normalize_storage_path(os.getenv("MODELS_DIR"), "models")
-MODELS_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 # 3D Micro-Topography PLY Storage Directory
 TOPOLOGY_STORAGE_DIR = _normalize_storage_path(os.getenv("TOPOLOGY_STORAGE_DIR"), "storage/topology")
-TOPOLOGY_STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    TOPOLOGY_STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 # Config path resolution
 DEFAULT_CONFIG_DIR = BACKEND_DIR / "config"
@@ -81,14 +93,20 @@ def resolve_db_url(raw_url: Optional[str] = None) -> str:
     if clean_url.startswith("sqlite:////workspace/"):
         rel_sub = clean_url[len("sqlite:////workspace/"):]
         abs_db = (PROJECT_ROOT / rel_sub).resolve()
-        abs_db.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            abs_db.parent.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
         return f"sqlite:///{abs_db.as_posix()}"
 
     # If explicitly sqlite relative path e.g. sqlite:///./data/... or sqlite:///data/...
     if env_url.startswith("sqlite:///./") or env_url.startswith("sqlite:///.\\"):
         rel_path = env_url[len("sqlite:///./"):]
         abs_db = (PROJECT_ROOT / rel_path).resolve()
-        abs_db.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            abs_db.parent.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
         return f"sqlite:///{abs_db.as_posix()}"
     
     if env_url.startswith("sqlite:///") and not env_url.startswith("sqlite:////") and not (len(env_url) > 11 and env_url[10] == ":"):
@@ -96,7 +114,10 @@ def resolve_db_url(raw_url: Optional[str] = None) -> str:
         candidate_rel = env_url[len("sqlite:///"):]
         if not Path(candidate_rel).is_absolute():
             abs_db = (PROJECT_ROOT / candidate_rel).resolve()
-            abs_db.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                abs_db.parent.mkdir(parents=True, exist_ok=True)
+            except Exception:
+                pass
             return f"sqlite:///{abs_db.as_posix()}"
 
     return env_url

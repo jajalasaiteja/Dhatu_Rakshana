@@ -6,6 +6,7 @@ in-process ML/CV inference, and integrated React SPA serving.
 """
 
 import sys
+import traceback
 from pathlib import Path
 from contextlib import asynccontextmanager
 
@@ -14,10 +15,11 @@ backend_root = Path(__file__).resolve().parent.parent
 if str(backend_root) not in sys.path:
     sys.path.insert(0, str(backend_root))
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 
 from app.core.config import settings, FRONTEND_DIST
 from app.core.logging import setup_logging, logger
@@ -43,7 +45,7 @@ async def lifespan(app: FastAPI):
     """Application lifecycle: initializes database, seeds reference data, and preheats ML registry."""
     logger.info(f"Starting {settings.APP_NAME} Backend ({settings.APP_ENV})...")
     try:
-        # Run automated migrations to ensure SQLite schema is at latest revision
+        # Run automated migrations to ensure schema is at latest revision
         run_migrations()
         seed_database()
 
@@ -65,6 +67,36 @@ app = FastAPI(
 
 # Centralized Domain Exception Handling
 app.add_exception_handler(DhatuRakshanaError, dhatu_exception_handler)
+
+# Global Request Validation Exception Handling
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Request Validation Error on {request.method} {request.url.path}: {exc.errors()}")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors(), "body": str(getattr(exc, "body", None))}
+    )
+
+# Global Unhandled Python Exception Handling (Surfaces full traceback to terminal & response)
+@app.exception_handler(Exception)
+async def global_unhandled_exception_handler(request: Request, exc: Exception):
+    tb = traceback.format_exc()
+    logger.critical(
+        f"\n{'='*75}\n"
+        f"CRITICAL BACKEND ERROR (500) ON: {request.method} {request.url.path}\n"
+        f"Exception Type: {type(exc).__name__}\n"
+        f"Error Detail  : {str(exc)}\n"
+        f"Traceback:\n{tb}"
+        f"{'='*75}\n"
+    )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": f"{type(exc).__name__}: {str(exc)}",
+            "error": type(exc).__name__,
+            "path": request.url.path
+        }
+    )
 
 # CORS Configuration
 app.add_middleware(
@@ -140,12 +172,12 @@ def api_base_info():
 @app.post("/api/v1/system/backup", tags=["System"])
 @app.post("/backup", tags=["System"])
 def trigger_backup():
-    """Trigger online atomic backup of the SQLite database without locking active transactions."""
+    """Trigger online atomic backup of the database without locking active transactions."""
     try:
         backup_path = backup_database()
         return {
             "status": "success",
-            "message": "SQLite database successfully backed up",
+            "message": "Database successfully backed up",
             "backup_file": backup_path.name,
             "backup_path": str(backup_path.resolve())
         }

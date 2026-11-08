@@ -34,7 +34,7 @@ Marine protective coatings are the first line of defense against severe seawater
                         ▼
  ┌──────────────────────────────────────────────────────────────────┐
  │  Stage 2: High-Resolution 2-Stage Tiled AI Inference             │
- │  • Overlapping 640x640 sliding window slicing (Zero downsample). │
+ │  • Overlapping 512x512 sliding window slicing (Zero downsample). │
  │  • YOLOv8 primary detector + ResNet18 fine-grained classifier.   │
  │  • Subtypes: pinhole, scratch, inclusion, contamination.        │
  └──────────────────────┬───────────────────────────────────────────┘

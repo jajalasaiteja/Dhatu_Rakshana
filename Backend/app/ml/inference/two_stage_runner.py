@@ -40,8 +40,8 @@ OPERATIONAL_MODES: Dict[str, Dict[str, Any]] = {
         "yolo_conf": 0.15,
         "clean_rejection_thr": 0.65,
         "iou_thresh": 0.35,
-        "accept_particles": True,
-        "desc": "Recommended production standard: Catches both macro-defects and micro-particles, filtered by ResNet."
+        "accept_particles": False,
+        "desc": "Recommended production standard: Macro & micro defect inspection with ResNet filtering, excluding harmless particles."
     },
     "safety": {
         "yolo_conf": 0.08,
@@ -66,6 +66,17 @@ OPERATIONAL_MODES: Dict[str, Dict[str, Any]] = {
     }
 }
 
+OPERATIONAL_PRESETS: Dict[str, Dict[str, Any]] = OPERATIONAL_MODES
+
+
+class AdaptiveConcatPool2d(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.avg = torch.nn.AdaptiveAvgPool2d(1)
+        self.max = torch.nn.AdaptiveMaxPool2d(1)
+    def forward(self, x):
+        return torch.cat([self.avg(x), self.max(x)], dim=1)
+
 
 class TwoStageInspectionRunner(BaseInferenceEngine):
     def __init__(
@@ -75,7 +86,9 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
         yolo_weights_path: Optional[Union[str, Path]] = None,
         resnet_weights_path: Optional[Union[str, Path]] = None,
         default_mode: str = "balanced",
-        device: str = "auto"
+        device: str = "auto",
+        tile_size: int = 512,
+        overlap: int = 128
     ):
         resolved_device = "cuda" if (device == "cuda" or (device == "auto" and torch.cuda.is_available())) else "cpu"
         super().__init__(name=name, version=version, device=resolved_device)
@@ -83,6 +96,8 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
         self.yolo_weights_path = Path(yolo_weights_path) if yolo_weights_path else None
         self.resnet_weights_path = Path(resnet_weights_path) if resnet_weights_path else None
         self.default_mode = default_mode if default_mode in OPERATIONAL_MODES else "balanced"
+        self.tile_size = int(tile_size)
+        self.overlap = int(overlap)
 
         self.yolo_model = None
         self.resnet_model = None
@@ -112,18 +127,55 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
             logger.info(f"Loading Stage 2 ResNet classifier from {self.resnet_weights_path} onto {self.device}...")
             ck = torch.load(str(self.resnet_weights_path), map_location=self.device)
             self.resnet_classes = ck.get("classes", self.resnet_classes)
-            arch = ck.get("arch", "resnet18")
-            self.imgsz = ck.get("imgsz", 224)
+            arch = ck.get("arch", "resnet34")
+            self.imgsz = ck.get("img_size") or ck.get("imgsz", 256)
 
-            if arch == "mobilenet_v3_small":
+            # Check if weights were saved with custom AdaptiveConcatPool architecture (0.* backbone, 1.* head)
+            if any(k.startswith("0.") or k.startswith("1.") for k in ck["state_dict"]):
+                ctor = getattr(torchvision.models, arch, torchvision.models.resnet34)
+                base = ctor(weights=None)
+                backbone = torch.nn.Sequential(*list(base.children())[:-2])
+                
+                feat_dim = 1024
+                hidden_dim = 256
+                if "1.4.weight" in ck["state_dict"]:
+                    feat_dim = ck["state_dict"]["1.4.weight"].shape[1]
+                    hidden_dim = ck["state_dict"]["1.4.weight"].shape[0]
+
+                head = torch.nn.Sequential(
+                    AdaptiveConcatPool2d(),
+                    torch.nn.Flatten(),
+                    torch.nn.BatchNorm1d(feat_dim),
+                    torch.nn.Dropout(p=0.30),
+                    torch.nn.Linear(feat_dim, hidden_dim),
+                    torch.nn.ReLU(inplace=True),
+                    torch.nn.BatchNorm1d(hidden_dim),
+                    torch.nn.Dropout(p=0.20),
+                    torch.nn.Linear(hidden_dim, len(self.resnet_classes))
+                )
+                self.resnet_model = torch.nn.Sequential(backbone, head)
+            elif arch == "mobilenet_v3_small":
                 self.resnet_model = torchvision.models.mobilenet_v3_small(weights=None)
                 self.resnet_model.classifier[3] = torch.nn.Linear(
                     self.resnet_model.classifier[3].in_features, len(self.resnet_classes)
                 )
+            elif "convnext" in str(arch):
+                ctor = getattr(torchvision.models, arch, torchvision.models.convnext_tiny)
+                self.resnet_model = ctor(weights=None)
+                self.resnet_model.classifier[2] = torch.nn.Linear(
+                    self.resnet_model.classifier[2].in_features, len(self.resnet_classes)
+                )
+            elif "efficientnet" in str(arch):
+                ctor = getattr(torchvision.models, arch, torchvision.models.efficientnet_b0)
+                self.resnet_model = ctor(weights=None)
+                self.resnet_model.classifier[1] = torch.nn.Linear(
+                    self.resnet_model.classifier[1].in_features, len(self.resnet_classes)
+                )
             else:
                 ctor = getattr(torchvision.models, arch, torchvision.models.resnet18)
                 self.resnet_model = ctor(weights=None)
-                self.resnet_model.fc = torch.nn.Linear(self.resnet_model.fc.in_features, len(self.resnet_classes))
+                if hasattr(self.resnet_model, "fc"):
+                    self.resnet_model.fc = torch.nn.Linear(self.resnet_model.fc.in_features, len(self.resnet_classes))
 
             self.resnet_model.load_state_dict(ck["state_dict"])
             self.resnet_model.to(self.device).eval()
@@ -153,13 +205,20 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
             torch.cuda.empty_cache()
         self.is_loaded = False
 
-    def _crop_with_adaptive_context(self, im_pil: Image.Image, box: List[float], min_side: int = 40) -> Image.Image:
-        """Extracts context box around candidate defect, ensuring micro-defects are not diluted."""
+    def _crop_with_adaptive_context(
+        self,
+        im_pil: Image.Image,
+        box: List[float],
+        min_side: int = 48,
+        context: float = 1.35
+    ) -> Image.Image:
+        """Extracts context box around candidate defect with adaptive padding to prevent drowning micro-defects."""
         W, H = im_pil.size
         x0, y0, x1, y1 = box
         bw = max(x1 - x0, 1.0)
         bh = max(y1 - y0, 1.0)
-        side = min(max(max(bw, bh) * 1.8, float(min_side)), float(min(W, H)))
+        pad = max(bw, bh) * 0.35 + 16.0
+        side = min(max(max(bw, bh) + 2.0 * pad, float(min_side)), float(min(W, H)))
         cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
         left = min(max(cx - side / 2.0, 0.0), float(W - side))
         top = min(max(cy - side / 2.0, 0.0), float(H - side))
@@ -169,12 +228,12 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
         self,
         im_pil: Image.Image,
         conf_thr: float,
-        tile_size: int = 640,
-        overlap: int = 160,
+        tile_size: int = 512,
+        overlap: int = 128,
         iou_thresh: float = 0.35,
-        accept_particles: bool = True
+        accept_particles: bool = False
     ) -> tuple:
-        """Slices images into native 640x640 overlapping tiles, exactly matching training resolution."""
+        """Slices images into native 512x512 overlapping tiles, exactly matching training resolution."""
         W, H = im_pil.size
         
         # If image fits within 640x640, pad to 640x640 without any downsampling
@@ -231,7 +290,11 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
                 tiles.append(crop)
                 offsets.append((x, y))
 
-        preds = self.yolo_model(tiles, conf=conf_thr, imgsz=tile_size, batch=16, verbose=False, device=self.device)
+        preds = []
+        batch_sz = 16
+        for i in range(0, len(tiles), batch_sz):
+            chunk = tiles[i:i + batch_sz]
+            preds.extend(self.yolo_model(chunk, conf=conf_thr, imgsz=tile_size, verbose=False, device=self.device))
 
         all_boxes, all_confs, all_classes = [], [], []
         for (ox, oy), res in zip(offsets, preds):
@@ -239,11 +302,21 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
                 b = res.boxes.xyxy.cpu().numpy()
                 c = res.boxes.conf.cpu().numpy()
                 cl = res.boxes.cls.cpu().numpy().astype(int)
-                b[:, [0, 2]] += ox
-                b[:, [1, 3]] += oy
-                all_boxes.append(b)
-                all_confs.append(c)
-                all_classes.append(cl)
+
+                # Filter detections located on artificial tile padding
+                tile_valid_w = min(tile_size, W - ox)
+                tile_valid_h = min(tile_size, H - oy)
+                valid = (b[:, 0] < tile_valid_w) & (b[:, 1] < tile_valid_h) & (b[:, 2] > 0) & (b[:, 3] > 0)
+                b = b[valid]
+                c = c[valid]
+                cl = cl[valid]
+
+                if len(b) > 0:
+                    b[:, [0, 2]] = np.clip(b[:, [0, 2]] + ox, 0, W)
+                    b[:, [1, 3]] = np.clip(b[:, [1, 3]] + oy, 0, H)
+                    all_boxes.append(b)
+                    all_confs.append(c)
+                    all_classes.append(cl)
 
         if not all_boxes:
             return np.zeros((0, 4)), np.zeros(0)
@@ -297,6 +370,61 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
         keep = torchvision.ops.nms(t_boxes, t_confs, iou_threshold=iou_thresh).cpu().numpy()
         return boxes[keep], confs[keep]
 
+    def _classify_and_filter(
+        self,
+        cand_boxes: np.ndarray,
+        cand_confs: np.ndarray,
+        probs: np.ndarray,
+        clean_rejection_thr: float,
+        orig_w: int,
+        orig_h: int,
+        active_mode: str = "balanced",
+        is_high_res: bool = True
+    ) -> List[DefectCandidate]:
+        """Classifies candidates using ResNet probabilities and filters clean surfaces/background."""
+        candidates: List[DefectCandidate] = []
+        total_pixels = float(orig_w * orig_h)
+
+        for b, y_conf, p in zip(cand_boxes, cand_confs, probs):
+            probs_dict = {cls_name: float(pr) for cls_name, pr in zip(self.resnet_classes, p)}
+            p_clean = probs_dict.get("no_defect", 0.0)
+
+            defect_subtypes = {k: v for k, v in probs_dict.items() if k != "no_defect"}
+            max_defect_prob = max(defect_subtypes.values()) if defect_subtypes else 0.0
+
+            # Reject only if clean surface strongly dominates over all defect probabilities
+            if p_clean >= clean_rejection_thr and p_clean > max_defect_prob:
+                continue
+
+            best_sub = max(defect_subtypes, key=defect_subtypes.get)
+            sub_conf = defect_subtypes[best_sub]
+
+            clamped = clamp_bbox(b.tolist(), orig_w, orig_h)
+            w = clamped[2] - clamped[0]
+            h = clamped[3] - clamped[1]
+            if w <= 0.0 or h <= 0.0:
+                continue
+            area_pct = round(((w * h) / total_pixels) * 100.0, 4)
+
+            candidates.append(
+                DefectCandidate(
+                    class_name="defect",
+                    subtype=best_sub,
+                    bbox=clamped,
+                    confidence=round(float(sub_conf), 4),
+                    area_pct=area_pct,
+                    metadata={
+                        "yolo_confidence": round(float(y_conf), 4),
+                        "p_no_defect": round(float(p_clean), 4),
+                        "probabilities": {k: round(v, 3) for k, v in probs_dict.items()},
+                        "mode": active_mode,
+                        "is_high_res": is_high_res
+                    }
+                )
+            )
+
+        return candidates
+
     def predict(
         self,
         image_input: Union[str, Path, np.ndarray],
@@ -328,63 +456,45 @@ class TwoStageInspectionRunner(BaseInferenceEngine):
         iou_thresh = float(cfg["iou_thresh"])
         accept_particles = bool(cfg["accept_particles"])
 
-        # 3. Stage 1: Native 640x640 Tiled Inference (Zero Downsampling)
-        # Slices any photo into exact 640x640 native tiles to match the training resolution exactly
-        is_high_res = max(orig_w, orig_h) >= 640
+        # 3. Stage 1: Native 512x512 Tiled Inference (Zero Downsampling)
+        # Slices photo into exact 512x512 native tiles to match training resolution
+        is_high_res = max(orig_w, orig_h) >= self.tile_size
         cand_boxes, cand_confs = self._slice_and_infer_high_res(
             im_pil,
             conf_thr=conf_thr,
-            tile_size=640,
-            overlap=160,
+            tile_size=self.tile_size,
+            overlap=self.overlap,
             iou_thresh=iou_thresh,
             accept_particles=accept_particles
         )
-        min_side = 32
 
         # 4. Stage 2: ResNet Subtype Attribution & Soft Rejection
         candidates: List[DefectCandidate] = []
-        total_pixels = float(orig_w * orig_h)
 
         if len(cand_boxes) > 0:
-            crops = [self._crop_with_adaptive_context(im_pil, b, min_side=min_side) for b in cand_boxes]
+            crops = [self._crop_with_adaptive_context(im_pil, b, min_side=120, context=2.2) for b in cand_boxes]
             batch = torch.stack([self.resnet_tf(c) for c in crops]).to(self.device)
             with torch.no_grad():
                 logits = self.resnet_model(batch)
                 probs = torch.softmax(logits, dim=1).cpu().numpy()
 
-            for b, y_conf, p in zip(cand_boxes, cand_confs, probs):
-                probs_dict = {cls_name: float(pr) for cls_name, pr in zip(self.resnet_classes, p)}
-                p_clean = probs_dict.get("no_defect", 0.0)
+            candidates = self._classify_and_filter(
+                cand_boxes=cand_boxes,
+                cand_confs=cand_confs,
+                probs=probs,
+                clean_rejection_thr=clean_rejection_thr,
+                orig_w=orig_w,
+                orig_h=orig_h,
+                active_mode=active_mode,
+                is_high_res=is_high_res
+            )
 
-                # Soft Rejection Rule: Only discard if ResNet is confident it is clean background
-                if p_clean >= clean_rejection_thr:
-                    continue
-
-                defect_subtypes = {k: v for k, v in probs_dict.items() if k != "no_defect"}
-                best_sub = max(defect_subtypes, key=defect_subtypes.get)
-                sub_conf = defect_subtypes[best_sub]
-
-                clamped = clamp_bbox(b.tolist(), orig_w, orig_h)
-                w = clamped[2] - clamped[0]
-                h = clamped[3] - clamped[1]
-                area_pct = round(((w * h) / total_pixels) * 100.0, 4)
-
-                candidates.append(
-                    DefectCandidate(
-                        class_name="defect",
-                        subtype=best_sub,
-                        bbox=clamped,
-                        confidence=round(float(sub_conf), 4),
-                        area_pct=area_pct,
-                        metadata={
-                            "yolo_confidence": round(float(y_conf), 4),
-                            "p_no_defect": round(float(p_clean), 4),
-                            "probabilities": {k: round(v, 3) for k, v in probs_dict.items()},
-                            "mode": active_mode,
-                            "is_high_res": is_high_res
-                        }
-                    )
-                )
+            # Post-Stage-2 NMS: Merge duplicate boxes spanning sliding tile seams
+            if len(candidates) > 1:
+                boxes_tensor = torch.tensor([c.bbox for c in candidates], dtype=torch.float32)
+                scores_tensor = torch.tensor([c.confidence for c in candidates], dtype=torch.float32)
+                keep_indices = torchvision.ops.nms(boxes_tensor, scores_tensor, iou_threshold=0.25)
+                candidates = [candidates[i] for i in keep_indices.tolist()]
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
 

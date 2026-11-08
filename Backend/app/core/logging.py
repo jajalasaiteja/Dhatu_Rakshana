@@ -18,8 +18,8 @@ def setup_logging():
         stream=sys.stdout
     )
 
-    # Silence overly verbose external loggers
-    logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
+    # Keep uvicorn access logging active so all HTTP requests and status codes appear in the terminal
+    logging.getLogger("uvicorn.access").setLevel(logging.INFO)
     logging.getLogger("PIL").setLevel(logging.WARNING)
     logging.getLogger("ultralytics").setLevel(logging.WARNING)
 

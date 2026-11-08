@@ -1,0 +1,7436 @@
+[
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 1,
+    "filename": "inclusion_01_20250507T155808Z_002901_265_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 143.34,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 2
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 2 'inclusion' detection(s) (conf: 94.0%, 88.5%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9404,
+        "bbox": [
+          1364.14,
+          2596.46,
+          1455.98,
+          2686.03
+        ],
+        "area_pct": 0.051,
+        "p_no_defect": 0.0378,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.94,
+          "no_defect": 0.038,
+          "pinhole": 0.002,
+          "scratch": 0.02
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.8852,
+        "bbox": [
+          1344.45,
+          2556.68,
+          1425.16,
+          2638.27
+        ],
+        "area_pct": 0.0408,
+        "p_no_defect": 0.0936,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.885,
+          "no_defect": 0.094,
+          "pinhole": 0.004,
+          "scratch": 0.016
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 2,
+    "filename": "inclusion_02_20250507T161757Z_017511_346_top_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 118.27,
+    "num_detections": 5,
+    "class_distribution": {
+      "inclusion": 5
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 5 'inclusion' detection(s) (conf: 99.2%, 91.3%, 79.3%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9922,
+        "bbox": [
+          1266.61,
+          240.2,
+          1357.1,
+          323.08
+        ],
+        "area_pct": 0.0465,
+        "p_no_defect": 0.006,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.992,
+          "no_defect": 0.006,
+          "pinhole": 0.0,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9135,
+        "bbox": [
+          2025.97,
+          4991.21,
+          2104.82,
+          5071.12
+        ],
+        "area_pct": 0.0391,
+        "p_no_defect": 0.009,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.913,
+          "no_defect": 0.009,
+          "pinhole": 0.001,
+          "scratch": 0.077
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7926,
+        "bbox": [
+          1197.73,
+          338.91,
+          1279.71,
+          470.84
+        ],
+        "area_pct": 0.0671,
+        "p_no_defect": 0.1824,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.793,
+          "no_defect": 0.182,
+          "pinhole": 0.004,
+          "scratch": 0.02
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7424,
+        "bbox": [
+          2446.08,
+          3492.65,
+          2548.01,
+          3582.06
+        ],
+        "area_pct": 0.0565,
+        "p_no_defect": 0.0315,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.742,
+          "no_defect": 0.032,
+          "pinhole": 0.002,
+          "scratch": 0.223
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.4966,
+        "bbox": [
+          942.22,
+          2122.39,
+          1042.07,
+          2232.77
+        ],
+        "area_pct": 0.0683,
+        "p_no_defect": 0.202,
+        "probabilities": {
+          "contamination": 0.278,
+          "inclusion": 0.497,
+          "no_defect": 0.202,
+          "pinhole": 0.012,
+          "scratch": 0.011
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 3,
+    "filename": "inclusion_03_20250507T161826Z_016589_346_top_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 69.61,
+    "num_detections": 1,
+    "class_distribution": {
+      "inclusion": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 1 'inclusion' detection(s) (conf: 84.0%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.84,
+        "bbox": [
+          1221.88,
+          4261.42,
+          1279.99,
+          4346.83
+        ],
+        "area_pct": 0.0308,
+        "p_no_defect": 0.1223,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.84,
+          "no_defect": 0.122,
+          "pinhole": 0.003,
+          "scratch": 0.034
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 4,
+    "filename": "inclusion_04_20250507T162008Z_013358_314_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 56.77,
+    "num_detections": 1,
+    "class_distribution": {
+      "inclusion": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 1 'inclusion' detection(s) (conf: 97.5%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.975,
+        "bbox": [
+          2474.87,
+          2404.25,
+          2559.63,
+          2488.86
+        ],
+        "area_pct": 0.0445,
+        "p_no_defect": 0.0037,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.975,
+          "no_defect": 0.004,
+          "pinhole": 0.001,
+          "scratch": 0.02
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 5,
+    "filename": "inclusion_05_20250507T162303Z_007820_314_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 52.07,
+    "num_detections": 4,
+    "class_distribution": {
+      "scratch": 4
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 4 detection(s) classified as 'scratch' (4x) instead of target 'inclusion'.",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 0.8927,
+        "bbox": [
+          2051.5,
+          2066.33,
+          2237.6,
+          2250.6
+        ],
+        "area_pct": 0.2126,
+        "p_no_defect": 0.0057,
+        "probabilities": {
+          "contamination": 0.005,
+          "inclusion": 0.093,
+          "no_defect": 0.006,
+          "pinhole": 0.004,
+          "scratch": 0.893
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.8719,
+        "bbox": [
+          2491.3,
+          2032.51,
+          2670.06,
+          2204.69
+        ],
+        "area_pct": 0.1908,
+        "p_no_defect": 0.0022,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.124,
+          "no_defect": 0.002,
+          "pinhole": 0.001,
+          "scratch": 0.872
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.787,
+        "bbox": [
+          2534.38,
+          1985.77,
+          2694.65,
+          2048.0
+        ],
+        "area_pct": 0.0618,
+        "p_no_defect": 0.0644,
+        "probabilities": {
+          "contamination": 0.008,
+          "inclusion": 0.133,
+          "no_defect": 0.064,
+          "pinhole": 0.007,
+          "scratch": 0.787
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.5051,
+        "bbox": [
+          2387.1,
+          1179.05,
+          2473.09,
+          1280.0
+        ],
+        "area_pct": 0.0538,
+        "p_no_defect": 0.0277,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.46,
+          "no_defect": 0.028,
+          "pinhole": 0.006,
+          "scratch": 0.505
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 6,
+    "filename": "inclusion_06_20250507T162501Z_004089_346_top_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 53.17,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 2
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 2 'inclusion' detection(s) (conf: 96.2%, 87.4%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.962,
+        "bbox": [
+          1424.27,
+          384.05,
+          1542.05,
+          427.95
+        ],
+        "area_pct": 0.0321,
+        "p_no_defect": 0.0158,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.962,
+          "no_defect": 0.016,
+          "pinhole": 0.001,
+          "scratch": 0.02
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.8735,
+        "bbox": [
+          1470.49,
+          4156.6,
+          1558.42,
+          4245.31
+        ],
+        "area_pct": 0.0484,
+        "p_no_defect": 0.0223,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.873,
+          "no_defect": 0.022,
+          "pinhole": 0.003,
+          "scratch": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 7,
+    "filename": "inclusion_07_20250509T091823Z_003779_265_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 53.9,
+    "num_detections": 1,
+    "class_distribution": {
+      "inclusion": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 1 'inclusion' detection(s) (conf: 99.6%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9961,
+        "bbox": [
+          2206.88,
+          101.29,
+          2352.72,
+          231.5
+        ],
+        "area_pct": 0.1177,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.996,
+          "no_defect": 0.001,
+          "pinhole": 0.0,
+          "scratch": 0.003
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 8,
+    "filename": "inclusion_08_1138_bmp.rf.e4252560e78e47979a107398d3ab0d49.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.73,
+    "num_detections": 14,
+    "class_distribution": {
+      "contamination": 14
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 14 detection(s) classified as 'contamination' (14x) instead of target 'inclusion'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9995,
+        "bbox": [
+          265.89,
+          929.85,
+          357.48,
+          1017.97
+        ],
+        "area_pct": 0.3892,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9985,
+        "bbox": [
+          184.25,
+          80.79,
+          263.28,
+          153.48
+        ],
+        "area_pct": 0.277,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9972,
+        "bbox": [
+          1540.8,
+          744.3,
+          1625.74,
+          821.62
+        ],
+        "area_pct": 0.3167,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9971,
+        "bbox": [
+          1521.39,
+          665.39,
+          1597.89,
+          735.94
+        ],
+        "area_pct": 0.2603,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          1434.83,
+          100.92,
+          1515.07,
+          175.16
+        ],
+        "area_pct": 0.2873,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.005,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9824,
+        "bbox": [
+          1735.43,
+          508.25,
+          1823.97,
+          591.45
+        ],
+        "area_pct": 0.3553,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.982,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.017,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9797,
+        "bbox": [
+          513.85,
+          642.59,
+          593.81,
+          718.1
+        ],
+        "area_pct": 0.2912,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.019,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9785,
+        "bbox": [
+          768.0,
+          641.74,
+          838.14,
+          733.14
+        ],
+        "area_pct": 0.3092,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.979,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.021,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9735,
+        "bbox": [
+          673.87,
+          597.69,
+          772.81,
+          687.43
+        ],
+        "area_pct": 0.4282,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.973,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.026,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9681,
+        "bbox": [
+          1077.67,
+          19.09,
+          1201.78,
+          145.88
+        ],
+        "area_pct": 0.7589,
+        "p_no_defect": 0.002,
+        "probabilities": {
+          "contamination": 0.968,
+          "inclusion": 0.006,
+          "no_defect": 0.002,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.947,
+        "bbox": [
+          1724.43,
+          702.8,
+          1805.05,
+          778.41
+        ],
+        "area_pct": 0.294,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.947,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.052,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.933,
+        "bbox": [
+          384.36,
+          718.78,
+          455.69,
+          797.44
+        ],
+        "area_pct": 0.2706,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.933,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.066,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8583,
+        "bbox": [
+          1468.6,
+          273.14,
+          1551.74,
+          352.42
+        ],
+        "area_pct": 0.3179,
+        "p_no_defect": 0.0017,
+        "probabilities": {
+          "contamination": 0.858,
+          "inclusion": 0.001,
+          "no_defect": 0.002,
+          "pinhole": 0.138,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8402,
+        "bbox": [
+          0.0,
+          963.06,
+          36.75,
+          1034.29
+        ],
+        "area_pct": 0.1262,
+        "p_no_defect": 0.0029,
+        "probabilities": {
+          "contamination": 0.84,
+          "inclusion": 0.004,
+          "no_defect": 0.003,
+          "pinhole": 0.152,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 9,
+    "filename": "inclusion_09_1139_bmp.rf.94e09b91e242cff0f62f6150254e5793.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 9.43,
+    "num_detections": 15,
+    "class_distribution": {
+      "contamination": 15
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 15 detection(s) classified as 'contamination' (15x) instead of target 'inclusion'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.998,
+        "bbox": [
+          1662.17,
+          511.08,
+          1746.36,
+          590.72
+        ],
+        "area_pct": 0.3233,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9979,
+        "bbox": [
+          182.39,
+          932.51,
+          284.47,
+          1023.92
+        ],
+        "area_pct": 0.45,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9942,
+        "bbox": [
+          1464.97,
+          746.38,
+          1550.45,
+          825.52
+        ],
+        "area_pct": 0.3262,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.006,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          441.16,
+          648.06,
+          511.82,
+          718.57
+        ],
+        "area_pct": 0.2403,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.004,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9918,
+        "bbox": [
+          1649.1,
+          705.03,
+          1728.81,
+          779.5
+        ],
+        "area_pct": 0.2863,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.992,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9857,
+        "bbox": [
+          108.09,
+          80.87,
+          193.98,
+          158.58
+        ],
+        "area_pct": 0.3219,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.986,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9849,
+        "bbox": [
+          1352.97,
+          96.1,
+          1440.38,
+          176.9
+        ],
+        "area_pct": 0.3406,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9826,
+        "bbox": [
+          1004.55,
+          22.46,
+          1123.95,
+          145.88
+        ],
+        "area_pct": 0.7107,
+        "p_no_defect": 0.0012,
+        "probabilities": {
+          "contamination": 0.983,
+          "inclusion": 0.004,
+          "no_defect": 0.001,
+          "pinhole": 0.012,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9795,
+        "bbox": [
+          600.23,
+          595.86,
+          699.12,
+          694.35
+        ],
+        "area_pct": 0.4697,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.02,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9663,
+        "bbox": [
+          1257.35,
+          15.48,
+          1335.56,
+          86.3
+        ],
+        "area_pct": 0.2671,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.966,
+          "inclusion": 0.008,
+          "no_defect": 0.001,
+          "pinhole": 0.025,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9593,
+        "bbox": [
+          298.18,
+          724.64,
+          376.08,
+          795.26
+        ],
+        "area_pct": 0.2653,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.959,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.039,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.959,
+        "bbox": [
+          1441.06,
+          662.74,
+          1523.55,
+          740.7
+        ],
+        "area_pct": 0.3101,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.959,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.04,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.894,
+        "bbox": [
+          0.0,
+          962.83,
+          36.68,
+          1033.16
+        ],
+        "area_pct": 0.1244,
+        "p_no_defect": 0.0028,
+        "probabilities": {
+          "contamination": 0.894,
+          "inclusion": 0.007,
+          "no_defect": 0.003,
+          "pinhole": 0.096,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8526,
+        "bbox": [
+          1408.37,
+          278.6,
+          1476.56,
+          357.75
+        ],
+        "area_pct": 0.2603,
+        "p_no_defect": 0.0023,
+        "probabilities": {
+          "contamination": 0.853,
+          "inclusion": 0.002,
+          "no_defect": 0.002,
+          "pinhole": 0.142,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8474,
+        "bbox": [
+          0.0,
+          809.35,
+          60.16,
+          884.17
+        ],
+        "area_pct": 0.2171,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.847,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.148,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "inclusions",
+    "target_class": "inclusion",
+    "index": 10,
+    "filename": "inclusion_10_1140_bmp.rf.952a44f1d662b64267e72f8acc14a878.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 8.87,
+    "num_detections": 17,
+    "class_distribution": {
+      "contamination": 17
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 17 detection(s) classified as 'contamination' (17x) instead of target 'inclusion'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9996,
+        "bbox": [
+          0.0,
+          964.78,
+          35.11,
+          1035.09
+        ],
+        "area_pct": 0.119,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 1.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9964,
+        "bbox": [
+          1511.04,
+          516.45,
+          1598.85,
+          598.61
+        ],
+        "area_pct": 0.3479,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.996,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9945,
+        "bbox": [
+          1750.18,
+          143.05,
+          1832.04,
+          219.21
+        ],
+        "area_pct": 0.3007,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.995,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.005,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9886,
+        "bbox": [
+          1314.07,
+          750.97,
+          1401.23,
+          832.42
+        ],
+        "area_pct": 0.3424,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.011,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9847,
+        "bbox": [
+          1623.91,
+          780.83,
+          1709.82,
+          860.14
+        ],
+        "area_pct": 0.3286,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.015,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9825,
+        "bbox": [
+          1239.94,
+          510.69,
+          1322.27,
+          586.29
+        ],
+        "area_pct": 0.3002,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.983,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.016,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9765,
+        "bbox": [
+          146.53,
+          731.01,
+          222.88,
+          799.58
+        ],
+        "area_pct": 0.2525,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.977,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9741,
+        "bbox": [
+          1104.43,
+          17.15,
+          1183.72,
+          90.91
+        ],
+        "area_pct": 0.282,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.974,
+          "inclusion": 0.007,
+          "no_defect": 0.0,
+          "pinhole": 0.019,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9723,
+        "bbox": [
+          1501.86,
+          711.06,
+          1577.69,
+          781.94
+        ],
+        "area_pct": 0.2592,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.972,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.027,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9687,
+        "bbox": [
+          852.8,
+          42.8,
+          896.0,
+          141.22
+        ],
+        "area_pct": 0.205,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.969,
+          "inclusion": 0.016,
+          "no_defect": 0.001,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9364,
+        "bbox": [
+          460.27,
+          611.47,
+          573.51,
+          731.87
+        ],
+        "area_pct": 0.6575,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.936,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.062,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9341,
+        "bbox": [
+          1295.07,
+          673.11,
+          1373.29,
+          744.45
+        ],
+        "area_pct": 0.2691,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.934,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.065,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9102,
+        "bbox": [
+          1157.96,
+          736.49,
+          1238.8,
+          809.37
+        ],
+        "area_pct": 0.2841,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.91,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.087,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9084,
+        "bbox": [
+          911.31,
+          611.96,
+          995.73,
+          689.22
+        ],
+        "area_pct": 0.3145,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.908,
+          "inclusion": 0.007,
+          "no_defect": 0.001,
+          "pinhole": 0.084,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8725,
+        "bbox": [
+          27.24,
+          931.27,
+          138.32,
+          1043.93
+        ],
+        "area_pct": 0.6035,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.872,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.126,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8656,
+        "bbox": [
+          1100.48,
+          862.36,
+          1179.46,
+          896.0
+        ],
+        "area_pct": 0.1281,
+        "p_no_defect": 0.0018,
+        "probabilities": {
+          "contamination": 0.866,
+          "inclusion": 0.008,
+          "no_defect": 0.002,
+          "pinhole": 0.124,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.5785,
+        "bbox": [
+          1239.86,
+          277.75,
+          1333.31,
+          368.29
+        ],
+        "area_pct": 0.408,
+        "p_no_defect": 0.0025,
+        "probabilities": {
+          "contamination": 0.578,
+          "inclusion": 0.002,
+          "no_defect": 0.002,
+          "pinhole": 0.416,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 1,
+    "filename": "pinhole_01_Image__2023-06-05__17-16-25.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "5472x3648",
+    "elapsed_seconds": 67.38,
+    "num_detections": 6,
+    "class_distribution": {
+      "inclusion": 6
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 6 detection(s) classified as 'inclusion' (6x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9781,
+        "bbox": [
+          3237.87,
+          1162.85,
+          3303.41,
+          1229.59
+        ],
+        "area_pct": 0.0219,
+        "p_no_defect": 0.0078,
+        "probabilities": {
+          "contamination": 0.004,
+          "inclusion": 0.978,
+          "no_defect": 0.008,
+          "pinhole": 0.01,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9672,
+        "bbox": [
+          3315.39,
+          2563.83,
+          3409.63,
+          2654.27
+        ],
+        "area_pct": 0.0427,
+        "p_no_defect": 0.0156,
+        "probabilities": {
+          "contamination": 0.004,
+          "inclusion": 0.967,
+          "no_defect": 0.016,
+          "pinhole": 0.012,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9657,
+        "bbox": [
+          3703.06,
+          151.71,
+          3904.41,
+          354.6
+        ],
+        "area_pct": 0.2046,
+        "p_no_defect": 0.0088,
+        "probabilities": {
+          "contamination": 0.009,
+          "inclusion": 0.966,
+          "no_defect": 0.009,
+          "pinhole": 0.015,
+          "scratch": 0.002
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9356,
+        "bbox": [
+          3698.85,
+          2551.69,
+          3792.91,
+          2640.71
+        ],
+        "area_pct": 0.0419,
+        "p_no_defect": 0.0439,
+        "probabilities": {
+          "contamination": 0.006,
+          "inclusion": 0.936,
+          "no_defect": 0.044,
+          "pinhole": 0.013,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9038,
+        "bbox": [
+          438.71,
+          258.73,
+          511.36,
+          330.75
+        ],
+        "area_pct": 0.0262,
+        "p_no_defect": 0.0357,
+        "probabilities": {
+          "contamination": 0.022,
+          "inclusion": 0.904,
+          "no_defect": 0.036,
+          "pinhole": 0.038,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.5777,
+        "bbox": [
+          3164.49,
+          2793.77,
+          3263.3,
+          2883.97
+        ],
+        "area_pct": 0.0446,
+        "p_no_defect": 0.0256,
+        "probabilities": {
+          "contamination": 0.341,
+          "inclusion": 0.578,
+          "no_defect": 0.026,
+          "pinhole": 0.054,
+          "scratch": 0.002
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 2,
+    "filename": "pinhole_02_Image__2023-06-05__17-23-33.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "5472x3648",
+    "elapsed_seconds": 66.0,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 2
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 2 detection(s) classified as 'inclusion' (2x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.855,
+        "bbox": [
+          1536.05,
+          2906.82,
+          1602.93,
+          3002.98
+        ],
+        "area_pct": 0.0322,
+        "p_no_defect": 0.0162,
+        "probabilities": {
+          "contamination": 0.075,
+          "inclusion": 0.855,
+          "no_defect": 0.016,
+          "pinhole": 0.049,
+          "scratch": 0.005
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.6852,
+        "bbox": [
+          2606.5,
+          3432.69,
+          2806.03,
+          3636.28
+        ],
+        "area_pct": 0.2035,
+        "p_no_defect": 0.068,
+        "probabilities": {
+          "contamination": 0.101,
+          "inclusion": 0.685,
+          "no_defect": 0.068,
+          "pinhole": 0.14,
+          "scratch": 0.006
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 3,
+    "filename": "pinhole_03_Image__2023-06-05__17-25-09.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "5472x3648",
+    "elapsed_seconds": 67.8,
+    "num_detections": 1,
+    "class_distribution": {
+      "inclusion": 1
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 1 detection(s) classified as 'inclusion' (1x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.4779,
+        "bbox": [
+          2689.61,
+          384.56,
+          2778.43,
+          459.05
+        ],
+        "area_pct": 0.0331,
+        "p_no_defect": 0.0163,
+        "probabilities": {
+          "contamination": 0.406,
+          "inclusion": 0.478,
+          "no_defect": 0.016,
+          "pinhole": 0.096,
+          "scratch": 0.003
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 4,
+    "filename": "pinhole_04_Image__2023-06-05__17-41-27.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "5472x3648",
+    "elapsed_seconds": 73.06,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 2
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 2 detection(s) classified as 'inclusion' (2x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9997,
+        "bbox": [
+          3397.48,
+          613.11,
+          3571.3,
+          783.38
+        ],
+        "area_pct": 0.1483,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 1.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9988,
+        "bbox": [
+          2108.95,
+          3170.1,
+          2179.26,
+          3200.0
+        ],
+        "area_pct": 0.0105,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.999,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 5,
+    "filename": "pinhole_05_Image__2023-06-05__17-49-04.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "5472x3648",
+    "elapsed_seconds": 55.04,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 2
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 2 detection(s) classified as 'inclusion' (2x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9987,
+        "bbox": [
+          3337.55,
+          2796.96,
+          3418.15,
+          2876.83
+        ],
+        "area_pct": 0.0322,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.999,
+          "no_defect": 0.001,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9976,
+        "bbox": [
+          4081.28,
+          1574.83,
+          4165.75,
+          1663.52
+        ],
+        "area_pct": 0.0375,
+        "p_no_defect": 0.0014,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.998,
+          "no_defect": 0.001,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 6,
+    "filename": "pinhole_06_1138_bmp.rf.e4252560e78e47979a107398d3ab0d49.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.13,
+    "num_detections": 14,
+    "class_distribution": {
+      "contamination": 14
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 14 detection(s) classified as 'contamination' (14x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9995,
+        "bbox": [
+          265.89,
+          929.85,
+          357.48,
+          1017.97
+        ],
+        "area_pct": 0.3892,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9985,
+        "bbox": [
+          184.25,
+          80.79,
+          263.28,
+          153.48
+        ],
+        "area_pct": 0.277,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9972,
+        "bbox": [
+          1540.8,
+          744.3,
+          1625.74,
+          821.62
+        ],
+        "area_pct": 0.3167,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9971,
+        "bbox": [
+          1521.39,
+          665.39,
+          1597.89,
+          735.94
+        ],
+        "area_pct": 0.2603,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          1434.83,
+          100.92,
+          1515.07,
+          175.16
+        ],
+        "area_pct": 0.2873,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.005,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9824,
+        "bbox": [
+          1735.43,
+          508.25,
+          1823.97,
+          591.45
+        ],
+        "area_pct": 0.3553,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.982,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.017,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9797,
+        "bbox": [
+          513.85,
+          642.59,
+          593.81,
+          718.1
+        ],
+        "area_pct": 0.2912,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.019,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9785,
+        "bbox": [
+          768.0,
+          641.74,
+          838.14,
+          733.14
+        ],
+        "area_pct": 0.3092,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.979,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.021,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9735,
+        "bbox": [
+          673.87,
+          597.69,
+          772.81,
+          687.43
+        ],
+        "area_pct": 0.4282,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.973,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.026,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9681,
+        "bbox": [
+          1077.67,
+          19.09,
+          1201.78,
+          145.88
+        ],
+        "area_pct": 0.7589,
+        "p_no_defect": 0.002,
+        "probabilities": {
+          "contamination": 0.968,
+          "inclusion": 0.006,
+          "no_defect": 0.002,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.947,
+        "bbox": [
+          1724.43,
+          702.8,
+          1805.05,
+          778.41
+        ],
+        "area_pct": 0.294,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.947,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.052,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.933,
+        "bbox": [
+          384.36,
+          718.78,
+          455.69,
+          797.44
+        ],
+        "area_pct": 0.2706,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.933,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.066,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8583,
+        "bbox": [
+          1468.6,
+          273.14,
+          1551.74,
+          352.42
+        ],
+        "area_pct": 0.3179,
+        "p_no_defect": 0.0017,
+        "probabilities": {
+          "contamination": 0.858,
+          "inclusion": 0.001,
+          "no_defect": 0.002,
+          "pinhole": 0.138,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8402,
+        "bbox": [
+          0.0,
+          963.06,
+          36.75,
+          1034.29
+        ],
+        "area_pct": 0.1262,
+        "p_no_defect": 0.0029,
+        "probabilities": {
+          "contamination": 0.84,
+          "inclusion": 0.004,
+          "no_defect": 0.003,
+          "pinhole": 0.152,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 7,
+    "filename": "pinhole_07_1139_bmp.rf.94e09b91e242cff0f62f6150254e5793.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.33,
+    "num_detections": 15,
+    "class_distribution": {
+      "contamination": 15
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 15 detection(s) classified as 'contamination' (15x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.998,
+        "bbox": [
+          1662.17,
+          511.08,
+          1746.36,
+          590.72
+        ],
+        "area_pct": 0.3233,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9979,
+        "bbox": [
+          182.39,
+          932.51,
+          284.47,
+          1023.92
+        ],
+        "area_pct": 0.45,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9942,
+        "bbox": [
+          1464.97,
+          746.38,
+          1550.45,
+          825.52
+        ],
+        "area_pct": 0.3262,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.006,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          441.16,
+          648.06,
+          511.82,
+          718.57
+        ],
+        "area_pct": 0.2403,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.004,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9918,
+        "bbox": [
+          1649.1,
+          705.03,
+          1728.81,
+          779.5
+        ],
+        "area_pct": 0.2863,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.992,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9857,
+        "bbox": [
+          108.09,
+          80.87,
+          193.98,
+          158.58
+        ],
+        "area_pct": 0.3219,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.986,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9849,
+        "bbox": [
+          1352.97,
+          96.1,
+          1440.38,
+          176.9
+        ],
+        "area_pct": 0.3406,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9826,
+        "bbox": [
+          1004.55,
+          22.46,
+          1123.95,
+          145.88
+        ],
+        "area_pct": 0.7107,
+        "p_no_defect": 0.0012,
+        "probabilities": {
+          "contamination": 0.983,
+          "inclusion": 0.004,
+          "no_defect": 0.001,
+          "pinhole": 0.012,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9795,
+        "bbox": [
+          600.23,
+          595.86,
+          699.12,
+          694.35
+        ],
+        "area_pct": 0.4697,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.02,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9663,
+        "bbox": [
+          1257.35,
+          15.48,
+          1335.56,
+          86.3
+        ],
+        "area_pct": 0.2671,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.966,
+          "inclusion": 0.008,
+          "no_defect": 0.001,
+          "pinhole": 0.025,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9593,
+        "bbox": [
+          298.18,
+          724.64,
+          376.08,
+          795.26
+        ],
+        "area_pct": 0.2653,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.959,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.039,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.959,
+        "bbox": [
+          1441.06,
+          662.74,
+          1523.55,
+          740.7
+        ],
+        "area_pct": 0.3101,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.959,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.04,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.894,
+        "bbox": [
+          0.0,
+          962.83,
+          36.68,
+          1033.16
+        ],
+        "area_pct": 0.1244,
+        "p_no_defect": 0.0028,
+        "probabilities": {
+          "contamination": 0.894,
+          "inclusion": 0.007,
+          "no_defect": 0.003,
+          "pinhole": 0.096,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8526,
+        "bbox": [
+          1408.37,
+          278.6,
+          1476.56,
+          357.75
+        ],
+        "area_pct": 0.2603,
+        "p_no_defect": 0.0023,
+        "probabilities": {
+          "contamination": 0.853,
+          "inclusion": 0.002,
+          "no_defect": 0.002,
+          "pinhole": 0.142,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8474,
+        "bbox": [
+          0.0,
+          809.35,
+          60.16,
+          884.17
+        ],
+        "area_pct": 0.2171,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.847,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.148,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 8,
+    "filename": "pinhole_08_1141_bmp.rf.438385deab6f6f53c17a2c8a88d7a989.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.61,
+    "num_detections": 16,
+    "class_distribution": {
+      "contamination": 16
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 16 detection(s) classified as 'contamination' (16x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.998,
+        "bbox": [
+          1074.18,
+          113.46,
+          1156.3,
+          188.42
+        ],
+        "area_pct": 0.2969,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9921,
+        "bbox": [
+          1376.21,
+          568.07,
+          1458.35,
+          604.17
+        ],
+        "area_pct": 0.143,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.992,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9902,
+        "bbox": [
+          1617.34,
+          148.19,
+          1695.76,
+          222.63
+        ],
+        "area_pct": 0.2815,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.99,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.009,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9891,
+        "bbox": [
+          1152.0,
+          295.06,
+          1185.48,
+          361.03
+        ],
+        "area_pct": 0.1065,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.01,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9856,
+        "bbox": [
+          1181.83,
+          756.69,
+          1267.16,
+          835.95
+        ],
+        "area_pct": 0.3262,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.986,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9847,
+        "bbox": [
+          270.21,
+          150.34,
+          354.18,
+          227.71
+        ],
+        "area_pct": 0.3133,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.005,
+          "no_defect": 0.0,
+          "pinhole": 0.01,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9776,
+        "bbox": [
+          768.0,
+          29.79,
+          836.24,
+          159.91
+        ],
+        "area_pct": 0.4282,
+        "p_no_defect": 0.002,
+        "probabilities": {
+          "contamination": 0.978,
+          "inclusion": 0.005,
+          "no_defect": 0.002,
+          "pinhole": 0.015,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9762,
+        "bbox": [
+          1841.67,
+          645.63,
+          1919.75,
+          743.11
+        ],
+        "area_pct": 0.3671,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.976,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9648,
+        "bbox": [
+          970.97,
+          22.62,
+          1047.08,
+          92.47
+        ],
+        "area_pct": 0.2564,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.965,
+          "inclusion": 0.015,
+          "no_defect": 0.0,
+          "pinhole": 0.02,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9424,
+        "bbox": [
+          2.83,
+          734.18,
+          89.17,
+          811.4
+        ],
+        "area_pct": 0.3215,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.942,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.056,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.938,
+        "bbox": [
+          1102.05,
+          512.69,
+          1184.68,
+          588.33
+        ],
+        "area_pct": 0.3014,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.938,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.058,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8605,
+        "bbox": [
+          1364.06,
+          715.27,
+          1443.58,
+          791.43
+        ],
+        "area_pct": 0.2921,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.861,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.137,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8565,
+        "bbox": [
+          1858.86,
+          27.94,
+          1920.0,
+          113.07
+        ],
+        "area_pct": 0.251,
+        "p_no_defect": 0.0028,
+        "probabilities": {
+          "contamination": 0.856,
+          "inclusion": 0.004,
+          "no_defect": 0.003,
+          "pinhole": 0.136,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8349,
+        "bbox": [
+          384.0,
+          641.87,
+          436.87,
+          738.55
+        ],
+        "area_pct": 0.2465,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.835,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.163,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8032,
+        "bbox": [
+          316.25,
+          611.78,
+          412.99,
+          707.45
+        ],
+        "area_pct": 0.4463,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.803,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.195,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.6546,
+        "bbox": [
+          1161.19,
+          678.69,
+          1238.72,
+          750.91
+        ],
+        "area_pct": 0.27,
+        "p_no_defect": 0.0015,
+        "probabilities": {
+          "contamination": 0.655,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.342,
+          "scratch": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 9,
+    "filename": "pinhole_09_1144_bmp.rf.b5c99cca801486266d9986912da96e76.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.05,
+    "num_detections": 12,
+    "class_distribution": {
+      "contamination": 12
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 12 detection(s) classified as 'contamination' (12x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9996,
+        "bbox": [
+          1480.27,
+          568.0,
+          1588.0,
+          632.09
+        ],
+        "area_pct": 0.333,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 1.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9981,
+        "bbox": [
+          607.54,
+          59.13,
+          693.66,
+          138.58
+        ],
+        "area_pct": 0.33,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9975,
+        "bbox": [
+          61.62,
+          230.78,
+          190.88,
+          353.8
+        ],
+        "area_pct": 0.7669,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9938,
+        "bbox": [
+          988.62,
+          272.35,
+          1069.15,
+          346.12
+        ],
+        "area_pct": 0.2865,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.006,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9934,
+        "bbox": [
+          866.62,
+          384.0,
+          992.22,
+          488.07
+        ],
+        "area_pct": 0.6304,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.993,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.006,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9872,
+        "bbox": [
+          1477.86,
+          715.02,
+          1563.96,
+          792.95
+        ],
+        "area_pct": 0.3236,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.987,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.012,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9816,
+        "bbox": [
+          1152.07,
+          940.86,
+          1219.68,
+          1057.85
+        ],
+        "area_pct": 0.3814,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.982,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.018,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9779,
+        "bbox": [
+          1154.7,
+          95.69,
+          1238.4,
+          176.52
+        ],
+        "area_pct": 0.3263,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.978,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.021,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9579,
+        "bbox": [
+          322.82,
+          860.4,
+          402.89,
+          896.0
+        ],
+        "area_pct": 0.1375,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.958,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.038,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9551,
+        "bbox": [
+          1604.66,
+          568.02,
+          1687.1,
+          601.84
+        ],
+        "area_pct": 0.1345,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.955,
+          "inclusion": 0.004,
+          "no_defect": 0.001,
+          "pinhole": 0.04,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8506,
+        "bbox": [
+          73.67,
+          518.72,
+          163.87,
+          600.32
+        ],
+        "area_pct": 0.355,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.851,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.147,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.7579,
+        "bbox": [
+          0.0,
+          961.11,
+          36.86,
+          1035.26
+        ],
+        "area_pct": 0.1318,
+        "p_no_defect": 0.0039,
+        "probabilities": {
+          "contamination": 0.758,
+          "inclusion": 0.003,
+          "no_defect": 0.004,
+          "pinhole": 0.234,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "pinholes",
+    "target_class": "pinhole",
+    "index": 10,
+    "filename": "pinhole_10_1145_bmp.rf.85f4334e3218622836c7c491c196f09a.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.6,
+    "num_detections": 16,
+    "class_distribution": {
+      "contamination": 16
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 16 detection(s) classified as 'contamination' (16x) instead of target 'pinhole'.",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9997,
+        "bbox": [
+          1737.68,
+          568.25,
+          1840.82,
+          622.5
+        ],
+        "area_pct": 0.2698,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 1.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9996,
+        "bbox": [
+          1704.02,
+          477.27,
+          1788.91,
+          511.98
+        ],
+        "area_pct": 0.1421,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 1.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.999,
+        "bbox": [
+          1690.83,
+          476.37,
+          1827.4,
+          618.02
+        ],
+        "area_pct": 0.9329,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9985,
+        "bbox": [
+          1865.18,
+          524.73,
+          1920.0,
+          594.14
+        ],
+        "area_pct": 0.1835,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9893,
+        "bbox": [
+          1152.0,
+          384.0,
+          1244.36,
+          475.51
+        ],
+        "area_pct": 0.4076,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.004,
+          "no_defect": 0.0,
+          "pinhole": 0.007,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9887,
+        "bbox": [
+          860.11,
+          43.41,
+          896.0,
+          127.86
+        ],
+        "area_pct": 0.1462,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.002,
+          "no_defect": 0.0,
+          "pinhole": 0.009,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9876,
+        "bbox": [
+          1409.84,
+          86.79,
+          1487.08,
+          161.97
+        ],
+        "area_pct": 0.28,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.988,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.011,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9792,
+        "bbox": [
+          384.02,
+          222.53,
+          451.98,
+          350.56
+        ],
+        "area_pct": 0.4196,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.979,
+          "inclusion": 0.005,
+          "no_defect": 0.001,
+          "pinhole": 0.015,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9791,
+        "bbox": [
+          1238.4,
+          258.67,
+          1321.64,
+          335.32
+        ],
+        "area_pct": 0.3077,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.979,
+          "inclusion": 0.006,
+          "no_defect": 0.0,
+          "pinhole": 0.015,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9718,
+        "bbox": [
+          1730.07,
+          708.0,
+          1814.37,
+          781.91
+        ],
+        "area_pct": 0.3005,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.972,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.028,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9247,
+        "bbox": [
+          0.0,
+          966.74,
+          33.65,
+          1031.68
+        ],
+        "area_pct": 0.1054,
+        "p_no_defect": 0.0016,
+        "probabilities": {
+          "contamination": 0.925,
+          "inclusion": 0.026,
+          "no_defect": 0.002,
+          "pinhole": 0.046,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8373,
+        "bbox": [
+          1324.22,
+          704.95,
+          1404.06,
+          777.2
+        ],
+        "area_pct": 0.2782,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.837,
+          "inclusion": 0.005,
+          "no_defect": 0.001,
+          "pinhole": 0.156,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8259,
+        "bbox": [
+          0.0,
+          196.39,
+          64.5,
+          275.69
+        ],
+        "area_pct": 0.2467,
+        "p_no_defect": 0.0015,
+        "probabilities": {
+          "contamination": 0.826,
+          "inclusion": 0.006,
+          "no_defect": 0.002,
+          "pinhole": 0.165,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8226,
+        "bbox": [
+          2.03,
+          265.42,
+          82.39,
+          343.35
+        ],
+        "area_pct": 0.302,
+        "p_no_defect": 0.0014,
+        "probabilities": {
+          "contamination": 0.823,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.172,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8197,
+        "bbox": [
+          1408.04,
+          927.55,
+          1473.35,
+          1052.55
+        ],
+        "area_pct": 0.3937,
+        "p_no_defect": 0.0006,
+        "probabilities": {
+          "contamination": 0.82,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.179,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.7132,
+        "bbox": [
+          0.0,
+          106.32,
+          46.28,
+          191.71
+        ],
+        "area_pct": 0.1906,
+        "p_no_defect": 0.0019,
+        "probabilities": {
+          "contamination": 0.713,
+          "inclusion": 0.015,
+          "no_defect": 0.002,
+          "pinhole": 0.268,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 1,
+    "filename": "scratch_01_20250507T160459Z_015830_265_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 49.09,
+    "num_detections": 3,
+    "class_distribution": {
+      "inclusion": 2,
+      "scratch": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 1 'scratch' detection(s) (conf: 51.2%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.6,
+        "bbox": [
+          2520.0,
+          18.81,
+          2573.05,
+          109.64
+        ],
+        "area_pct": 0.0299,
+        "p_no_defect": 0.357,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.6,
+          "no_defect": 0.357,
+          "pinhole": 0.002,
+          "scratch": 0.041
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.5117,
+        "bbox": [
+          2423.55,
+          0.0,
+          2583.71,
+          138.76
+        ],
+        "area_pct": 0.1378,
+        "p_no_defect": 0.1072,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.378,
+          "no_defect": 0.107,
+          "pinhole": 0.002,
+          "scratch": 0.512
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.4336,
+        "bbox": [
+          2364.05,
+          0.0,
+          2431.83,
+          147.08
+        ],
+        "area_pct": 0.0618,
+        "p_no_defect": 0.3193,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.434,
+          "no_defect": 0.319,
+          "pinhole": 0.002,
+          "scratch": 0.245
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 2,
+    "filename": "scratch_02_20250507T160506Z_016060_265_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 47.07,
+    "num_detections": 0,
+    "class_distribution": {},
+    "status": "ZERO_DETECTIONS",
+    "target_matched": false,
+    "diagnosis": "No defect bounding boxes delivered by pipeline after Stage 2 filtering.",
+    "detections": []
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 3,
+    "filename": "scratch_03_20250507T160552Z_017444_265_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 42.71,
+    "num_detections": 6,
+    "class_distribution": {
+      "inclusion": 3,
+      "scratch": 3
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 3 'scratch' detection(s) (conf: 80.2%, 62.3%, 43.8%).",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9147,
+        "bbox": [
+          2622.76,
+          3778.79,
+          2735.76,
+          3878.26
+        ],
+        "area_pct": 0.0697,
+        "p_no_defect": 0.0425,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.915,
+          "no_defect": 0.042,
+          "pinhole": 0.001,
+          "scratch": 0.042
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.906,
+        "bbox": [
+          212.82,
+          1536.0,
+          342.73,
+          1614.65
+        ],
+        "area_pct": 0.0633,
+        "p_no_defect": 0.0795,
+        "probabilities": {
+          "contamination": 0.005,
+          "inclusion": 0.906,
+          "no_defect": 0.079,
+          "pinhole": 0.004,
+          "scratch": 0.005
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.8024,
+        "bbox": [
+          2304.0,
+          643.68,
+          2424.87,
+          755.13
+        ],
+        "area_pct": 0.0835,
+        "p_no_defect": 0.0031,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.193,
+          "no_defect": 0.003,
+          "pinhole": 0.001,
+          "scratch": 0.802
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.6229,
+        "bbox": [
+          1823.56,
+          718.8,
+          1949.27,
+          834.16
+        ],
+        "area_pct": 0.0899,
+        "p_no_defect": 0.0096,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.364,
+          "no_defect": 0.01,
+          "pinhole": 0.003,
+          "scratch": 0.623
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.4882,
+        "bbox": [
+          2533.71,
+          310.24,
+          2652.66,
+          426.77
+        ],
+        "area_pct": 0.0859,
+        "p_no_defect": 0.0365,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.488,
+          "no_defect": 0.036,
+          "pinhole": 0.003,
+          "scratch": 0.472
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.438,
+        "bbox": [
+          2693.27,
+          263.34,
+          2816.0,
+          416.36
+        ],
+        "area_pct": 0.1164,
+        "p_no_defect": 0.1219,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.436,
+          "no_defect": 0.122,
+          "pinhole": 0.003,
+          "scratch": 0.438
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 4,
+    "filename": "scratch_04_20250507T160937Z_024272_297_top_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 43.02,
+    "num_detections": 3,
+    "class_distribution": {
+      "scratch": 2,
+      "inclusion": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 2 'scratch' detection(s) (conf: 76.9%, 65.4%).",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 0.7688,
+        "bbox": [
+          1279.0,
+          1282.99,
+          1398.56,
+          1406.36
+        ],
+        "area_pct": 0.0914,
+        "p_no_defect": 0.0194,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.204,
+          "no_defect": 0.019,
+          "pinhole": 0.006,
+          "scratch": 0.769
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7561,
+        "bbox": [
+          1773.2,
+          1241.97,
+          1852.37,
+          1280.0
+        ],
+        "area_pct": 0.0187,
+        "p_no_defect": 0.2056,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.756,
+          "no_defect": 0.206,
+          "pinhole": 0.007,
+          "scratch": 0.029
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.6537,
+        "bbox": [
+          1707.25,
+          1241.31,
+          1835.45,
+          1375.69
+        ],
+        "area_pct": 0.1068,
+        "p_no_defect": 0.0037,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.34,
+          "no_defect": 0.004,
+          "pinhole": 0.002,
+          "scratch": 0.654
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 5,
+    "filename": "scratch_05_20250507T162210Z_009435_314_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 47.39,
+    "num_detections": 0,
+    "class_distribution": {},
+    "status": "ZERO_DETECTIONS",
+    "target_matched": false,
+    "diagnosis": "No defect bounding boxes delivered by pipeline after Stage 2 filtering.",
+    "detections": []
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 6,
+    "filename": "scratch_06_20250507T162217Z_009204_314_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 47.42,
+    "num_detections": 4,
+    "class_distribution": {
+      "scratch": 3,
+      "inclusion": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 3 'scratch' detection(s) (conf: 94.5%, 94.3%, 88.2%).",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 0.9447,
+        "bbox": [
+          2525.43,
+          2804.66,
+          2693.12,
+          2935.23
+        ],
+        "area_pct": 0.1357,
+        "p_no_defect": 0.0006,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.054,
+          "no_defect": 0.001,
+          "pinhole": 0.0,
+          "scratch": 0.945
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9426,
+        "bbox": [
+          2042.65,
+          2833.85,
+          2166.04,
+          2938.48
+        ],
+        "area_pct": 0.08,
+        "p_no_defect": 0.0023,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.054,
+          "no_defect": 0.002,
+          "pinhole": 0.001,
+          "scratch": 0.943
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.8825,
+        "bbox": [
+          2667.23,
+          2808.04,
+          2786.26,
+          2912.27
+        ],
+        "area_pct": 0.0769,
+        "p_no_defect": 0.0048,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.112,
+          "no_defect": 0.005,
+          "pinhole": 0.001,
+          "scratch": 0.883
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.6445,
+        "bbox": [
+          1929.23,
+          506.47,
+          2048.0,
+          639.49
+        ],
+        "area_pct": 0.0979,
+        "p_no_defect": 0.0178,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.645,
+          "no_defect": 0.018,
+          "pinhole": 0.005,
+          "scratch": 0.33
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 7,
+    "filename": "scratch_07_117_bmp.rf.4d8d6c31622b7db3e60a9b643a24d0b7.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.42,
+    "num_detections": 27,
+    "class_distribution": {
+      "scratch": 13,
+      "contamination": 14
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 13 'scratch' detection(s) (conf: 100.0%, 100.0%, 100.0%).",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          814.0,
+          671.71,
+          999.12,
+          810.96
+        ],
+        "area_pct": 1.2432,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          724.79,
+          391.81,
+          896.0,
+          512.0
+        ],
+        "area_pct": 0.9924,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          679.01,
+          568.0,
+          867.22,
+          686.2
+        ],
+        "area_pct": 1.0728,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          1090.11,
+          711.1,
+          1280.0,
+          848.71
+        ],
+        "area_pct": 1.2602,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          96.73,
+          449.65,
+          268.18,
+          598.01
+        ],
+        "area_pct": 1.2267,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          1341.14,
+          842.32,
+          1465.89,
+          989.42
+        ],
+        "area_pct": 0.885,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          0.0,
+          0.0,
+          184.57,
+          187.53
+        ],
+        "area_pct": 1.6692,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9986,
+        "bbox": [
+          227.13,
+          568.34,
+          388.14,
+          623.17
+        ],
+        "area_pct": 0.4257,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.999
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9982,
+        "bbox": [
+          1452.84,
+          568.04,
+          1551.24,
+          592.1
+        ],
+        "area_pct": 0.1142,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9973,
+        "bbox": [
+          1280.58,
+          420.05,
+          1399.14,
+          511.99
+        ],
+        "area_pct": 0.5257,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.002
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9912,
+        "bbox": [
+          742.16,
+          0.26,
+          896.0,
+          103.88
+        ],
+        "area_pct": 0.7688,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.004,
+          "scratch": 0.991
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9887,
+        "bbox": [
+          56.88,
+          683.13,
+          214.08,
+          811.51
+        ],
+        "area_pct": 0.9733,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.01
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9872,
+        "bbox": [
+          1152.11,
+          259.2,
+          1216.23,
+          383.55
+        ],
+        "area_pct": 0.3845,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.987,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.011
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.982,
+        "bbox": [
+          1408.0,
+          114.28,
+          1466.69,
+          241.07
+        ],
+        "area_pct": 0.3589,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.013,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.003,
+          "scratch": 0.982
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9789,
+        "bbox": [
+          1294.39,
+          64.34,
+          1367.59,
+          137.56
+        ],
+        "area_pct": 0.2585,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.979,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.02,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9763,
+        "bbox": [
+          258.7,
+          913.27,
+          414.05,
+          1040.71
+        ],
+        "area_pct": 0.9548,
+        "p_no_defect": 0.0058,
+        "probabilities": {
+          "contamination": 0.015,
+          "inclusion": 0.002,
+          "no_defect": 0.006,
+          "pinhole": 0.001,
+          "scratch": 0.976
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9747,
+        "bbox": [
+          464.82,
+          1018.97,
+          512.0,
+          1080.0
+        ],
+        "area_pct": 0.1389,
+        "p_no_defect": 0.0011,
+        "probabilities": {
+          "contamination": 0.975,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.022,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.967,
+        "bbox": [
+          1424.85,
+          51.09,
+          1502.28,
+          123.55
+        ],
+        "area_pct": 0.2706,
+        "p_no_defect": 0.0032,
+        "probabilities": {
+          "contamination": 0.967,
+          "inclusion": 0.002,
+          "no_defect": 0.003,
+          "pinhole": 0.011,
+          "scratch": 0.016
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9638,
+        "bbox": [
+          1060.56,
+          468.61,
+          1133.32,
+          511.74
+        ],
+        "area_pct": 0.1513,
+        "p_no_defect": 0.0006,
+        "probabilities": {
+          "contamination": 0.964,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.027,
+          "scratch": 0.008
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9628,
+        "bbox": [
+          384.0,
+          884.48,
+          449.19,
+          1007.03
+        ],
+        "area_pct": 0.3853,
+        "p_no_defect": 0.007,
+        "probabilities": {
+          "contamination": 0.023,
+          "inclusion": 0.001,
+          "no_defect": 0.007,
+          "pinhole": 0.007,
+          "scratch": 0.963
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9497,
+        "bbox": [
+          1573.15,
+          645.35,
+          1641.52,
+          709.66
+        ],
+        "area_pct": 0.212,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.95,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.049,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8821,
+        "bbox": [
+          1152.11,
+          568.39,
+          1213.26,
+          639.23
+        ],
+        "area_pct": 0.2089,
+        "p_no_defect": 0.0058,
+        "probabilities": {
+          "contamination": 0.882,
+          "inclusion": 0.017,
+          "no_defect": 0.006,
+          "pinhole": 0.074,
+          "scratch": 0.021
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8445,
+        "bbox": [
+          1152.0,
+          384.15,
+          1222.28,
+          476.32
+        ],
+        "area_pct": 0.3124,
+        "p_no_defect": 0.0034,
+        "probabilities": {
+          "contamination": 0.844,
+          "inclusion": 0.009,
+          "no_defect": 0.003,
+          "pinhole": 0.012,
+          "scratch": 0.131
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.8235,
+        "bbox": [
+          433.53,
+          397.18,
+          512.0,
+          512.0
+        ],
+        "area_pct": 0.4345,
+        "p_no_defect": 0.0196,
+        "probabilities": {
+          "contamination": 0.105,
+          "inclusion": 0.009,
+          "no_defect": 0.02,
+          "pinhole": 0.042,
+          "scratch": 0.824
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.6412,
+        "bbox": [
+          967.47,
+          201.23,
+          1163.14,
+          365.67
+        ],
+        "area_pct": 1.5517,
+        "p_no_defect": 0.0006,
+        "probabilities": {
+          "contamination": 0.641,
+          "inclusion": 0.006,
+          "no_defect": 0.001,
+          "pinhole": 0.001,
+          "scratch": 0.351
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.5861,
+        "bbox": [
+          384.42,
+          621.34,
+          432.42,
+          716.09
+        ],
+        "area_pct": 0.2193,
+        "p_no_defect": 0.011,
+        "probabilities": {
+          "contamination": 0.586,
+          "inclusion": 0.01,
+          "no_defect": 0.011,
+          "pinhole": 0.1,
+          "scratch": 0.292
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.4644,
+        "bbox": [
+          999.21,
+          7.76,
+          1087.28,
+          92.37
+        ],
+        "area_pct": 0.3594,
+        "p_no_defect": 0.0198,
+        "probabilities": {
+          "contamination": 0.464,
+          "inclusion": 0.256,
+          "no_defect": 0.02,
+          "pinhole": 0.021,
+          "scratch": 0.239
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 8,
+    "filename": "scratch_08_119_bmp.rf.3515b17737aedcf57b7bc4d3bc3bcfd4.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.27,
+    "num_detections": 27,
+    "class_distribution": {
+      "scratch": 11,
+      "contamination": 15,
+      "pinhole": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 11 'scratch' detection(s) (conf: 100.0%, 100.0%, 100.0%).",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          768.0,
+          577.23,
+          927.64,
+          777.41
+        ],
+        "area_pct": 1.5411,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          992.03,
+          384.0,
+          1175.76,
+          486.2
+        ],
+        "area_pct": 0.9055,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          1015.88,
+          938.53,
+          1202.73,
+          1079.37
+        ],
+        "area_pct": 1.2691,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          3.55,
+          449.81,
+          120.59,
+          604.74
+        ],
+        "area_pct": 0.8745,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          1154.2,
+          786.05,
+          1329.37,
+          896.0
+        ],
+        "area_pct": 0.9288,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9998,
+        "bbox": [
+          940.86,
+          21.04,
+          1123.25,
+          203.84
+        ],
+        "area_pct": 1.6079,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9998,
+        "bbox": [
+          869.09,
+          261.14,
+          1063.06,
+          453.2
+        ],
+        "area_pct": 1.7966,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9997,
+        "bbox": [
+          303.45,
+          416.29,
+          502.49,
+          617.23
+        ],
+        "area_pct": 1.9288,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9985,
+        "bbox": [
+          0.0,
+          568.0,
+          131.67,
+          705.28
+        ],
+        "area_pct": 0.8717,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.998
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9981,
+        "bbox": [
+          266.49,
+          689.44,
+          368.78,
+          819.4
+        ],
+        "area_pct": 0.6411,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9981,
+        "bbox": [
+          734.54,
+          583.81,
+          806.32,
+          653.58
+        ],
+        "area_pct": 0.2415,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9979,
+        "bbox": [
+          309.55,
+          482.16,
+          398.99,
+          556.56
+        ],
+        "area_pct": 0.3209,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9962,
+        "bbox": [
+          503.0,
+          225.86,
+          614.81,
+          360.45
+        ],
+        "area_pct": 0.7257,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.996,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.991,
+        "bbox": [
+          384.13,
+          466.79,
+          453.06,
+          512.0
+        ],
+        "area_pct": 0.1503,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.991,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9909,
+        "bbox": [
+          1152.04,
+          384.73,
+          1218.49,
+          445.71
+        ],
+        "area_pct": 0.1954,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.991,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9885,
+        "bbox": [
+          136.92,
+          384.27,
+          273.52,
+          475.96
+        ],
+        "area_pct": 0.604,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.01,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.989
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9675,
+        "bbox": [
+          1408.0,
+          215.61,
+          1471.22,
+          292.33
+        ],
+        "area_pct": 0.2339,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.967,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.029,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9669,
+        "bbox": [
+          0.0,
+          259.13,
+          65.33,
+          373.31
+        ],
+        "area_pct": 0.3597,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.032,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.967
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9479,
+        "bbox": [
+          1424.33,
+          0.15,
+          1492.73,
+          46.62
+        ],
+        "area_pct": 0.1533,
+        "p_no_defect": 0.0016,
+        "probabilities": {
+          "contamination": 0.948,
+          "inclusion": 0.003,
+          "no_defect": 0.002,
+          "pinhole": 0.045,
+          "scratch": 0.003
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9217,
+        "bbox": [
+          508.74,
+          112.21,
+          692.91,
+          290.57
+        ],
+        "area_pct": 1.5841,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.922,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.004,
+          "scratch": 0.073
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8411,
+        "bbox": [
+          1745.16,
+          384.17,
+          1866.35,
+          486.49
+        ],
+        "area_pct": 0.598,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.841,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.156
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.826,
+        "bbox": [
+          384.0,
+          17.68,
+          440.81,
+          133.95
+        ],
+        "area_pct": 0.3185,
+        "p_no_defect": 0.0053,
+        "probabilities": {
+          "contamination": 0.826,
+          "inclusion": 0.016,
+          "no_defect": 0.005,
+          "pinhole": 0.052,
+          "scratch": 0.101
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8042,
+        "bbox": [
+          463.96,
+          435.88,
+          512.0,
+          512.0
+        ],
+        "area_pct": 0.1764,
+        "p_no_defect": 0.007,
+        "probabilities": {
+          "contamination": 0.804,
+          "inclusion": 0.019,
+          "no_defect": 0.007,
+          "pinhole": 0.072,
+          "scratch": 0.097
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.7681,
+        "bbox": [
+          131.92,
+          84.18,
+          228.89,
+          131.81
+        ],
+        "area_pct": 0.2227,
+        "p_no_defect": 0.0053,
+        "probabilities": {
+          "contamination": 0.768,
+          "inclusion": 0.002,
+          "no_defect": 0.005,
+          "pinhole": 0.168,
+          "scratch": 0.056
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.7189,
+        "bbox": [
+          0.0,
+          15.31,
+          38.75,
+          99.49
+        ],
+        "area_pct": 0.1573,
+        "p_no_defect": 0.0018,
+        "probabilities": {
+          "contamination": 0.719,
+          "inclusion": 0.001,
+          "no_defect": 0.002,
+          "pinhole": 0.264,
+          "scratch": 0.015
+        }
+      },
+      {
+        "subtype": "pinhole",
+        "confidence": 0.5073,
+        "bbox": [
+          1409.82,
+          726.37,
+          1489.93,
+          797.94
+        ],
+        "area_pct": 0.2765,
+        "p_no_defect": 0.0065,
+        "probabilities": {
+          "contamination": 0.483,
+          "inclusion": 0.001,
+          "no_defect": 0.007,
+          "pinhole": 0.507,
+          "scratch": 0.002
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.4888,
+        "bbox": [
+          388.97,
+          0.0,
+          567.0,
+          79.99
+        ],
+        "area_pct": 0.6868,
+        "p_no_defect": 0.0015,
+        "probabilities": {
+          "contamination": 0.489,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.394,
+          "scratch": 0.114
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 9,
+    "filename": "scratch_09_122_bmp.rf.196c34d1ee031f8631d981d59f43c64b.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.17,
+    "num_detections": 22,
+    "class_distribution": {
+      "scratch": 11,
+      "contamination": 11
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 11 'scratch' detection(s) (conf: 100.0%, 100.0%, 100.0%).",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          984.21,
+          11.7,
+          1183.84,
+          189.09
+        ],
+        "area_pct": 1.7078,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          289.22,
+          272.66,
+          452.01,
+          452.4
+        ],
+        "area_pct": 1.4111,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9998,
+        "bbox": [
+          290.8,
+          816.62,
+          452.51,
+          896.0
+        ],
+        "area_pct": 0.619,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9998,
+        "bbox": [
+          117.36,
+          862.62,
+          297.3,
+          1041.02
+        ],
+        "area_pct": 1.5481,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9998,
+        "bbox": [
+          1058.23,
+          803.48,
+          1235.98,
+          896.0
+        ],
+        "area_pct": 0.7931,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9995,
+        "bbox": [
+          1431.07,
+          568.29,
+          1482.72,
+          611.66
+        ],
+        "area_pct": 0.108,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9993,
+        "bbox": [
+          120.31,
+          384.0,
+          296.33,
+          496.01
+        ],
+        "area_pct": 0.9508,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.999
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9988,
+        "bbox": [
+          1152.0,
+          957.29,
+          1222.65,
+          1077.78
+        ],
+        "area_pct": 0.4105,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.0,
+          "scratch": 0.999
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9968,
+        "bbox": [
+          1741.89,
+          320.93,
+          1920.0,
+          512.0
+        ],
+        "area_pct": 1.6412,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.997
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9962,
+        "bbox": [
+          384.0,
+          851.47,
+          439.02,
+          896.0
+        ],
+        "area_pct": 0.1182,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.996,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          1189.23,
+          726.87,
+          1267.74,
+          806.3
+        ],
+        "area_pct": 0.3007,
+        "p_no_defect": 0.0011,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.005,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9907,
+        "bbox": [
+          1113.92,
+          471.45,
+          1200.03,
+          511.42
+        ],
+        "area_pct": 0.166,
+        "p_no_defect": 0.0015,
+        "probabilities": {
+          "contamination": 0.991,
+          "inclusion": 0.001,
+          "no_defect": 0.002,
+          "pinhole": 0.002,
+          "scratch": 0.004
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9875,
+        "bbox": [
+          384.04,
+          181.12,
+          437.46,
+          240.53
+        ],
+        "area_pct": 0.1531,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.988,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.012,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9628,
+        "bbox": [
+          0.0,
+          965.48,
+          33.97,
+          1032.33
+        ],
+        "area_pct": 0.1095,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.963,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.036,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9619,
+        "bbox": [
+          1855.0,
+          462.38,
+          1920.0,
+          552.75
+        ],
+        "area_pct": 0.2833,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.962,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.004,
+          "scratch": 0.033
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9552,
+        "bbox": [
+          467.65,
+          475.92,
+          512.0,
+          512.0
+        ],
+        "area_pct": 0.0772,
+        "p_no_defect": 0.0014,
+        "probabilities": {
+          "contamination": 0.955,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.04,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.941,
+        "bbox": [
+          1152.0,
+          246.95,
+          1203.96,
+          326.02
+        ],
+        "area_pct": 0.1981,
+        "p_no_defect": 0.0006,
+        "probabilities": {
+          "contamination": 0.941,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.01,
+          "scratch": 0.046
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9025,
+        "bbox": [
+          756.72,
+          58.27,
+          878.65,
+          173.69
+        ],
+        "area_pct": 0.6787,
+        "p_no_defect": 0.0029,
+        "probabilities": {
+          "contamination": 0.081,
+          "inclusion": 0.004,
+          "no_defect": 0.003,
+          "pinhole": 0.01,
+          "scratch": 0.902
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9023,
+        "bbox": [
+          1223.41,
+          0.05,
+          1280.0,
+          36.98
+        ],
+        "area_pct": 0.1008,
+        "p_no_defect": 0.0114,
+        "probabilities": {
+          "contamination": 0.902,
+          "inclusion": 0.051,
+          "no_defect": 0.011,
+          "pinhole": 0.032,
+          "scratch": 0.004
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.8462,
+        "bbox": [
+          897.57,
+          0.0,
+          1009.67,
+          86.2
+        ],
+        "area_pct": 0.466,
+        "p_no_defect": 0.0043,
+        "probabilities": {
+          "contamination": 0.116,
+          "inclusion": 0.021,
+          "no_defect": 0.004,
+          "pinhole": 0.013,
+          "scratch": 0.846
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.5293,
+        "bbox": [
+          772.0,
+          830.24,
+          927.54,
+          896.0
+        ],
+        "area_pct": 0.4933,
+        "p_no_defect": 0.0528,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.001,
+          "no_defect": 0.053,
+          "pinhole": 0.415,
+          "scratch": 0.529
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.5177,
+        "bbox": [
+          924.39,
+          854.64,
+          1003.35,
+          896.0
+        ],
+        "area_pct": 0.1575,
+        "p_no_defect": 0.0418,
+        "probabilities": {
+          "contamination": 0.518,
+          "inclusion": 0.003,
+          "no_defect": 0.042,
+          "pinhole": 0.429,
+          "scratch": 0.008
+        }
+      }
+    ]
+  },
+  {
+    "category": "scratches",
+    "target_class": "scratch",
+    "index": 10,
+    "filename": "scratch_10_123_bmp.rf.c5f9d92984d66ce3fcdb6dd2fe892fc9.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.05,
+    "num_detections": 25,
+    "class_distribution": {
+      "scratch": 10,
+      "contamination": 14,
+      "pinhole": 1
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 10 'scratch' detection(s) (conf: 100.0%, 100.0%, 100.0%).",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          228.75,
+          384.0,
+          387.16,
+          499.15
+        ],
+        "area_pct": 0.8797,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          0.0,
+          824.78,
+          176.97,
+          999.88
+        ],
+        "area_pct": 1.4944,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          0.0,
+          703.43,
+          183.7,
+          896.0
+        ],
+        "area_pct": 1.706,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 1.0,
+        "bbox": [
+          275.32,
+          468.12,
+          445.94,
+          601.71
+        ],
+        "area_pct": 1.0992,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          540.81,
+          568.0,
+          729.18,
+          698.44
+        ],
+        "area_pct": 1.1849,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9999,
+        "bbox": [
+          1131.61,
+          34.72,
+          1280.0,
+          226.39
+        ],
+        "area_pct": 1.3716,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 1.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9969,
+        "bbox": [
+          1653.92,
+          384.02,
+          1725.87,
+          417.61
+        ],
+        "area_pct": 0.1166,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.996,
+        "bbox": [
+          1179.22,
+          391.15,
+          1253.18,
+          466.44
+        ],
+        "area_pct": 0.2685,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.996,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.004,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9921,
+        "bbox": [
+          650.67,
+          186.19,
+          719.12,
+          252.9
+        ],
+        "area_pct": 0.2202,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.992,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "pinhole",
+        "confidence": 0.9918,
+        "bbox": [
+          1790.78,
+          325.9,
+          1900.39,
+          378.61
+        ],
+        "area_pct": 0.2786,
+        "p_no_defect": 0.0006,
+        "probabilities": {
+          "contamination": 0.007,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.992,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9908,
+        "bbox": [
+          1413.01,
+          880.5,
+          1499.28,
+          959.88
+        ],
+        "area_pct": 0.3303,
+        "p_no_defect": 0.0019,
+        "probabilities": {
+          "contamination": 0.991,
+          "inclusion": 0.0,
+          "no_defect": 0.002,
+          "pinhole": 0.006,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9801,
+        "bbox": [
+          638.35,
+          958.93,
+          726.79,
+          1074.02
+        ],
+        "area_pct": 0.4909,
+        "p_no_defect": 0.0014,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.002,
+          "scratch": 0.015
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9681,
+        "bbox": [
+          443.64,
+          844.67,
+          512.0,
+          895.92
+        ],
+        "area_pct": 0.169,
+        "p_no_defect": 0.0028,
+        "probabilities": {
+          "contamination": 0.968,
+          "inclusion": 0.002,
+          "no_defect": 0.003,
+          "pinhole": 0.015,
+          "scratch": 0.013
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.9629,
+        "bbox": [
+          1408.0,
+          709.0,
+          1463.22,
+          826.96
+        ],
+        "area_pct": 0.3141,
+        "p_no_defect": 0.0248,
+        "probabilities": {
+          "contamination": 0.008,
+          "inclusion": 0.002,
+          "no_defect": 0.025,
+          "pinhole": 0.002,
+          "scratch": 0.963
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.931,
+        "bbox": [
+          824.44,
+          986.41,
+          956.82,
+          1080.0
+        ],
+        "area_pct": 0.5975,
+        "p_no_defect": 0.0184,
+        "probabilities": {
+          "contamination": 0.047,
+          "inclusion": 0.001,
+          "no_defect": 0.018,
+          "pinhole": 0.002,
+          "scratch": 0.931
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9123,
+        "bbox": [
+          144.33,
+          0.0,
+          265.78,
+          109.47
+        ],
+        "area_pct": 0.6412,
+        "p_no_defect": 0.0016,
+        "probabilities": {
+          "contamination": 0.912,
+          "inclusion": 0.001,
+          "no_defect": 0.002,
+          "pinhole": 0.053,
+          "scratch": 0.033
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9106,
+        "bbox": [
+          1836.67,
+          967.35,
+          1920.0,
+          1015.72
+        ],
+        "area_pct": 0.1944,
+        "p_no_defect": 0.002,
+        "probabilities": {
+          "contamination": 0.911,
+          "inclusion": 0.0,
+          "no_defect": 0.002,
+          "pinhole": 0.075,
+          "scratch": 0.012
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9055,
+        "bbox": [
+          459.64,
+          126.44,
+          511.86,
+          196.05
+        ],
+        "area_pct": 0.1753,
+        "p_no_defect": 0.0083,
+        "probabilities": {
+          "contamination": 0.906,
+          "inclusion": 0.021,
+          "no_defect": 0.008,
+          "pinhole": 0.049,
+          "scratch": 0.017
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9024,
+        "bbox": [
+          1735.41,
+          21.8,
+          1847.23,
+          139.81
+        ],
+        "area_pct": 0.6364,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.902,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.004,
+          "scratch": 0.093
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9005,
+        "bbox": [
+          769.64,
+          801.8,
+          855.82,
+          859.31
+        ],
+        "area_pct": 0.239,
+        "p_no_defect": 0.0511,
+        "probabilities": {
+          "contamination": 0.901,
+          "inclusion": 0.002,
+          "no_defect": 0.051,
+          "pinhole": 0.046,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8974,
+        "bbox": [
+          973.47,
+          0.0,
+          1054.38,
+          60.28
+        ],
+        "area_pct": 0.2352,
+        "p_no_defect": 0.0027,
+        "probabilities": {
+          "contamination": 0.897,
+          "inclusion": 0.025,
+          "no_defect": 0.003,
+          "pinhole": 0.07,
+          "scratch": 0.005
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8705,
+        "bbox": [
+          1879.22,
+          253.49,
+          1919.97,
+          324.37
+        ],
+        "area_pct": 0.1393,
+        "p_no_defect": 0.0014,
+        "probabilities": {
+          "contamination": 0.87,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.127,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.711,
+        "bbox": [
+          1849.26,
+          125.48,
+          1920.0,
+          230.18
+        ],
+        "area_pct": 0.3572,
+        "p_no_defect": 0.0017,
+        "probabilities": {
+          "contamination": 0.711,
+          "inclusion": 0.0,
+          "no_defect": 0.002,
+          "pinhole": 0.009,
+          "scratch": 0.278
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.7038,
+        "bbox": [
+          1044.46,
+          863.27,
+          1127.6,
+          997.92
+        ],
+        "area_pct": 0.5399,
+        "p_no_defect": 0.0322,
+        "probabilities": {
+          "contamination": 0.24,
+          "inclusion": 0.008,
+          "no_defect": 0.032,
+          "pinhole": 0.016,
+          "scratch": 0.704
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.5766,
+        "bbox": [
+          298.85,
+          0.78,
+          431.6,
+          100.29
+        ],
+        "area_pct": 0.6371,
+        "p_no_defect": 0.0043,
+        "probabilities": {
+          "contamination": 0.033,
+          "inclusion": 0.002,
+          "no_defect": 0.004,
+          "pinhole": 0.385,
+          "scratch": 0.577
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 1,
+    "filename": "contaminant_01_20250507T155829Z_003594_297_top_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 49.65,
+    "num_detections": 1,
+    "class_distribution": {
+      "scratch": 1
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 1 detection(s) classified as 'scratch' (1x) instead of target 'contamination'.",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 0.9113,
+        "bbox": [
+          2305.31,
+          3187.45,
+          2407.75,
+          3299.06
+        ],
+        "area_pct": 0.0709,
+        "p_no_defect": 0.008,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.078,
+          "no_defect": 0.008,
+          "pinhole": 0.003,
+          "scratch": 0.911
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 2,
+    "filename": "contaminant_02_20250509T091926Z_005766_280_mid_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 49.07,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 1,
+      "scratch": 1
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 2 detection(s) classified as 'inclusion' (1x) instead of target 'contamination'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.844,
+        "bbox": [
+          863.57,
+          1288.91,
+          1026.22,
+          1441.37
+        ],
+        "area_pct": 0.1537,
+        "p_no_defect": 0.0114,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.844,
+          "no_defect": 0.011,
+          "pinhole": 0.003,
+          "scratch": 0.14
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.6193,
+        "bbox": [
+          759.92,
+          615.45,
+          891.03,
+          756.94
+        ],
+        "area_pct": 0.115,
+        "p_no_defect": 0.0674,
+        "probabilities": {
+          "contamination": 0.004,
+          "inclusion": 0.3,
+          "no_defect": 0.067,
+          "pinhole": 0.01,
+          "scratch": 0.619
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 3,
+    "filename": "contaminant_03_20250509T092054Z_008415_280_mid_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 49.42,
+    "num_detections": 2,
+    "class_distribution": {
+      "scratch": 2
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 2 detection(s) classified as 'scratch' (2x) instead of target 'contamination'.",
+    "detections": [
+      {
+        "subtype": "scratch",
+        "confidence": 0.8018,
+        "bbox": [
+          1965.09,
+          1607.56,
+          2113.52,
+          1757.67
+        ],
+        "area_pct": 0.1381,
+        "p_no_defect": 0.011,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.186,
+          "no_defect": 0.011,
+          "pinhole": 0.001,
+          "scratch": 0.802
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.6391,
+        "bbox": [
+          1344.6,
+          1652.5,
+          1483.61,
+          1771.63
+        ],
+        "area_pct": 0.1027,
+        "p_no_defect": 0.2883,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.07,
+          "no_defect": 0.288,
+          "pinhole": 0.002,
+          "scratch": 0.639
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 4,
+    "filename": "contaminant_04_20250509T092652Z_018603_266_bot_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 52.47,
+    "num_detections": 8,
+    "class_distribution": {
+      "inclusion": 5,
+      "scratch": 3
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 8 detection(s) classified as 'inclusion' (5x) instead of target 'contamination'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9639,
+        "bbox": [
+          2577.84,
+          526.54,
+          2700.95,
+          625.38
+        ],
+        "area_pct": 0.0754,
+        "p_no_defect": 0.0329,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.964,
+          "no_defect": 0.033,
+          "pinhole": 0.001,
+          "scratch": 0.002
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.8168,
+        "bbox": [
+          2456.61,
+          4647.2,
+          2587.27,
+          4787.28
+        ],
+        "area_pct": 0.1135,
+        "p_no_defect": 0.0114,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.17,
+          "no_defect": 0.011,
+          "pinhole": 0.001,
+          "scratch": 0.817
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7985,
+        "bbox": [
+          2330.05,
+          2688.13,
+          2445.21,
+          2739.42
+        ],
+        "area_pct": 0.0366,
+        "p_no_defect": 0.0116,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.799,
+          "no_defect": 0.012,
+          "pinhole": 0.001,
+          "scratch": 0.188
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7662,
+        "bbox": [
+          2448.36,
+          482.53,
+          2607.21,
+          635.0
+        ],
+        "area_pct": 0.1502,
+        "p_no_defect": 0.2178,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.766,
+          "no_defect": 0.218,
+          "pinhole": 0.001,
+          "scratch": 0.015
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.705,
+        "bbox": [
+          2676.89,
+          2323.76,
+          2828.6,
+          2431.61
+        ],
+        "area_pct": 0.1014,
+        "p_no_defect": 0.1194,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.705,
+          "no_defect": 0.119,
+          "pinhole": 0.004,
+          "scratch": 0.17
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.7026,
+        "bbox": [
+          1956.27,
+          3399.78,
+          2101.69,
+          3555.44
+        ],
+        "area_pct": 0.1403,
+        "p_no_defect": 0.1223,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.171,
+          "no_defect": 0.122,
+          "pinhole": 0.003,
+          "scratch": 0.703
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.6945,
+        "bbox": [
+          2600.25,
+          2416.58,
+          2739.58,
+          2550.51
+        ],
+        "area_pct": 0.1157,
+        "p_no_defect": 0.02,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.695,
+          "no_defect": 0.02,
+          "pinhole": 0.001,
+          "scratch": 0.284
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.5292,
+        "bbox": [
+          2567.83,
+          3312.02,
+          2720.27,
+          3458.95
+        ],
+        "area_pct": 0.1389,
+        "p_no_defect": 0.2857,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.182,
+          "no_defect": 0.286,
+          "pinhole": 0.002,
+          "scratch": 0.529
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 5,
+    "filename": "contaminant_05_20250509T092855Z_019447_324_mid_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 48.86,
+    "num_detections": 2,
+    "class_distribution": {
+      "inclusion": 1,
+      "scratch": 1
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 2 detection(s) classified as 'inclusion' (1x) instead of target 'contamination'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.898,
+        "bbox": [
+          2520.15,
+          3546.44,
+          2574.7,
+          3674.39
+        ],
+        "area_pct": 0.0433,
+        "p_no_defect": 0.0042,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.898,
+          "no_defect": 0.004,
+          "pinhole": 0.001,
+          "scratch": 0.096
+        }
+      },
+      {
+        "subtype": "scratch",
+        "confidence": 0.527,
+        "bbox": [
+          2405.74,
+          3539.83,
+          2561.9,
+          3685.32
+        ],
+        "area_pct": 0.1409,
+        "p_no_defect": 0.0034,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.468,
+          "no_defect": 0.003,
+          "pinhole": 0.001,
+          "scratch": 0.527
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 6,
+    "filename": "contaminant_06_20250509T093030Z_016577_324_mid_raw.jpg",
+    "source": "Zenodo Subsea",
+    "resolution": "3032x5320",
+    "elapsed_seconds": 48.18,
+    "num_detections": 11,
+    "class_distribution": {
+      "inclusion": 11
+    },
+    "status": "CROSS_CLASS_DELIVERY",
+    "target_matched": false,
+    "diagnosis": "Delivered 11 detection(s) classified as 'inclusion' (11x) instead of target 'contamination'.",
+    "detections": [
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9934,
+        "bbox": [
+          2186.35,
+          2927.38,
+          2310.69,
+          3043.55
+        ],
+        "area_pct": 0.0895,
+        "p_no_defect": 0.0038,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.993,
+          "no_defect": 0.004,
+          "pinhole": 0.0,
+          "scratch": 0.003
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9886,
+        "bbox": [
+          2083.15,
+          2577.44,
+          2206.03,
+          2699.73
+        ],
+        "area_pct": 0.0932,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.989,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.011
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9881,
+        "bbox": [
+          1597.27,
+          2522.49,
+          1663.85,
+          2644.55
+        ],
+        "area_pct": 0.0504,
+        "p_no_defect": 0.0025,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.988,
+          "no_defect": 0.002,
+          "pinhole": 0.0,
+          "scratch": 0.009
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9736,
+        "bbox": [
+          1913.66,
+          2927.31,
+          2048.0,
+          3051.44
+        ],
+        "area_pct": 0.1034,
+        "p_no_defect": 0.0143,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.974,
+          "no_defect": 0.014,
+          "pinhole": 0.0,
+          "scratch": 0.012
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9659,
+        "bbox": [
+          2482.63,
+          2475.96,
+          2584.0,
+          2599.82
+        ],
+        "area_pct": 0.0778,
+        "p_no_defect": 0.0048,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.966,
+          "no_defect": 0.005,
+          "pinhole": 0.0,
+          "scratch": 0.029
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.9065,
+        "bbox": [
+          2026.02,
+          2482.12,
+          2162.39,
+          2621.35
+        ],
+        "area_pct": 0.1177,
+        "p_no_defect": 0.0025,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.907,
+          "no_defect": 0.003,
+          "pinhole": 0.0,
+          "scratch": 0.09
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.8924,
+        "bbox": [
+          1329.66,
+          768.21,
+          1431.3,
+          822.19
+        ],
+        "area_pct": 0.034,
+        "p_no_defect": 0.1016,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.892,
+          "no_defect": 0.102,
+          "pinhole": 0.001,
+          "scratch": 0.005
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.8856,
+        "bbox": [
+          1762.55,
+          2209.38,
+          1892.25,
+          2345.8
+        ],
+        "area_pct": 0.1097,
+        "p_no_defect": 0.0165,
+        "probabilities": {
+          "contamination": 0.0,
+          "inclusion": 0.886,
+          "no_defect": 0.016,
+          "pinhole": 0.001,
+          "scratch": 0.096
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7807,
+        "bbox": [
+          2013.37,
+          334.2,
+          2176.55,
+          481.72
+        ],
+        "area_pct": 0.1492,
+        "p_no_defect": 0.1441,
+        "probabilities": {
+          "contamination": 0.002,
+          "inclusion": 0.781,
+          "no_defect": 0.144,
+          "pinhole": 0.002,
+          "scratch": 0.071
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.7481,
+        "bbox": [
+          2152.05,
+          4621.92,
+          2248.82,
+          4719.97
+        ],
+        "area_pct": 0.0588,
+        "p_no_defect": 0.2294,
+        "probabilities": {
+          "contamination": 0.001,
+          "inclusion": 0.748,
+          "no_defect": 0.229,
+          "pinhole": 0.001,
+          "scratch": 0.021
+        }
+      },
+      {
+        "subtype": "inclusion",
+        "confidence": 0.5509,
+        "bbox": [
+          1251.01,
+          201.89,
+          1402.52,
+          336.3
+        ],
+        "area_pct": 0.1263,
+        "p_no_defect": 0.2164,
+        "probabilities": {
+          "contamination": 0.006,
+          "inclusion": 0.551,
+          "no_defect": 0.216,
+          "pinhole": 0.007,
+          "scratch": 0.22
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 7,
+    "filename": "contaminant_07_1138_bmp.rf.e4252560e78e47979a107398d3ab0d49.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.58,
+    "num_detections": 14,
+    "class_distribution": {
+      "contamination": 14
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 14 'contamination' detection(s) (conf: 100.0%, 99.9%, 99.7%).",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9995,
+        "bbox": [
+          265.89,
+          929.85,
+          357.48,
+          1017.97
+        ],
+        "area_pct": 0.3892,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9985,
+        "bbox": [
+          184.25,
+          80.79,
+          263.28,
+          153.48
+        ],
+        "area_pct": 0.277,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.999,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.001,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9972,
+        "bbox": [
+          1540.8,
+          744.3,
+          1625.74,
+          821.62
+        ],
+        "area_pct": 0.3167,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9971,
+        "bbox": [
+          1521.39,
+          665.39,
+          1597.89,
+          735.94
+        ],
+        "area_pct": 0.2603,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.997,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          1434.83,
+          100.92,
+          1515.07,
+          175.16
+        ],
+        "area_pct": 0.2873,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.005,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9824,
+        "bbox": [
+          1735.43,
+          508.25,
+          1823.97,
+          591.45
+        ],
+        "area_pct": 0.3553,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.982,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.017,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9797,
+        "bbox": [
+          513.85,
+          642.59,
+          593.81,
+          718.1
+        ],
+        "area_pct": 0.2912,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.019,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9785,
+        "bbox": [
+          768.0,
+          641.74,
+          838.14,
+          733.14
+        ],
+        "area_pct": 0.3092,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.979,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.021,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9735,
+        "bbox": [
+          673.87,
+          597.69,
+          772.81,
+          687.43
+        ],
+        "area_pct": 0.4282,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.973,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.026,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9681,
+        "bbox": [
+          1077.67,
+          19.09,
+          1201.78,
+          145.88
+        ],
+        "area_pct": 0.7589,
+        "p_no_defect": 0.002,
+        "probabilities": {
+          "contamination": 0.968,
+          "inclusion": 0.006,
+          "no_defect": 0.002,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.947,
+        "bbox": [
+          1724.43,
+          702.8,
+          1805.05,
+          778.41
+        ],
+        "area_pct": 0.294,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.947,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.052,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.933,
+        "bbox": [
+          384.36,
+          718.78,
+          455.69,
+          797.44
+        ],
+        "area_pct": 0.2706,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.933,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.066,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8583,
+        "bbox": [
+          1468.6,
+          273.14,
+          1551.74,
+          352.42
+        ],
+        "area_pct": 0.3179,
+        "p_no_defect": 0.0017,
+        "probabilities": {
+          "contamination": 0.858,
+          "inclusion": 0.001,
+          "no_defect": 0.002,
+          "pinhole": 0.138,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8402,
+        "bbox": [
+          0.0,
+          963.06,
+          36.75,
+          1034.29
+        ],
+        "area_pct": 0.1262,
+        "p_no_defect": 0.0029,
+        "probabilities": {
+          "contamination": 0.84,
+          "inclusion": 0.004,
+          "no_defect": 0.003,
+          "pinhole": 0.152,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 8,
+    "filename": "contaminant_08_1139_bmp.rf.94e09b91e242cff0f62f6150254e5793.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.79,
+    "num_detections": 15,
+    "class_distribution": {
+      "contamination": 15
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 15 'contamination' detection(s) (conf: 99.8%, 99.8%, 99.4%).",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.998,
+        "bbox": [
+          1662.17,
+          511.08,
+          1746.36,
+          590.72
+        ],
+        "area_pct": 0.3233,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9979,
+        "bbox": [
+          182.39,
+          932.51,
+          284.47,
+          1023.92
+        ],
+        "area_pct": 0.45,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9942,
+        "bbox": [
+          1464.97,
+          746.38,
+          1550.45,
+          825.52
+        ],
+        "area_pct": 0.3262,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.006,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9941,
+        "bbox": [
+          441.16,
+          648.06,
+          511.82,
+          718.57
+        ],
+        "area_pct": 0.2403,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.994,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.004,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9918,
+        "bbox": [
+          1649.1,
+          705.03,
+          1728.81,
+          779.5
+        ],
+        "area_pct": 0.2863,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.992,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9857,
+        "bbox": [
+          108.09,
+          80.87,
+          193.98,
+          158.58
+        ],
+        "area_pct": 0.3219,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.986,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9849,
+        "bbox": [
+          1352.97,
+          96.1,
+          1440.38,
+          176.9
+        ],
+        "area_pct": 0.3406,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9826,
+        "bbox": [
+          1004.55,
+          22.46,
+          1123.95,
+          145.88
+        ],
+        "area_pct": 0.7107,
+        "p_no_defect": 0.0012,
+        "probabilities": {
+          "contamination": 0.983,
+          "inclusion": 0.004,
+          "no_defect": 0.001,
+          "pinhole": 0.012,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9795,
+        "bbox": [
+          600.23,
+          595.86,
+          699.12,
+          694.35
+        ],
+        "area_pct": 0.4697,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.98,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.02,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9663,
+        "bbox": [
+          1257.35,
+          15.48,
+          1335.56,
+          86.3
+        ],
+        "area_pct": 0.2671,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.966,
+          "inclusion": 0.008,
+          "no_defect": 0.001,
+          "pinhole": 0.025,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9593,
+        "bbox": [
+          298.18,
+          724.64,
+          376.08,
+          795.26
+        ],
+        "area_pct": 0.2653,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.959,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.039,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.959,
+        "bbox": [
+          1441.06,
+          662.74,
+          1523.55,
+          740.7
+        ],
+        "area_pct": 0.3101,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.959,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.04,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.894,
+        "bbox": [
+          0.0,
+          962.83,
+          36.68,
+          1033.16
+        ],
+        "area_pct": 0.1244,
+        "p_no_defect": 0.0028,
+        "probabilities": {
+          "contamination": 0.894,
+          "inclusion": 0.007,
+          "no_defect": 0.003,
+          "pinhole": 0.096,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8526,
+        "bbox": [
+          1408.37,
+          278.6,
+          1476.56,
+          357.75
+        ],
+        "area_pct": 0.2603,
+        "p_no_defect": 0.0023,
+        "probabilities": {
+          "contamination": 0.853,
+          "inclusion": 0.002,
+          "no_defect": 0.002,
+          "pinhole": 0.142,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8474,
+        "bbox": [
+          0.0,
+          809.35,
+          60.16,
+          884.17
+        ],
+        "area_pct": 0.2171,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.847,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.148,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 9,
+    "filename": "contaminant_09_1140_bmp.rf.952a44f1d662b64267e72f8acc14a878.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 7.05,
+    "num_detections": 17,
+    "class_distribution": {
+      "contamination": 17
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 17 'contamination' detection(s) (conf: 100.0%, 99.6%, 99.5%).",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.9996,
+        "bbox": [
+          0.0,
+          964.78,
+          35.11,
+          1035.09
+        ],
+        "area_pct": 0.119,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 1.0,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.0,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9964,
+        "bbox": [
+          1511.04,
+          516.45,
+          1598.85,
+          598.61
+        ],
+        "area_pct": 0.3479,
+        "p_no_defect": 0.0,
+        "probabilities": {
+          "contamination": 0.996,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.003,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9945,
+        "bbox": [
+          1750.18,
+          143.05,
+          1832.04,
+          219.21
+        ],
+        "area_pct": 0.3007,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.995,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.005,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9886,
+        "bbox": [
+          1314.07,
+          750.97,
+          1401.23,
+          832.42
+        ],
+        "area_pct": 0.3424,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.011,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9847,
+        "bbox": [
+          1623.91,
+          780.83,
+          1709.82,
+          860.14
+        ],
+        "area_pct": 0.3286,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.015,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9825,
+        "bbox": [
+          1239.94,
+          510.69,
+          1322.27,
+          586.29
+        ],
+        "area_pct": 0.3002,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.983,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.016,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9765,
+        "bbox": [
+          146.53,
+          731.01,
+          222.88,
+          799.58
+        ],
+        "area_pct": 0.2525,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.977,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9741,
+        "bbox": [
+          1104.43,
+          17.15,
+          1183.72,
+          90.91
+        ],
+        "area_pct": 0.282,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.974,
+          "inclusion": 0.007,
+          "no_defect": 0.0,
+          "pinhole": 0.019,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9723,
+        "bbox": [
+          1501.86,
+          711.06,
+          1577.69,
+          781.94
+        ],
+        "area_pct": 0.2592,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.972,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.027,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9687,
+        "bbox": [
+          852.8,
+          42.8,
+          896.0,
+          141.22
+        ],
+        "area_pct": 0.205,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.969,
+          "inclusion": 0.016,
+          "no_defect": 0.001,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9364,
+        "bbox": [
+          460.27,
+          611.47,
+          573.51,
+          731.87
+        ],
+        "area_pct": 0.6575,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.936,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.062,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9341,
+        "bbox": [
+          1295.07,
+          673.11,
+          1373.29,
+          744.45
+        ],
+        "area_pct": 0.2691,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.934,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.065,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9102,
+        "bbox": [
+          1157.96,
+          736.49,
+          1238.8,
+          809.37
+        ],
+        "area_pct": 0.2841,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.91,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.087,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9084,
+        "bbox": [
+          911.31,
+          611.96,
+          995.73,
+          689.22
+        ],
+        "area_pct": 0.3145,
+        "p_no_defect": 0.001,
+        "probabilities": {
+          "contamination": 0.908,
+          "inclusion": 0.007,
+          "no_defect": 0.001,
+          "pinhole": 0.084,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8725,
+        "bbox": [
+          27.24,
+          931.27,
+          138.32,
+          1043.93
+        ],
+        "area_pct": 0.6035,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.872,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.126,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8656,
+        "bbox": [
+          1100.48,
+          862.36,
+          1179.46,
+          896.0
+        ],
+        "area_pct": 0.1281,
+        "p_no_defect": 0.0018,
+        "probabilities": {
+          "contamination": 0.866,
+          "inclusion": 0.008,
+          "no_defect": 0.002,
+          "pinhole": 0.124,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.5785,
+        "bbox": [
+          1239.86,
+          277.75,
+          1333.31,
+          368.29
+        ],
+        "area_pct": 0.408,
+        "p_no_defect": 0.0025,
+        "probabilities": {
+          "contamination": 0.578,
+          "inclusion": 0.002,
+          "no_defect": 0.002,
+          "pinhole": 0.416,
+          "scratch": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "category": "contaminants",
+    "target_class": "contamination",
+    "index": 10,
+    "filename": "contaminant_10_1141_bmp.rf.438385deab6f6f53c17a2c8a88d7a989.jpg",
+    "source": "Roboflow Thin-Film",
+    "resolution": "1920x1080",
+    "elapsed_seconds": 6.91,
+    "num_detections": 16,
+    "class_distribution": {
+      "contamination": 16
+    },
+    "status": "TARGET_MATCH",
+    "target_matched": true,
+    "diagnosis": "Successfully delivered 16 'contamination' detection(s) (conf: 99.8%, 99.2%, 99.0%).",
+    "detections": [
+      {
+        "subtype": "contamination",
+        "confidence": 0.998,
+        "bbox": [
+          1074.18,
+          113.46,
+          1156.3,
+          188.42
+        ],
+        "area_pct": 0.2969,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.998,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.002,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9921,
+        "bbox": [
+          1376.21,
+          568.07,
+          1458.35,
+          604.17
+        ],
+        "area_pct": 0.143,
+        "p_no_defect": 0.0001,
+        "probabilities": {
+          "contamination": 0.992,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.008,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9902,
+        "bbox": [
+          1617.34,
+          148.19,
+          1695.76,
+          222.63
+        ],
+        "area_pct": 0.2815,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.99,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.009,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9891,
+        "bbox": [
+          1152.0,
+          295.06,
+          1185.48,
+          361.03
+        ],
+        "area_pct": 0.1065,
+        "p_no_defect": 0.0002,
+        "probabilities": {
+          "contamination": 0.989,
+          "inclusion": 0.001,
+          "no_defect": 0.0,
+          "pinhole": 0.01,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9856,
+        "bbox": [
+          1181.83,
+          756.69,
+          1267.16,
+          835.95
+        ],
+        "area_pct": 0.3262,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.986,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.014,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9847,
+        "bbox": [
+          270.21,
+          150.34,
+          354.18,
+          227.71
+        ],
+        "area_pct": 0.3133,
+        "p_no_defect": 0.0005,
+        "probabilities": {
+          "contamination": 0.985,
+          "inclusion": 0.005,
+          "no_defect": 0.0,
+          "pinhole": 0.01,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9776,
+        "bbox": [
+          768.0,
+          29.79,
+          836.24,
+          159.91
+        ],
+        "area_pct": 0.4282,
+        "p_no_defect": 0.002,
+        "probabilities": {
+          "contamination": 0.978,
+          "inclusion": 0.005,
+          "no_defect": 0.002,
+          "pinhole": 0.015,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9762,
+        "bbox": [
+          1841.67,
+          645.63,
+          1919.75,
+          743.11
+        ],
+        "area_pct": 0.3671,
+        "p_no_defect": 0.0003,
+        "probabilities": {
+          "contamination": 0.976,
+          "inclusion": 0.0,
+          "no_defect": 0.0,
+          "pinhole": 0.023,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9648,
+        "bbox": [
+          970.97,
+          22.62,
+          1047.08,
+          92.47
+        ],
+        "area_pct": 0.2564,
+        "p_no_defect": 0.0004,
+        "probabilities": {
+          "contamination": 0.965,
+          "inclusion": 0.015,
+          "no_defect": 0.0,
+          "pinhole": 0.02,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.9424,
+        "bbox": [
+          2.83,
+          734.18,
+          89.17,
+          811.4
+        ],
+        "area_pct": 0.3215,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.942,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.056,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.938,
+        "bbox": [
+          1102.05,
+          512.69,
+          1184.68,
+          588.33
+        ],
+        "area_pct": 0.3014,
+        "p_no_defect": 0.0007,
+        "probabilities": {
+          "contamination": 0.938,
+          "inclusion": 0.003,
+          "no_defect": 0.001,
+          "pinhole": 0.058,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8605,
+        "bbox": [
+          1364.06,
+          715.27,
+          1443.58,
+          791.43
+        ],
+        "area_pct": 0.2921,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.861,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.137,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8565,
+        "bbox": [
+          1858.86,
+          27.94,
+          1920.0,
+          113.07
+        ],
+        "area_pct": 0.251,
+        "p_no_defect": 0.0028,
+        "probabilities": {
+          "contamination": 0.856,
+          "inclusion": 0.004,
+          "no_defect": 0.003,
+          "pinhole": 0.136,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8349,
+        "bbox": [
+          384.0,
+          641.87,
+          436.87,
+          738.55
+        ],
+        "area_pct": 0.2465,
+        "p_no_defect": 0.0009,
+        "probabilities": {
+          "contamination": 0.835,
+          "inclusion": 0.001,
+          "no_defect": 0.001,
+          "pinhole": 0.163,
+          "scratch": 0.0
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.8032,
+        "bbox": [
+          316.25,
+          611.78,
+          412.99,
+          707.45
+        ],
+        "area_pct": 0.4463,
+        "p_no_defect": 0.0008,
+        "probabilities": {
+          "contamination": 0.803,
+          "inclusion": 0.0,
+          "no_defect": 0.001,
+          "pinhole": 0.195,
+          "scratch": 0.001
+        }
+      },
+      {
+        "subtype": "contamination",
+        "confidence": 0.6546,
+        "bbox": [
+          1161.19,
+          678.69,
+          1238.72,
+          750.91
+        ],
+        "area_pct": 0.27,
+        "p_no_defect": 0.0015,
+        "probabilities": {
+          "contamination": 0.655,
+          "inclusion": 0.002,
+          "no_defect": 0.001,
+          "pinhole": 0.342,
+          "scratch": 0.0
+        }
+      }
+    ]
+  }
+]

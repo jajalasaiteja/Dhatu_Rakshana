@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import apiClient, { resolveMediaUrl, downloadInspectionReport } from '../api/client';
 import StatusBadge from '../components/StatusBadge';
@@ -9,7 +9,7 @@ import Interactive3DTopography from '../components/Interactive3DTopography';
 import MeshViewer from '../components/MeshViewer';
 import DefectClassificationTable from '../components/DefectClassificationTable';
 import StructuredEvaluationPanel from '../components/StructuredEvaluationPanel';
-import { formatISTDateTime, formatISTDate } from '../utils/dateTime';
+import { formatISTDateTime } from '../utils/dateTime';
 import { isObsoleteHistoricalRecord } from '../utils/inspectionFilters';
 import {
   FileDown,
@@ -35,6 +35,7 @@ export default function Result() {
   const [hoveredDetId, setHoveredDetId] = useState(null);
   const [show3DViewer, setShow3DViewer] = useState(false);
   const [activeImageIdx, setActiveImageIdx] = useState(0);
+  const [failedImageUrls, setFailedImageUrls] = useState(() => new Set());
 
   // PDF Report Download States: 'idle' | 'downloading' | 'success' | 'error'
   const [reportState, setReportState] = useState('idle');
@@ -82,6 +83,9 @@ export default function Result() {
   };
 
   useEffect(() => {
+    setActiveImageIdx(0);
+    setFailedImageUrls(new Set());
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchInspection(pollCount > 0);
     return () => {
       if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
@@ -241,38 +245,72 @@ export default function Result() {
     return null;
   };
 
-  // Build candidate images from all possible inspection schema formats
+  // Build canonical list of images with strict deduplication by normalized key
   const candidateImages = [];
-  if (Array.isArray(inspection.image_urls) && inspection.image_urls.length > 0) {
-    candidateImages.push(...inspection.image_urls);
-  }
-  if (inspection.image_url) candidateImages.push(inspection.image_url);
-  if (inspection.thumbnail_url) candidateImages.push(inspection.thumbnail_url);
-  if (inspection.annotated_image) candidateImages.push(inspection.annotated_image);
-  if (inspection.original_image) candidateImages.push(inspection.original_image);
-  if (inspection.image_path && typeof inspection.image_path === 'string') {
-    const splitPaths = inspection.image_path.split(',').map((p) => p.trim()).filter(Boolean);
-    candidateImages.push(...splitPaths);
-  }
+  const seenKeys = new Set();
+
+  const addCandidate = (rawPathOrUrl, record = null) => {
+    if (!rawPathOrUrl || typeof rawPathOrUrl !== 'string') return;
+    const trimmed = rawPathOrUrl.trim();
+    if (!trimmed) return;
+    let key = trimmed
+      .replace(/^https?:\/\/[^/]+/i, '')
+      .replace(/^\/files\//, '')
+      .replace(/^\/api\/v1\/storage\/file\?key=/, '')
+      .replace(/^\/+/, '');
+    if (!key || seenKeys.has(key)) return;
+    seenKeys.add(key);
+
+    const url = (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('blob:') || trimmed.startsWith('data:'))
+      ? trimmed
+      : resolveMediaUrl(`/files/${key}`);
+
+    candidateImages.push({
+      key,
+      url,
+      record
+    });
+  };
+
+  // 1. Prioritize inspection.images child records (primary source of truth)
   if (Array.isArray(inspection.images) && inspection.images.length > 0) {
-    for (const img of inspection.images) {
-      if (typeof img === 'string') candidateImages.push(img);
-      else if (img && img.storage_key) candidateImages.push(`/api/v1/storage/file?key=${encodeURIComponent(img.storage_key)}`);
-      else if (img && img.url) candidateImages.push(img.url);
-    }
+    inspection.images.forEach((img) => {
+      if (typeof img === 'string') addCandidate(img, null);
+      else if (img?.storage_key) addCandidate(img.storage_key, img);
+      else if (img?.url) addCandidate(img.url, img);
+    });
   }
 
-  // Deduplicate and resolve URLs safely
-  const uniqueRawUrls = [...new Set(candidateImages.filter(Boolean))];
-  const resolvedImageUrls = uniqueRawUrls.map(resolveMediaUrl);
+  // 2. Add from image_urls
+  if (Array.isArray(inspection.image_urls) && inspection.image_urls.length > 0) {
+    inspection.image_urls.forEach((url, idx) => {
+      const rec = (Array.isArray(inspection.images) && inspection.images[idx]) || null;
+      addCandidate(url, rec);
+    });
+  }
+
+  // 3. Fallbacks: image_url, thumbnail_url, or split image_path
+  if (inspection.image_url) addCandidate(inspection.image_url);
+  if (inspection.thumbnail_url) addCandidate(inspection.thumbnail_url);
+  if (inspection.image_path && typeof inspection.image_path === 'string') {
+    inspection.image_path.split(',').forEach((p) => addCandidate(p.trim()));
+  }
+
+  // Filter out any image URLs or keys that failed to load
+  const validAngleImages = candidateImages.filter(
+    (item) => !failedImageUrls.has(item.url) && !failedImageUrls.has(item.key)
+  );
 
   // Active image URL for current angle/perspective selection
-  const safeImageIdx = activeImageIdx < resolvedImageUrls.length ? activeImageIdx : 0;
-  const activeImageUrl = resolvedImageUrls[safeImageIdx] || '';
-  const currentImageRecord = (Array.isArray(inspection.images) ? inspection.images : [])[safeImageIdx] || null;
+  const safeImageIdx = activeImageIdx < validAngleImages.length ? activeImageIdx : 0;
+  const activeImageItem = validAngleImages[safeImageIdx] || null;
+  const activeImageUrl = activeImageItem ? activeImageItem.url : '';
+  const currentImageRecord = activeImageItem?.record || null;
   const currentImageId = currentImageRecord ? currentImageRecord.id : null;
   const hasPerImageDetections = detections.some((d) => d.image_id != null);
-  const visibleDetections = (hasPerImageDetections && currentImageId) ? detections.filter((d) => d.image_id === currentImageId) : ((hasPerImageDetections && (inspection.images || []).length > 1) ? [] : detections);
+  const visibleDetections = (hasPerImageDetections && currentImageId)
+    ? detections.filter((d) => d.image_id === currentImageId)
+    : ((hasPerImageDetections && validAngleImages.length > 1) ? [] : detections);
 
   const hasTopology = Boolean(inspection.topology_available || inspection.mesh_url);
   const meshUrl = hasTopology
@@ -486,23 +524,38 @@ export default function Result() {
             </div>
 
             {/* Multi-perspective Thumbnail Selector (if multiple images) */}
-            {resolvedImageUrls.length > 1 && (
+            {validAngleImages.length > 1 && (
               <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-mono">
                 <span className="text-[10px] font-semibold text-greige shrink-0 uppercase tracking-wider">
                   Inspection Angles:
                 </span>
-                {resolvedImageUrls.map((url, idx) => (
+                {validAngleImages.map((item, idx) => (
                   <button
-                    key={idx}
+                    key={item.key || idx}
                     type="button"
-                    onClick={() => setActiveImageIdx(idx)}
+                    onClick={() => {
+                      setActiveImageIdx(idx);
+                      setHoveredDetId(null);
+                    }}
                     className={`w-12 h-12 rounded overflow-hidden shrink-0 border nav-transition cursor-pointer ${
-                      activeImageIdx === idx
+                      safeImageIdx === idx
                         ? 'border-grayGreen ring-1 ring-grayGreen shadow-panel'
                         : 'border-white/10 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={url} alt={`Angle #${idx + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={item.url}
+                      alt={`Angle #${idx + 1}`}
+                      onError={() => {
+                        setFailedImageUrls((prev) => {
+                          const next = new Set(prev);
+                          next.add(item.url);
+                          next.add(item.key);
+                          return next;
+                        });
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -642,7 +695,7 @@ export default function Result() {
                 </p>
               </div>
               <span className="px-2 py-0.5 rounded border border-white/10 bg-surface-dark font-mono text-[10px] text-matteSage shrink-0">
-                {detections.length} ANOMALIES
+                {visibleDetections.length} ANOMALIES
               </span>
             </div>
 
@@ -658,7 +711,7 @@ export default function Result() {
 
             {/* Compact, Scrollable Defect Classification Table */}
             <DefectClassificationTable
-              detections={detections}
+              detections={visibleDetections}
               getGradeForDetection={getGradeForDetection}
               hoveredDetId={hoveredDetId}
               onHoverDetection={setHoveredDetId}

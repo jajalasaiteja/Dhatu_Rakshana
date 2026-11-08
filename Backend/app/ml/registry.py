@@ -80,6 +80,8 @@ class ModelRegistry:
                 yolo_weights_path=weights_path,
                 resnet_weights_path=cls_path,
                 default_mode=cfg.get("mode", "balanced"),
+                tile_size=int(cfg.get("tile_size", 512)),
+                overlap=int(cfg.get("tile_overlap", 128)),
                 device=self.device
             )
         elif framework == "ultralytics":

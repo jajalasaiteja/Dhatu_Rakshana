@@ -53,3 +53,6 @@ Frontend/node_modules/.vite/
 # OS Metadata
 .DS_Store
 Thumbs.db
+
+*.bak
+

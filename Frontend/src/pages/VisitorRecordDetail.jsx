@@ -41,6 +41,7 @@ export default function VisitorRecordDetail() {
   const [hoveredDetId, setHoveredDetId] = useState(null);
   const [show3DViewer, setShow3DViewer] = useState(false);
   const [activeImageIdx, setActiveImageIdx] = useState(0);
+  const [failedImageUrls, setFailedImageUrls] = useState(() => new Set());
 
   const fetchDetail = async () => {
     setLoading(true);
@@ -73,6 +74,8 @@ export default function VisitorRecordDetail() {
   };
 
   useEffect(() => {
+    setActiveImageIdx(0);
+    setFailedImageUrls(new Set());
     fetchDetail();
   }, [id]);
 
@@ -222,20 +225,72 @@ export default function VisitorRecordDetail() {
     return null;
   };
 
-  // Build candidate images from all possible record schema formats
+  // Build canonical list of images with strict deduplication by normalized key
   const candidateImages = [];
-  if (Array.isArray(record.image_urls) && record.image_urls.length > 0) {
-    candidateImages.push(...record.image_urls);
+  const seenKeys = new Set();
+
+  const addCandidate = (rawPathOrUrl, recordObj = null) => {
+    if (!rawPathOrUrl || typeof rawPathOrUrl !== 'string') return;
+    const trimmed = rawPathOrUrl.trim();
+    if (!trimmed) return;
+    let key = trimmed
+      .replace(/^https?:\/\/[^/]+/i, '')
+      .replace(/^\/files\//, '')
+      .replace(/^\/api\/v1\/storage\/file\?key=/, '')
+      .replace(/^\/+/, '');
+    if (!key || seenKeys.has(key)) return;
+    seenKeys.add(key);
+
+    const url = (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('blob:') || trimmed.startsWith('data:'))
+      ? trimmed
+      : resolveMediaUrl(`/files/${key}`);
+
+    candidateImages.push({
+      key,
+      url,
+      record: recordObj
+    });
+  };
+
+  // 1. Prioritize child images if present
+  if (Array.isArray(record.images) && record.images.length > 0) {
+    record.images.forEach((img) => {
+      if (typeof img === 'string') addCandidate(img, null);
+      else if (img?.storage_key) addCandidate(img.storage_key, img);
+      else if (img?.url) addCandidate(img.url, img);
+    });
   }
-  if (record.image_url) candidateImages.push(record.image_url);
-  if (record.thumbnail_url) candidateImages.push(record.thumbnail_url);
-  if (record.original_image) candidateImages.push(record.original_image);
 
-  const uniqueRawUrls = [...new Set(candidateImages.filter(Boolean))];
-  const resolvedImageUrls = uniqueRawUrls.map(resolveMediaUrl);
+  // 2. Add from image_urls
+  if (Array.isArray(record.image_urls) && record.image_urls.length > 0) {
+    record.image_urls.forEach((url, idx) => {
+      const rec = (Array.isArray(record.images) && record.images[idx]) || null;
+      addCandidate(url, rec);
+    });
+  }
 
-  const safeImageIdx = activeImageIdx < resolvedImageUrls.length ? activeImageIdx : 0;
-  const activeImageUrl = resolvedImageUrls[safeImageIdx] || '';
+  // 3. Fallbacks: image_url, thumbnail_url, original_image, image_path
+  if (record.image_url) addCandidate(record.image_url);
+  if (record.thumbnail_url) addCandidate(record.thumbnail_url);
+  if (record.original_image) addCandidate(record.original_image);
+  if (record.image_path && typeof record.image_path === 'string') {
+    record.image_path.split(',').forEach((p) => addCandidate(p.trim()));
+  }
+
+  // Filter out any image URLs or keys that failed to load
+  const validAngleImages = candidateImages.filter(
+    (item) => !failedImageUrls.has(item.url) && !failedImageUrls.has(item.key)
+  );
+
+  const safeImageIdx = activeImageIdx < validAngleImages.length ? activeImageIdx : 0;
+  const activeImageItem = validAngleImages[safeImageIdx] || null;
+  const activeImageUrl = activeImageItem ? activeImageItem.url : '';
+  const currentImageRecord = activeImageItem?.record || null;
+  const currentImageId = currentImageRecord ? currentImageRecord.id : null;
+  const hasPerImageDetections = detections.some((d) => d.image_id != null);
+  const visibleDetections = (hasPerImageDetections && currentImageId)
+    ? detections.filter((d) => d.image_id === currentImageId)
+    : ((hasPerImageDetections && validAngleImages.length > 1) ? [] : detections);
 
   const hasTopology = Boolean(record.topology_available || record.mesh_url);
   const meshUrl = hasTopology
@@ -432,23 +487,38 @@ export default function VisitorRecordDetail() {
               </div>
 
               {/* Multi-perspective Thumbnail Selector */}
-              {resolvedImageUrls.length > 1 && (
+              {validAngleImages.length > 1 && (
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-mono">
                   <span className="text-[10px] font-semibold text-greige shrink-0 uppercase tracking-wider">
                     Inspection Angles:
                   </span>
-                  {resolvedImageUrls.map((url, idx) => (
+                  {validAngleImages.map((item, idx) => (
                     <button
-                      key={idx}
+                      key={item.key || idx}
                       type="button"
-                      onClick={() => setActiveImageIdx(idx)}
+                      onClick={() => {
+                        setActiveImageIdx(idx);
+                        setHoveredDetId(null);
+                      }}
                       className={`w-12 h-12 rounded overflow-hidden shrink-0 border nav-transition cursor-pointer ${
-                        activeImageIdx === idx
+                        safeImageIdx === idx
                           ? 'border-grayGreen ring-1 ring-grayGreen shadow-panel'
                           : 'border-white/10 opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <img src={url} alt={`Angle #${idx + 1}`} className="w-full h-full object-cover" />
+                      <img
+                        src={item.url}
+                        alt={`Angle #${idx + 1}`}
+                        onError={() => {
+                          setFailedImageUrls((prev) => {
+                            const next = new Set(prev);
+                            next.add(item.url);
+                            next.add(item.key);
+                            return next;
+                          });
+                        }}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>

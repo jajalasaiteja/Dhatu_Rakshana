@@ -36,7 +36,7 @@ export default function History() {
   const [errorMsg, setErrorMsg] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [verdictFilter, setVerdictFilter] = useState('ALL');
-  const [sortBy, setSortBy] = useState('oldest'); // 'oldest' | 'newest' | 'defects'
+  const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'defects'
   const [viewMode, setViewMode] = useState('table'); // 'table' | 'grid'
 
   const getRecordLabel = (insp) => {

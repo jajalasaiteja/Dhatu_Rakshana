@@ -10,9 +10,9 @@ from app.schemas.measurement import InspectionMeasurementRead
 class InspectionCreateResponse(BaseModel):
     id: Optional[int] = None
     inspection_id: int
-    overall_verdict: str
-    image_count: int
-    status: str
+    overall_verdict: Optional[str] = "PENDING"
+    image_count: int = 1
+    status: Optional[str] = "PENDING"
     job_id: Optional[str] = None
     operation_mode: Optional[str] = "balanced"
 
@@ -49,6 +49,7 @@ class InspectionDetail(BaseModel):
     image_url: Optional[str] = None
     thumbnail_url: Optional[str] = None
     image_urls: List[str] = Field(default_factory=list)
+    images: List[Dict[str, Any]] = Field(default_factory=list)
     mesh_url: Optional[str] = None
     topology_available: bool = False
     topology_info: Optional[Dict[str, Any]] = None

@@ -8,6 +8,7 @@ from app.schemas.measurement import MeasurementRead
 class DetectionRead(BaseModel):
     id: int
     inspection_id: int
+    image_id: Optional[int] = None
     class_name: str = Field(alias="class")
     subtype: str
     bbox: List[float]
@@ -19,3 +20,4 @@ class DetectionRead(BaseModel):
 
     class Config:
         populate_by_name = True
+        from_attributes = True

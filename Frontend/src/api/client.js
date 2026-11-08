@@ -228,8 +228,21 @@ export async function apiClient(endpoint, options = {}) {
     if (!response.ok) {
       let errorMsg = `Server error (${response.status})`;
       try {
-        const errorData = await response.json();
-        errorMsg = errorData.detail || errorData.message || errorMsg;
+        const textData = await response.text();
+        try {
+          const errorData = JSON.parse(textData);
+          if (typeof errorData.detail === 'string') {
+            errorMsg = errorData.detail;
+          } else if (Array.isArray(errorData.detail)) {
+            errorMsg = errorData.detail.map((d) => d.msg || JSON.stringify(d)).join('; ');
+          } else {
+            errorMsg = errorData.message || errorData.detail || errorMsg;
+          }
+        } catch {
+          if (textData && textData.trim()) {
+            errorMsg = `Server error (${response.status}): ${textData.slice(0, 160)}`;
+          }
+        }
       } catch {
         // use default error message
       }

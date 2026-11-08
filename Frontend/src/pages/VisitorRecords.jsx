@@ -39,7 +39,7 @@ export default function VisitorRecords() {
   const [errorMsg, setErrorMsg] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [verdictFilter, setVerdictFilter] = useState('ALL');
-  const [sortBy, setSortBy] = useState('oldest'); // 'oldest' | 'newest' | 'defects'
+  const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'defects'
 
   const getRecordLabel = (insp) => {
     if (insp.display_label) return insp.display_label;
