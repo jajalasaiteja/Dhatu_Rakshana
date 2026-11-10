@@ -84,7 +84,7 @@ Marine protective coatings are the first line of defense against severe seawater
 - **Deep Learning:** PyTorch 2.5.1, TorchVision 0.20.1, Ultralytics YOLOv8 8.3.50
 - **Computer Vision:** OpenCV Headless 4.10.0.84, NumPy 1.26.4, Scikit-Learn 1.5.2
 - **3D Reconstruction:** Open3D 0.18.0
-- **Database & ORM:** PostgreSQL 16 / SQLite via SQLModel 0.0.22 and Alembic 1.14.1 migrations
+- **Database & ORM:** PostgreSQL 16 via SQLModel 0.0.22, psycopg2-binary, and Alembic 1.14.1 migrations (SQLite is strictly rejected)
 - **Reporting:** ReportLab 4.2.5
 
 ### Frontend Web Dashboard

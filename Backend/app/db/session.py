@@ -1,13 +1,15 @@
 """Database engine, connection pooling, and session management for Dhatu Rakshana.
 
-Configured for standalone zero-infrastructure SQLite execution by default, with thread-safe
-WAL (Write-Ahead Logging) concurrency, busy timeout guards, and automated Alembic schema migrations.
+Configured strictly for PostgreSQL with connection pooling, pool pre-ping,
+and automated Alembic schema migrations. SQLite is not supported.
 """
 
 from pathlib import Path
+from typing import Optional
 from sqlmodel import SQLModel, create_engine, Session
-from sqlalchemy import text, event
-import sqlite3
+from sqlalchemy import text
+import subprocess
+import shutil
 import datetime
 import logging
 
@@ -15,67 +17,32 @@ from app.core.config import settings, BACKEND_DIR, DATA_DIR
 
 logger = logging.getLogger("dhatu_rakshana.db")
 
-def create_db_engine():
-    db_url = settings.DATABASE_URL
+def create_db_engine(db_url: Optional[str] = None):
+    url = db_url or settings.DATABASE_URL
 
-    # 1. SQLite: Primary, default, self-contained database
-    if db_url.startswith("sqlite"):
-        # Ensure target database directory exists
-        if ":///" in db_url:
-            path_part = db_url.split(":///", 1)[1]
-            db_file_path = Path(path_part)
-            db_file_path.parent.mkdir(parents=True, exist_ok=True)
-            logger.info(f"Initialized SQLite database at: {db_file_path.resolve()}")
-        else:
-            logger.info(f"Initialized SQLite database: {db_url}")
-
-        engine = create_engine(
-            db_url,
-            echo=False,
-            connect_args={"check_same_thread": False}
+    if not url or "sqlite" in url.lower():
+        raise ValueError(
+            "SQLite is not supported. Project Dhatu Rakshana requires PostgreSQL as its only database. "
+            f"Configured URL was '{url}'. "
+            "Please configure a valid PostgreSQL connection (e.g. postgresql+psycopg2://<user>:<password>@<host>:<port>/<dbname>)."
         )
 
-        # Enable DELETE journal mode (prevents Windows host lock issues on -shm), busy timeout, and foreign keys
-        @event.listens_for(engine, "connect")
-        def set_sqlite_pragma(dbapi_connection, connection_record):
-            if isinstance(dbapi_connection, sqlite3.Connection):
-                cursor = dbapi_connection.cursor()
-                try:
-                    cursor.execute("PRAGMA journal_mode=DELETE")
-                    cursor.execute("PRAGMA synchronous=NORMAL")
-                    cursor.execute("PRAGMA busy_timeout=5000")
-                    cursor.execute("PRAGMA foreign_keys=ON")
-                except Exception:
-                    pass
-                finally:
-                    cursor.close()
+    if not (url.startswith("postgresql") or url.startswith("postgres")):
+        raise ValueError(
+            f"Unsupported database scheme in DATABASE_URL: {url.split('://')[0]}. "
+            "Only PostgreSQL is supported."
+        )
 
-        return engine
-
-    # 2. Optional Production PostgreSQL (only if explicitly set in DATABASE_URL)
-    if db_url.startswith("postgresql"):
-        try:
-            logger.info(f"Connecting to explicit PostgreSQL configuration: {db_url.split('@')[-1]}")
-            engine = create_engine(
-                db_url,
-                echo=False,
-                pool_pre_ping=True,
-                pool_size=10,
-                max_overflow=20
-            )
-            with engine.connect() as conn:
-                conn.execute(text("SELECT 1"))
-            logger.info("Successfully connected to PostgreSQL database.")
-            return engine
-        except Exception as exc:
-            logger.error(
-                f"Configured PostgreSQL connection at '{db_url.split('@')[-1]}' failed: {exc}. "
-                f"Please verify PostgreSQL service or omit DATABASE_URL to use self-contained SQLite."
-            )
-            raise
-
-    # Fallback to standard engine
-    return create_engine(db_url, echo=False)
+    logger.info(f"Configuring PostgreSQL database connection: {url.split('@')[-1] if '@' in url else url}")
+    engine = create_engine(
+        url,
+        echo=False,
+        pool_pre_ping=True,
+        pool_size=10,
+        max_overflow=20,
+        pool_recycle=3600
+    )
+    return engine
 
 engine = create_db_engine()
 
@@ -147,61 +114,53 @@ def run_migrations():
     init_db()
 
 def check_db_health() -> dict:
-    """Checks database connectivity and dialect information."""
+    """Checks PostgreSQL database connectivity and version information."""
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
-            dialect = engine.dialect.name
-            version_str = None
-            if dialect == "sqlite":
-                version_str = conn.execute(text("SELECT sqlite_version();")).scalar()
-            elif dialect == "postgresql":
-                version_str = conn.execute(text("SELECT version();")).scalar()
+            version_str = conn.execute(text("SELECT version();")).scalar()
+            current_db = conn.execute(text("SELECT current_database();")).scalar()
         return {
             "status": "connected",
-            "dialect": dialect,
+            "dialect": "postgresql",
+            "database": current_db,
             "version": version_str
         }
     except Exception as exc:
-        return {"status": "unhealthy", "error": str(exc)}
+        return {
+            "status": "unhealthy",
+            "dialect": "postgresql",
+            "error": str(exc)
+        }
 
 def backup_database(destination_path: Path = None) -> Path:
     """
-    Creates an atomic, consistent online backup of the SQLite database.
-    Does not block active transactions or lock concurrent readers/writers.
+    Creates a backup of the PostgreSQL database using pg_dump if available.
     """
-    if engine.dialect.name != "sqlite":
-        raise NotImplementedError("Online zero-downtime backup utility currently supports SQLite.")
+    backup_dir = DATA_DIR / "backups"
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    from app.core.timezone import get_ist_now
+    timestamp = get_ist_now().strftime("%Y%m%d_%H%M%S_IST")
 
-    # Locate source sqlite file
-    url_str = str(engine.url)
-    if ":///" not in url_str:
-        raise ValueError(f"Cannot resolve source SQLite file path from URL: {url_str}")
-
-    source_path = Path(url_str.split(":///", 1)[1])
-    if not source_path.exists():
-        raise FileNotFoundError(f"Source SQLite database does not exist: {source_path}")
-
-    # Determine backup destination
     if destination_path is None:
-        backup_dir = DATA_DIR / "backups"
-        backup_dir.mkdir(parents=True, exist_ok=True)
-        from app.core.timezone import get_ist_now
-        timestamp = get_ist_now().strftime("%Y%m%d_%H%M%S_IST")
-        destination_path = backup_dir / f"dhatu_rakshana_backup_{timestamp}.db"
+        destination_path = backup_dir / f"dhatu_rakshana_backup_{timestamp}.sql"
     else:
         destination_path = Path(destination_path)
         destination_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Execute SQLite atomic backup API
-    src_conn = sqlite3.connect(str(source_path))
-    dst_conn = sqlite3.connect(str(destination_path))
-    try:
-        with dst_conn:
-            src_conn.backup(dst_conn, pages=100)
-        logger.info(f"SQLite database backed up successfully to: {destination_path}")
-    finally:
-        dst_conn.close()
-        src_conn.close()
+    pg_dump_bin = shutil.which("pg_dump")
+    if not pg_dump_bin:
+        raise RuntimeError(
+            "pg_dump utility not found on system PATH. To back up PostgreSQL database, "
+            "install postgresql-client tools or execute backup via Docker: "
+            f"'docker exec dhatu_postgres pg_dump -U postgres marine_defect_db > {destination_path}'"
+        )
 
+    db_url = str(engine.url)
+    cmd = [pg_dump_bin, db_url, "-f", str(destination_path)]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"PostgreSQL backup failed: {result.stderr}")
+
+    logger.info(f"PostgreSQL database backed up successfully to: {destination_path}")
     return destination_path

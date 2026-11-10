@@ -7,10 +7,12 @@ try:
 except ImportError:
     from .config import DATABASE_URL
     from sqlmodel import create_engine
+    if "sqlite" in DATABASE_URL.lower():
+        raise ValueError("SQLite is not supported. Project Dhatu Rakshana requires PostgreSQL.")
     engine = create_engine(
         DATABASE_URL,
         echo=False,
-        connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+        pool_pre_ping=True
     )
 
     def get_session() -> Generator[Session, None, None]:
@@ -21,18 +23,21 @@ except ImportError:
         SQLModel.metadata.create_all(engine)
 
     def check_db_health() -> dict:
-        with engine.connect() as connection:
-            if engine.dialect.name == "sqlite":
-                version_result = connection.execute(text("SELECT sqlite_version();")).scalar()
-                current_db = "sqlite"
-            else:
+        try:
+            with engine.connect() as connection:
                 version_result = connection.execute(text("SELECT version();")).scalar()
                 current_db = connection.execute(text("SELECT current_database();")).scalar()
+                return {
+                    "status": "connected",
+                    "dialect": "postgresql",
+                    "database": current_db,
+                    "version": version_result
+                }
+        except Exception as exc:
             return {
-                "status": "connected",
-                "dialect": engine.dialect.name,
-                "database": current_db,
-                "version": version_result
+                "status": "unhealthy",
+                "dialect": "postgresql",
+                "error": str(exc)
             }
 
 def check_db_connection() -> dict:
@@ -40,6 +45,6 @@ def check_db_connection() -> dict:
     res = check_db_health()
     return {
         "connected": res.get("status") == "connected",
-        "database": res.get("database", res.get("dialect", "sqlite")),
+        "database": res.get("database", "marine_defect_db"),
         "version": res.get("version", "unknown")
     }

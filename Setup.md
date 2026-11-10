@@ -616,13 +616,15 @@ Antigravity should preserve the project's existing
 
 Do not commit secrets into source code.
 
-Typical configuration uses self-contained SQLite:
+Mandatory configuration requires PostgreSQL (SQLite is not supported and is rejected):
 
 ``` text
-DATABASE_URL=sqlite:///./data/dhatu_rakshana.db
+DATABASE_URL=postgresql+psycopg2://postgres:postgrespassword@localhost:5432/marine_defect_db
 ```
 
-(Optional production PostgreSQL: `DATABASE_URL=postgresql+psycopg2://user:pass@host:5432/db`)
+Or individual PostgreSQL variables: `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DB`.
+PostgreSQL 16 can be started locally via Docker Compose: `docker compose up -d postgres`.
+To migrate existing legacy SQLite data safely to PostgreSQL: `python -m scripts.migrate_sqlite_to_postgres`.
 
 The exact environment-variable names must come from the project's
 existing configuration.

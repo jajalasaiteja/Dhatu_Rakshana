@@ -1,24 +1,50 @@
 import os
 import shutil
+import sys
 from pathlib import Path
 import pytest
+from sqlalchemy.exc import OperationalError
+from dotenv import load_dotenv
+
+# Ensure Backend is in sys.path
+backend_dir = Path(__file__).resolve().parent.parent
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
+
+# Load .env if present
+for env_path in [backend_dir / ".env", backend_dir.parent.parent / ".env"]:
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path, override=False)
 
 TEST_DIR = Path("/tmp/dhatu_test_isolated")
 if TEST_DIR.exists():
-    shutil.rmtree(TEST_DIR)
+    shutil.rmtree(TEST_DIR, ignore_errors=True)
 TEST_DIR.mkdir(parents=True, exist_ok=True)
 
-TEST_DB_PATH = TEST_DIR / "test_dhatu_rakshana.db"
 TEST_STORAGE_PATH = TEST_DIR / "storage"
 TEST_STORAGE_PATH.mkdir(parents=True, exist_ok=True)
 
-# Point environment to isolated test database and storage
-os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB_PATH.resolve()}"
+# Point environment to PostgreSQL - SQLite is strictly rejected
+POSTGRES_TEST_URL = os.getenv(
+    "TEST_DATABASE_URL",
+    os.getenv(
+        "DATABASE_URL",
+        "postgresql+psycopg2://postgres:postgrespassword@localhost:5432/marine_defect_db"
+    )
+)
+os.environ["DATABASE_URL"] = POSTGRES_TEST_URL
 os.environ["STORAGE_DIR"] = str(TEST_STORAGE_PATH.resolve())
 
-def seed_test_inspection_8():
-    """Seeds test fixture inspection #8 if not already present."""
-    from app.db.session import engine
+_db_initialized = False
+
+def ensure_test_database_initialized():
+    """Initializes tables and seeds test database with reference data and isolated test fixture."""
+    global _db_initialized
+    if _db_initialized:
+        return
+
+    from app.db.session import init_db, engine
+    from app.db.seed import seed_database
     from sqlmodel import Session
     from app.models.inspection import Inspection
     from app.models.detection import Detection
@@ -26,6 +52,29 @@ def seed_test_inspection_8():
     from app.models.inspection_image import InspectionImage
     from app.models.topology import TopologyFile
     from app.core.timezone import get_ist_now
+
+    # Copy a real sample image into isolated test storage
+    bucket_dir = TEST_STORAGE_PATH / "buckets" / "marine-inspections"
+    bucket_dir.mkdir(parents=True, exist_ok=True)
+    sample_src = Path("/workspace/Project Dhatu Rakshana/Backend/data/datasets/synthetic_defects/images/marine_scan_001_pinhole.png")
+    test_img_dst = bucket_dir / "test_specimen.png"
+    if sample_src.exists():
+        shutil.copyfile(sample_src, test_img_dst)
+    else:
+        from PIL import Image
+        img_dummy = Image.new("RGB", (640, 640), color=(120, 130, 125))
+        img_dummy.save(test_img_dst)
+
+    # Check PostgreSQL connection
+    try:
+        with engine.connect() as conn:
+            from sqlalchemy import text
+            conn.execute(text("SELECT 1"))
+    except (OperationalError, Exception) as exc:
+        pytest.skip(f"PostgreSQL test database not available ({exc}). Start PostgreSQL via Docker or local service to execute integration tests.")
+
+    init_db()
+    seed_database()
 
     with Session(engine) as session:
         existing = session.get(Inspection, 8)
@@ -110,30 +159,17 @@ def seed_test_inspection_8():
             session.add(topo)
             session.commit()
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_test_environment():
-    """Initializes tables and seeds test database with reference data and isolated test fixture."""
-    from app.db.session import init_db
-    from app.db.seed import seed_database
+    _db_initialized = True
 
-    # Copy a real sample image into isolated test storage
-    bucket_dir = TEST_STORAGE_PATH / "buckets" / "marine-inspections"
-    bucket_dir.mkdir(parents=True, exist_ok=True)
-    sample_src = Path("/workspace/Project Dhatu Rakshana/Backend/data/datasets/synthetic_defects/images/marine_scan_001_pinhole.png")
-    test_img_dst = bucket_dir / "test_specimen.png"
-    if sample_src.exists():
-        shutil.copyfile(sample_src, test_img_dst)
-    else:
-        from PIL import Image
-        img_dummy = Image.new("RGB", (640, 640), color=(120, 130, 125))
-        img_dummy.save(test_img_dst)
 
-    init_db()
-    seed_database()
-    seed_test_inspection_8()
-
-    yield
-
-    # Clean up isolated test directory after test run
-    if TEST_DIR.exists():
-        shutil.rmtree(TEST_DIR, ignore_errors=True)
+@pytest.fixture(autouse=True)
+def check_test_db(request):
+    """Automatically initialize PostgreSQL for database-dependent integration tests."""
+    db_test_modules = {
+        "test_authoritative_synchronization",
+        "test_iso_evaluation_engine",
+        "test_stale_record_9_resolution",
+    }
+    module_name = request.node.module.__name__ if hasattr(request.node, "module") and request.node.module else ""
+    if any(m in module_name for m in db_test_modules):
+        ensure_test_database_initialized()

@@ -139,7 +139,7 @@ class InspectionService:
 
             if next_id == 1:
                 try:
-                    self.session.execute(text("DELETE FROM sqlite_sequence WHERE name = 'inspections'"))
+                    self.session.execute(text("ALTER SEQUENCE inspections_id_seq RESTART WITH 1"))
                     self.session.commit()
                 except Exception:
                     pass

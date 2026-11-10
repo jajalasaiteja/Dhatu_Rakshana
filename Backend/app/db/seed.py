@@ -239,19 +239,20 @@ def purge_obsolete_record_9(session: Session) -> bool:
         except Exception as exc:
             logger.warning(f"Notice while removing storage file {key}: {exc}")
 
-    # 5. If no inspection records remain, safely reset sequence counter
+    # 5. If no inspection records remain, safely reset sequence counter for PostgreSQL
     remaining = session.exec(select(func.count(Inspection.id))).one()
     if remaining == 0:
         try:
-            session.execute(text("""
-                DELETE FROM sqlite_sequence 
-                WHERE name IN (
-                    'inspections', 'inspection_images', 'processing_jobs', 
-                    'processing_artifacts', 'inspection_reports', 'topology_files', 
-                    'detections', 'defect_measurements', 'graded_defect_records', 
-                    'inspection_measurements', 'evaluation_histories'
-                )
-            """))
+            for seq_table in [
+                'inspections', 'inspection_images', 'processing_jobs', 
+                'processing_artifacts', 'inspection_reports', 'topology_files', 
+                'detections', 'defect_measurements', 'graded_defect_records', 
+                'inspection_measurements', 'evaluation_histories'
+            ]:
+                try:
+                    session.execute(text(f"ALTER SEQUENCE {seq_table}_id_seq RESTART WITH 1;"))
+                except Exception:
+                    pass
             session.commit()
         except Exception:
             pass

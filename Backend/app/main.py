@@ -18,6 +18,7 @@ if str(backend_root) not in sys.path:
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, FileResponse
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -37,6 +38,7 @@ from app.api.v1.models import router as models_router
 from app.api.v1.artifacts import router as artifacts_router
 from app.api.v1.health import router as health_router
 from app.api.v1.topology import router as topology_router
+from app.api.v1.visitors import router as visitors_router
 
 setup_logging()
 
@@ -74,7 +76,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     logger.error(f"Request Validation Error on {request.method} {request.url.path}: {exc.errors()}")
     return JSONResponse(
         status_code=422,
-        content={"detail": exc.errors(), "body": str(getattr(exc, "body", None))}
+        content={"detail": jsonable_encoder(exc.errors()), "body": str(getattr(exc, "body", None))}
     )
 
 # Global Unhandled Python Exception Handling (Surfaces full traceback to terminal & response)
@@ -121,6 +123,7 @@ app.include_router(models_router, prefix=v1_prefix)
 app.include_router(artifacts_router, prefix=v1_prefix)
 app.include_router(health_router, prefix=v1_prefix)
 app.include_router(topology_router, prefix=v1_prefix)
+app.include_router(visitors_router, prefix=v1_prefix)
 
 # 2. Mount API under /api prefix for compatibility with /api/auth/login, /api/inspections, etc.
 app.include_router(auth_router, prefix="/api")
@@ -130,6 +133,7 @@ app.include_router(models_router, prefix="/api")
 app.include_router(artifacts_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
 app.include_router(topology_router, prefix="/api")
+app.include_router(visitors_router, prefix="/api")
 
 # 3. Mount Top-Level Routers for Direct / Prototype Compatibility
 app.include_router(auth_router)
@@ -139,6 +143,7 @@ app.include_router(models_router)
 app.include_router(artifacts_router)
 app.include_router(health_router)
 app.include_router(topology_router)
+app.include_router(visitors_router)
 
 # API Base Information Endpoints
 @app.get("/api", tags=["API Base"])
@@ -164,6 +169,9 @@ def api_base_info():
             "zones": "/api/v1/zones",
             "models": "/api/v1/models",
             "topology": "/api/v1/topology",
+            "visitors_access": "/api/v1/visitors/access",
+            "visitors_records": "/api/v1/visitors/records",
+            "visitors_logs": "/api/v1/visitors/logs",
             "backup": "/api/v1/system/backup"
         }
     }
