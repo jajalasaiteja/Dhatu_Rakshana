@@ -121,15 +121,18 @@ export function AuthProvider({ children }) {
   };
 
   // Dedicated Visitor Authentication Methods
-  const loginVisitor = async (username) => {
+  const loginVisitor = async (username, password) => {
     const trimmed = (username || '').trim();
     if (!trimmed) {
       throw new Error('Visitor username is required.');
     }
+    if (!(password || '').trim()) {
+      throw new Error('Visitor password is required.');
+    }
 
     const data = await apiClient('/visitors/access', {
       method: 'POST',
-      body: JSON.stringify({ username: trimmed })
+      body: JSON.stringify({ username: trimmed, password: (password || '').trim() })
     });
 
     const vUser = {

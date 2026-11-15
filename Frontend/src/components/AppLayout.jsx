@@ -30,9 +30,9 @@ export default function AppLayout() {
     }
     if (location.pathname.startsWith('/visitor-logs')) {
       return {
-        title: 'Visitor Access Audit Logs',
-        subtitle: 'Audit trail of external visitor activity, timestamps, and accessed records',
-        badge: 'SECURITY AUDIT',
+        title: 'Visitor Access & Permissions',
+        subtitle: 'Grant visitor permissions, manage observer credentials, and review audit logs',
+        badge: 'SECURITY & ACCESS',
       };
     }
     if (location.pathname.startsWith('/standards')) {

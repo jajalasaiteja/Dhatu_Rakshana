@@ -109,6 +109,12 @@ def init_db():
             conn.commit()
     except Exception:
         pass
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE visitors ADD COLUMN password_hash VARCHAR(255)"))
+            conn.commit()
+    except Exception:
+        pass
     logger.info("Database schema verified and tables initialized via SQLModel metadata.")
 
 def run_migrations():

@@ -159,6 +159,15 @@ def seed_database():
             session.commit()
             logger.info(f"Seeded {len(DEFAULT_VISITORS)} authorized visitor identities.")
         else:
+            default_visitor_hash = hash_password("visitor123")
+            updated = False
+            for ev in existing_visitors:
+                if not ev.password_hash:
+                    ev.password_hash = default_visitor_hash
+                    session.add(ev)
+                    updated = True
+            if updated:
+                session.commit()
             logger.info(f"Visitor identities already present ({len(existing_visitors)} visitors found).")
 
         # 5. Purge Confirmed Obsolete Historical Record 9 if Present

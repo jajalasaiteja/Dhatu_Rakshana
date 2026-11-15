@@ -8,6 +8,7 @@ from app.schemas.measurement import InspectionMeasurementRead
 
 class VisitorAccessRequest(BaseModel):
     username: str = Field(..., description="Authorized visitor username")
+    password: str = Field(..., description="Visitor access password")
 
     @field_validator("username")
     @classmethod
@@ -17,6 +18,14 @@ class VisitorAccessRequest(BaseModel):
             raise ValueError("Visitor username cannot be empty or whitespace.")
         if len(trimmed) > 100:
             raise ValueError("Visitor username must be at most 100 characters.")
+        return trimmed
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        trimmed = v.strip()
+        if not trimmed:
+            raise ValueError("Password cannot be empty.")
         return trimmed
 
 class VisitorTokenResponse(BaseModel):
@@ -85,3 +94,32 @@ class VisitorLogsResponse(BaseModel):
     total_count: int
     page: int
     limit: int
+
+class VisitorCreateRequest(BaseModel):
+    username: str = Field(..., description="Unique visitor username for access")
+    password: Optional[str] = Field(None, description="Visitor access password. Defaults to visitor123 if omitted.")
+    full_name: Optional[str] = Field(None, description="Visitor's full name or designation")
+    organization: Optional[str] = Field(None, description="Visitor's organization or department")
+    is_active: bool = Field(True, description="Whether visitor access permission is active")
+
+    @field_validator("username")
+    @classmethod
+    def validate_username(cls, v: str) -> str:
+        trimmed = v.strip().lower()
+        if not trimmed:
+            raise ValueError("Visitor username cannot be empty.")
+        if len(trimmed) > 100:
+            raise ValueError("Visitor username must be at most 100 characters.")
+        for char in trimmed:
+            if not (char.isalnum() or char in ("_", "-", ".")):
+                raise ValueError("Visitor username may only contain letters, numbers, underscores, hyphens, and periods.")
+        return trimmed
+
+class VisitorItem(BaseModel):
+    id: int
+    username: str
+    full_name: Optional[str] = None
+    organization: Optional[str] = None
+    is_active: bool
+    has_password: bool = True
+    created_at: Optional[str] = None

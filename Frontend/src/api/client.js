@@ -141,13 +141,22 @@ export async function apiClient(endpoint, options = {}) {
   const url = `${BASE_URL}${normalizedEndpoint}`;
   const headers = { ...(options.headers || {}) };
 
-  const isVisitorRequest = normalizedEndpoint.includes('/visitors/records') || options.useVisitorToken;
+  const isInspectorVisitorManagement =
+    normalizedEndpoint.includes('/visitors/logs') ||
+    normalizedEndpoint.includes('/visitors/list') ||
+    normalizedEndpoint.includes('/visitors/grant') ||
+    (normalizedEndpoint.includes('/visitors/') && (options.method === 'POST' || options.method === 'PATCH' || options.method === 'DELETE') && !normalizedEndpoint.includes('/visitors/access'));
+
+  const isVisitorRequest =
+    !isInspectorVisitorManagement &&
+    (normalizedEndpoint.includes('/visitors/records') || options.useVisitorToken);
+
   const token = isVisitorRequest
     ? getVisitorToken()
     : options.forceAuthToken
     ? getAuthToken()
     : getAuthToken() ||
-      (normalizedEndpoint.includes('/visitors/') && !normalizedEndpoint.includes('/visitors/logs')
+      (normalizedEndpoint.includes('/visitors/') && !normalizedEndpoint.includes('/visitors/logs') && !isInspectorVisitorManagement
         ? getVisitorToken()
         : null);
 

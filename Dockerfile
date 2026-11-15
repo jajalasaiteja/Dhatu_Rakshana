@@ -54,8 +54,12 @@ COPY --from=frontend-builder /build/dist ./Frontend/dist
 # Copy reference data and setup templates
 COPY data/ ./data/
 
-# Initialize storage and models mount points
-RUN mkdir -p storage/buckets/marine-inspections storage/topology models
+# Copy deep learning model weights
+COPY models/ ./models/
+
+# Initialize storage and ensure writable permissions for non-root containers (e.g. Hugging Face UID 1000)
+RUN mkdir -p storage/buckets/marine-inspections storage/topology && \
+    chmod -R 777 /app
 
 WORKDIR /app/Backend
 

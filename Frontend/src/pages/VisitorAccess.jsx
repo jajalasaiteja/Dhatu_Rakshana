@@ -3,7 +3,18 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Spinner from '../components/Spinner';
 import ThemeToggle from '../components/ThemeToggle';
-import { Shield, UserCheck, ArrowRight, ArrowLeft, AlertCircle, Info } from 'lucide-react';
+import {
+  Shield,
+  UserCheck,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ArrowLeft,
+  AlertCircle,
+  Info,
+  KeyRound
+} from 'lucide-react';
 
 export default function VisitorAccess() {
   const { loginVisitor, isVisitorAuthenticated } = useAuth();
@@ -11,6 +22,8 @@ export default function VisitorAccess() {
   const location = useLocation();
 
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,8 +38,15 @@ export default function VisitorAccess() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const cleanUsername = username.trim();
+    const cleanPassword = password.trim();
+
     if (!cleanUsername) {
-      setError('Please provide a valid visitor username.');
+      setError('Please provide your visitor username.');
+      return;
+    }
+
+    if (!cleanPassword) {
+      setError('Please provide your visitor password.');
       return;
     }
 
@@ -34,12 +54,12 @@ export default function VisitorAccess() {
     setError('');
 
     try {
-      await loginVisitor(cleanUsername);
+      await loginVisitor(cleanUsername, cleanPassword);
       const destination = location.state?.from?.pathname || '/visitor/records';
       navigate(destination, { replace: true });
     } catch (err) {
       setError(
-        err.message || 'Access denied: Username not authorized for visitor access.'
+        err.message || 'Access denied: Invalid visitor username or password.'
       );
       setLoading(false);
     }
@@ -47,6 +67,7 @@ export default function VisitorAccess() {
 
   const handleQuickFill = (val) => {
     setUsername(val);
+    setPassword('visitor123');
     setError('');
   };
 
@@ -81,7 +102,7 @@ export default function VisitorAccess() {
             Visitor Access
           </h1>
           <p className="text-xs text-content-secondary mt-2 leading-relaxed">
-            Enter your username to access available inspection analysis records. Your access will be recorded for audit purposes.
+            Enter your authorized visitor credentials to access coating analysis records. Your session will be logged for defense compliance audits.
           </p>
         </div>
 
@@ -122,8 +143,47 @@ export default function VisitorAccess() {
                 className="w-full pl-9 pr-3 py-2.5 rounded border border-white/10 text-xs font-mono text-fullWhite bg-surface-dark placeholder:text-content-secondary/70 focus:outline-hidden focus:ring-1 focus:ring-grayGreen disabled:opacity-50"
               />
             </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-greige font-semibold" htmlFor="visitor-password">
+                Visitor Access Password
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-[10px] text-greige hover:text-fullWhite cursor-pointer"
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-greige">
+                <Lock className="w-3.5 h-3.5" />
+              </div>
+              <input
+                id="visitor-password"
+                name="visitor-password"
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                disabled={loading}
+                className="w-full pl-9 pr-9 py-2.5 rounded border border-white/10 text-xs font-mono text-fullWhite bg-surface-dark placeholder:text-content-secondary/70 focus:outline-hidden focus:ring-1 focus:ring-grayGreen disabled:opacity-50"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-greige hover:text-fullWhite cursor-pointer"
+                aria-label="Toggle password visibility"
+              >
+                {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
+            </div>
             <p className="text-[10px] text-content-secondary mt-1">
-              Registered visitor access identifier. Passwords are not required.
+              Authorized access key provided by the certified naval inspector.
             </p>
           </div>
 
@@ -136,11 +196,12 @@ export default function VisitorAccess() {
             {loading ? (
               <>
                 <Spinner size="sm" className="text-fullWhite" />
-                <span>Verifying Visitor Identity...</span>
+                <span>Verifying Visitor Credentials...</span>
               </>
             ) : (
               <>
-                <span>Continue to Records</span>
+                <KeyRound className="w-3.5 h-3.5 text-matteSage" />
+                <span>Authenticate & Access Records</span>
                 <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
               </>
             )}
@@ -149,9 +210,12 @@ export default function VisitorAccess() {
 
         {/* Authorized Visitor Demo Helper */}
         <div className="mt-5 p-3 rounded border border-white/10 bg-surface-dark font-mono text-[11px] space-y-2">
-          <div className="flex items-center gap-1.5 text-greige font-semibold">
-            <Info className="w-3 h-3 text-matteSage" />
-            <span>Authorized Test Visitor Identifiers:</span>
+          <div className="flex items-center justify-between text-greige font-semibold">
+            <div className="flex items-center gap-1.5">
+              <Info className="w-3 h-3 text-matteSage" />
+              <span>Authorized Test Identifiers:</span>
+            </div>
+            <span className="text-[10px] text-matteSage font-normal">Password: visitor123</span>
           </div>
           <div className="flex flex-wrap gap-1.5 pt-0.5">
             {['visitor', 'auditor', 'defense_observer', 'naval_cadet'].map((uname) => (
@@ -160,7 +224,7 @@ export default function VisitorAccess() {
                 type="button"
                 onClick={() => handleQuickFill(uname)}
                 className="px-2 py-0.5 rounded border border-white/15 bg-surface-panel hover:bg-surface-elevated text-matteSage hover:text-fullWhite text-[10px] nav-transition cursor-pointer"
-                title={`Click to fill: ${uname}`}
+                title={`Click to fill ${uname} with password visitor123`}
               >
                 {uname}
               </button>

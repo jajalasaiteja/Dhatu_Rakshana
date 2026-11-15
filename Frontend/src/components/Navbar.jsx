@@ -87,7 +87,7 @@ export default function Navbar() {
                 }`}
               >
                 <Users className="w-3.5 h-3.5 text-matteSage" />
-                <span>Visitor Logs</span>
+                <span>Visitor Access & Permissions</span>
               </Link>
             </>
           ) : (

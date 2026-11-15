@@ -10,6 +10,7 @@ class Visitor(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(unique=True, index=True, max_length=100)
+    password_hash: Optional[str] = Field(default=None, max_length=255)
     full_name: Optional[str] = Field(default=None, max_length=255)
     organization: Optional[str] = Field(default=None, max_length=255)
     is_active: bool = Field(default=True, index=True)
@@ -22,5 +23,6 @@ class Visitor(SQLModel, table=True):
             "full_name": self.full_name,
             "organization": self.organization,
             "is_active": self.is_active,
+            "has_password": bool(self.password_hash),
             "created_at": format_ist_iso(self.created_at)
         }

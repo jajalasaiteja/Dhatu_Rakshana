@@ -23,6 +23,8 @@ from app.schemas.visitor import (
     VisitorRecordDetail,
     VisitorAccessLogItem,
     VisitorLogsResponse,
+    VisitorCreateRequest,
+    VisitorItem,
 )
 from app.api.deps import (
     get_current_user,
@@ -30,7 +32,7 @@ from app.api.deps import (
     get_current_visitor,
     VisitorSession,
 )
-from app.core.security import create_visitor_token
+from app.core.security import create_visitor_token, hash_password, verify_password
 from app.core.config import settings
 from app.services.inspection_service import InspectionService
 
@@ -44,18 +46,26 @@ def request_visitor_access(
     session: Session = Depends(get_session)
 ):
     """
-    POST /visitors/access: Validates visitor identity against defined visitor-access policy.
+    POST /visitors/access: Validates visitor identity and password against defined visitor registry.
     If valid, creates a visitor access log with server-generated UTC timestamp and issues
     a dedicated visitor access session credential.
     """
-    clean_username = data.username.strip()
+    clean_username = data.username.strip().lower()
+    clean_password = data.password.strip() if data.password else ""
+
     if not clean_username:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Visitor username cannot be empty."
         )
 
-    # Validate against Visitor registry
+    if not clean_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Visitor password cannot be empty."
+        )
+
+    # Validate against Visitor registry (case-insensitive)
     visitor = session.exec(
         select(Visitor).where(
             Visitor.username == clean_username,
@@ -67,7 +77,15 @@ def request_visitor_access(
         logger.warning(f"Visitor access denied for unauthorized username: '{clean_username}'")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid visitor username. Access is restricted to authorized visitor identifiers."
+            detail="Invalid visitor credentials. Please verify your username and password."
+        )
+
+    # Verify visitor password
+    if not visitor.password_hash or not verify_password(clean_password, visitor.password_hash):
+        logger.warning(f"Visitor access denied: incorrect password for '{clean_username}'")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid visitor credentials. Please verify your username and password."
         )
 
     # Generate session ID and record access event with server-generated IST timestamp
@@ -208,11 +226,6 @@ def retrieve_visitor_topology_file(
     GET /visitors/records/{inspection_id}/topology/file
     Streams the authenticated binary PLY topology data for Three.js rendering
     in authorized visitor read-only mode.
-    Enforces that:
-    1. Request has a valid visitor session.
-    2. Inspection exists and is permitted.
-    3. Topology artifact is linked to this inspection.
-    4. Physical file is verified and strictly within topology storage vault.
     """
     inspection = session.get(Inspection, inspection_id)
     if not inspection:
@@ -270,13 +283,11 @@ def get_visitor_logs(
     if username:
         query = query.where(VisitorAccessLog.visitor_username == username.strip())
 
-    # Count total matching records
     count_query = select(func.count(VisitorAccessLog.id))
     if username:
         count_query = count_query.where(VisitorAccessLog.visitor_username == username.strip())
     total_count = session.exec(count_query).one()
 
-    # Sort newest access first
     logs = session.exec(
         query.order_by(VisitorAccessLog.accessed_at.desc())
         .offset(skip)
@@ -305,3 +316,153 @@ def get_visitor_logs(
         page=page,
         limit=limit
     )
+
+# --- Inspector-Managed Visitor Permissions Endpoints ---
+
+@router.get("/list", response_model=List[VisitorItem])
+def list_registered_visitors(
+    current_user: User = Depends(require_inspector),
+    session: Session = Depends(get_session)
+):
+    """
+    GET /visitors/list: Retrieves all registered visitor identities and their active permission status.
+    Restricted to authenticated certified inspectors.
+    """
+    visitors = session.exec(select(Visitor).order_by(Visitor.username)).all()
+    return [
+        VisitorItem(
+            id=v.id,
+            username=v.username,
+            full_name=v.full_name,
+            organization=v.organization,
+            is_active=v.is_active,
+            has_password=bool(v.password_hash),
+            created_at=format_ist_iso(v.created_at) if v.created_at else None
+        )
+        for v in visitors
+    ]
+
+@router.post("/grant", response_model=VisitorItem, status_code=status.HTTP_201_CREATED)
+def grant_visitor_permission(
+    data: VisitorCreateRequest,
+    current_user: User = Depends(require_inspector),
+    session: Session = Depends(get_session)
+):
+    """
+    POST /visitors/grant: Inspector action to grant or update access permission and password for a visitor.
+    If no password is provided, defaults to 'visitor123'.
+    Restricted to authenticated certified inspectors.
+    """
+    clean_username = data.username.strip().lower()
+    plain_password = data.password.strip() if (data.password and data.password.strip()) else "visitor123"
+    hashed = hash_password(plain_password)
+
+    visitor = session.exec(
+        select(Visitor).where(Visitor.username == clean_username)
+    ).first()
+
+    if visitor:
+        visitor.is_active = data.is_active
+        if data.password and data.password.strip():
+            visitor.password_hash = hashed
+        elif not visitor.password_hash:
+            visitor.password_hash = hashed
+        if data.full_name is not None:
+            visitor.full_name = data.full_name.strip() or None
+        if data.organization is not None:
+            visitor.organization = data.organization.strip() or None
+        session.add(visitor)
+        session.commit()
+        session.refresh(visitor)
+        logger.info(
+            f"Inspector '{current_user.email}' updated permission for visitor '{clean_username}' (is_active={visitor.is_active})."
+        )
+    else:
+        visitor = Visitor(
+            username=clean_username,
+            password_hash=hashed,
+            full_name=data.full_name.strip() if data.full_name else None,
+            organization=data.organization.strip() if data.organization else None,
+            is_active=data.is_active,
+            created_at=get_ist_now()
+        )
+        session.add(visitor)
+        session.commit()
+        session.refresh(visitor)
+        logger.info(
+            f"Inspector '{current_user.email}' created new visitor '{clean_username}' with active permission and password."
+        )
+
+    return VisitorItem(
+        id=visitor.id,
+        username=visitor.username,
+        full_name=visitor.full_name,
+        organization=visitor.organization,
+        is_active=visitor.is_active,
+        has_password=bool(visitor.password_hash),
+        created_at=format_ist_iso(visitor.created_at) if visitor.created_at else None
+    )
+
+@router.patch("/{visitor_id}/toggle", response_model=VisitorItem)
+def toggle_visitor_permission(
+    visitor_id: int,
+    current_user: User = Depends(require_inspector),
+    session: Session = Depends(get_session)
+):
+    """
+    PATCH /visitors/{visitor_id}/toggle: Instantly toggles visitor permission between Active and Suspended.
+    Restricted to authenticated certified inspectors.
+    """
+    visitor = session.get(Visitor, visitor_id)
+    if not visitor:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Visitor ID #{visitor_id} not found."
+        )
+
+    visitor.is_active = not visitor.is_active
+    session.add(visitor)
+    session.commit()
+    session.refresh(visitor)
+
+    state_str = "ACTIVE" if visitor.is_active else "SUSPENDED"
+    logger.info(
+        f"Inspector '{current_user.email}' toggled visitor #{visitor_id} ('{visitor.username}') permission to {state_str}."
+    )
+
+    return VisitorItem(
+        id=visitor.id,
+        username=visitor.username,
+        full_name=visitor.full_name,
+        organization=visitor.organization,
+        is_active=visitor.is_active,
+        has_password=bool(visitor.password_hash),
+        created_at=format_ist_iso(visitor.created_at) if visitor.created_at else None
+    )
+
+@router.delete("/{visitor_id}")
+def delete_visitor_permission(
+    visitor_id: int,
+    current_user: User = Depends(require_inspector),
+    session: Session = Depends(get_session)
+):
+    """
+    DELETE /visitors/{visitor_id}: Removes a visitor identity from the authorized registry.
+    Restricted to authenticated certified inspectors.
+    """
+    visitor = session.get(Visitor, visitor_id)
+    if not visitor:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Visitor ID #{visitor_id} not found."
+        )
+
+    uname = visitor.username
+    session.delete(visitor)
+    session.commit()
+    logger.info(f"Inspector '{current_user.email}' deleted visitor #{visitor_id} ('{uname}').")
+
+    return {
+        "status": "success",
+        "message": f"Visitor '{uname}' successfully deleted from authorized registry."
+    }

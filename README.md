@@ -1,3 +1,13 @@
+---
+title: Dhatu Rakshana
+emoji: 🛡️
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # Dhatu Rakshana (धातु रक्षण)
 ### AI-Powered Defense Marine Platform Coating Inspection, 3D Micro-Topography Reconstruction & ISO Compliance Grading
 

@@ -37,6 +37,7 @@ from app.api.v1.models import router as models_router
 from app.api.v1.artifacts import router as artifacts_router
 from app.api.v1.health import router as health_router
 from app.api.v1.topology import router as topology_router
+from app.api.v1.visitors import router as visitors_router
 
 setup_logging()
 
@@ -121,6 +122,7 @@ app.include_router(models_router, prefix=v1_prefix)
 app.include_router(artifacts_router, prefix=v1_prefix)
 app.include_router(health_router, prefix=v1_prefix)
 app.include_router(topology_router, prefix=v1_prefix)
+app.include_router(visitors_router, prefix=v1_prefix)
 
 # 2. Mount API under /api prefix for compatibility with /api/auth/login, /api/inspections, etc.
 app.include_router(auth_router, prefix="/api")
@@ -130,6 +132,7 @@ app.include_router(models_router, prefix="/api")
 app.include_router(artifacts_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
 app.include_router(topology_router, prefix="/api")
+app.include_router(visitors_router, prefix="/api")
 
 # 3. Mount Top-Level Routers for Direct / Prototype Compatibility
 app.include_router(auth_router)
@@ -139,6 +142,7 @@ app.include_router(models_router)
 app.include_router(artifacts_router)
 app.include_router(health_router)
 app.include_router(topology_router)
+app.include_router(visitors_router)
 
 # API Base Information Endpoints
 @app.get("/api", tags=["API Base"])
@@ -164,6 +168,7 @@ def api_base_info():
             "zones": "/api/v1/zones",
             "models": "/api/v1/models",
             "topology": "/api/v1/topology",
+            "visitors": "/api/v1/visitors",
             "backup": "/api/v1/system/backup"
         }
     }
@@ -201,7 +206,10 @@ if FRONTEND_DIST.exists() and (FRONTEND_DIST / "index.html").exists():
         if full_path and potential_file.is_file():
             return FileResponse(potential_file)
         # Fallback to index.html for client-side React Router navigation
-        return FileResponse(FRONTEND_DIST / "index.html")
+        return FileResponse(
+            FRONTEND_DIST / "index.html",
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
+        )
 else:
     @app.get("/")
     def root():
