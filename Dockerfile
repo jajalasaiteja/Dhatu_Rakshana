@@ -17,7 +17,7 @@ RUN npm ci --prefer-offline || npm install
 
 # Copy frontend source code and compile production distribution
 COPY Frontend/ ./
-RUN npm run build
+RUN chmod -R +x node_modules/.bin && npm run build
 
 # ------------------------------------------------------------------------------
 # Stage 2: Production Backend Runtime Stage

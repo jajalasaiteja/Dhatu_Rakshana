@@ -46,6 +46,8 @@ storage/topology/*
 !storage/topology/.gitkeep
 
 # Vite & Node local build caches
+Frontend/node_modules/
+node_modules/
 Frontend/node_modules/.vite/
 .npm
 *.log
