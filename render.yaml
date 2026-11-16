@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: dhatu-rakshana
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: oregon
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: sqlite:///data/dhatu_rakshana.db
+      - key: ML_DEVICE
+        value: cpu
+      - key: STORAGE_BACKEND
+        value: local
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+    healthCheckPath: /api/v1/health
