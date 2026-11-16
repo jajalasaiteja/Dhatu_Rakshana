@@ -18,6 +18,7 @@ if str(backend_root) not in sys.path:
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, FileResponse
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -75,7 +76,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     logger.error(f"Request Validation Error on {request.method} {request.url.path}: {exc.errors()}")
     return JSONResponse(
         status_code=422,
-        content={"detail": exc.errors(), "body": str(getattr(exc, "body", None))}
+        content={"detail": jsonable_encoder(exc.errors()), "body": str(getattr(exc, "body", None))}
     )
 
 # Global Unhandled Python Exception Handling (Surfaces full traceback to terminal & response)

@@ -1,33 +1,18 @@
-"""CLI script to reset all inspection records and associated files safely."""
+"""CLI script to reset all inspection records and associated files safely in PostgreSQL."""
 
 import os
 import shutil
-import sqlite3
 from pathlib import Path
+from sqlalchemy import text
 from app.core.config import settings
+from app.db.session import engine
 
 def reset_inspections() -> None:
     print("=" * 60)
     print("  DHATU RAKSHANA - RESET ALL INSPECTION RECORDS")
     print("=" * 60)
 
-    # Determine database path
-    db_url = settings.DATABASE_URL
-    if db_url.startswith("sqlite:///"):
-        db_path = db_url.replace("sqlite:///", "")
-    else:
-        db_path = "data/dhatu_rakshana.db"
-
-    abs_db_path = Path(db_path).resolve()
-    print(f"[*] Target SQLite Database: {abs_db_path}")
-
-    if not abs_db_path.exists():
-        print(f"[!] Database file not found at {abs_db_path}. Nothing to reset.")
-        return
-
-    conn = sqlite3.connect(str(abs_db_path))
-    cur = conn.cursor()
-    cur.execute("PRAGMA foreign_keys = ON;")
+    print(f"[*] Target PostgreSQL Database: {settings.DATABASE_URL}")
 
     tables_to_clear = [
         "graded_defect_records",
@@ -43,54 +28,31 @@ def reset_inspections() -> None:
         "inspections"
     ]
 
-    print("\n[*] Purging inspection records from database...")
+    print("\n[*] Purging inspection records from PostgreSQL database...")
     total_deleted = 0
-    for table in tables_to_clear:
-        try:
-            cur.execute(f'DELETE FROM "{table}"')
-            count = cur.rowcount
-            total_deleted += count
-            print(f"  - Cleared table '{table}': {count} records removed")
-        except sqlite3.OperationalError as e:
-            print(f"  - Table '{table}' skipped ({e})")
+    with engine.begin() as conn:
+        for table in tables_to_clear:
+            try:
+                res = conn.execute(text(f'DELETE FROM "{table}"'))
+                count = res.rowcount if res.rowcount is not None and res.rowcount >= 0 else 0
+                total_deleted += count
+                print(f"  - Cleared table '{table}': {count} records removed")
+            except Exception as e:
+                print(f"  - Table '{table}' skipped ({e})")
 
-    conn.commit()
-    print(f"[*] Total records removed: {total_deleted}")
+        print(f"[*] Total records removed: {total_deleted}")
 
-    # Reset SQLite sequence counter for inspection tables safely (preserving users, visitors, zones, etc.)
-    try:
-        cur.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'")
-        if cur.fetchone():
-            cur.execute("""
-                DELETE FROM sqlite_sequence 
-                WHERE name IN (
-                    'inspections', 'inspection_images', 'processing_jobs', 
-                    'processing_artifacts', 'inspection_reports', 'topology_files', 
-                    'detections', 'defect_measurements', 'graded_defect_records', 
-                    'inspection_measurements', 'evaluation_histories'
-                )
-            """)
-            conn.commit()
-            print("  - Reset sqlite_sequence for inspection tables (preserved user and system sequences)")
-    except sqlite3.OperationalError as e:
-        print(f"  - sqlite_sequence reset skipped ({e})")
-
-    print("[*] Verifying SQLite foreign keys and integrity...")
-    fk_violations = cur.execute("PRAGMA foreign_key_check;").fetchall()
-    if fk_violations:
-        print(f"[!] Warning: Foreign key check failed with violations: {fk_violations}")
-    else:
-        print("  - PRAGMA foreign_key_check: OK (0 violations)")
-
-    integrity = cur.execute("PRAGMA integrity_check;").fetchall()
-    print(f"  - PRAGMA integrity_check: {integrity[0][0] if integrity else 'unknown'}")
-
-    print("[*] Running SQLite VACUUM optimization...")
-    cur.execute("VACUUM;")
-    conn.close()
+        # Reset PostgreSQL sequence counters for inspection tables safely
+        print("[*] Resetting sequence counters...")
+        for table in tables_to_clear:
+            seq_name = f"{table}_id_seq"
+            try:
+                conn.execute(text(f'ALTER SEQUENCE IF EXISTS "{seq_name}" RESTART WITH 1'))
+                print(f"  - Reset sequence '{seq_name}' to 1")
+            except Exception as e:
+                print(f"  - Sequence '{seq_name}' reset skipped ({e})")
 
     # Storage cleanup
-    # Identify storage root: check settings, environment, or relative paths
     candidate_roots = [
         Path(settings.STORAGE_DIR).resolve(),
         Path(settings.PROJECT_ROOT / "storage").resolve() if hasattr(settings, "PROJECT_ROOT") else None,

@@ -29,7 +29,7 @@ Inspection Processing Engine
         │
         ▼
 Persistence & Storage
-        ├── SQLite 3 (SQLModel + Alembic migrations) [Self-contained local data/dhatu_rakshana.db]
+        ├── PostgreSQL 16 (SQLModel + Alembic migrations, connection pooling, psycopg2-binary)
         └── S3-Style Partitioned Local Object Storage (SHA-256 integrity, safe keys)
 ```
 
@@ -40,7 +40,7 @@ Persistence & Storage
 - **Python**: 3.11.x
 - **API Framework**: FastAPI 0.115.6 / Uvicorn 0.34.0
 - **Validation**: Pydantic 2.10.5
-- **ORM & Database**: SQLModel 0.0.22 / SQLite 3 (Optional production PostgreSQL)
+- **ORM & Database**: SQLModel 0.0.22 / PostgreSQL 16 (psycopg2-binary 2.9.10; SQLite strictly rejected)
 - **Migrations**: Alembic 1.14.1
 - **Machine Learning & Deep Learning**: PyTorch 2.5.1, TorchVision 0.20.1, Ultralytics 8.3.50 (YOLOv8)
 - **Computer Vision**: OpenCV Headless 4.10.0.84, NumPy 1.26.4, Pillow 10.4.0, Scikit-Learn 1.5.2

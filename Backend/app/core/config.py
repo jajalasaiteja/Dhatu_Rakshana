@@ -81,46 +81,51 @@ DEFAULT_CONFIG_DIR = BACKEND_DIR / "config"
 if not DEFAULT_CONFIG_DIR.exists() and (PROJECT_ROOT / "config").exists():
     DEFAULT_CONFIG_DIR = PROJECT_ROOT / "config"
 
-DEFAULT_SQLITE_PATH = DATA_DIR / "dhatu_rakshana.db"
+def build_default_postgres_url() -> str:
+    """Builds standard PostgreSQL connection URL from environment variables."""
+    user = os.getenv("POSTGRES_USER", "postgres")
+    password = os.getenv("POSTGRES_PASSWORD", "postgrespassword")
+    host = os.getenv("POSTGRES_HOST", "localhost")
+    port = os.getenv("POSTGRES_PORT", "5432")
+    db = os.getenv("POSTGRES_DB", "marine_defect_db")
+    return f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}"
 
 def resolve_db_url(raw_url: Optional[str] = None) -> str:
-    """Resolves database URL to an absolute, cross-platform SQLite URL if default or relative."""
+    """Resolves and validates database URL.
+    
+    PostgreSQL is the only supported and active database.
+    Rejects any SQLite URLs and enforces PostgreSQL connection scheme.
+    """
     env_url = raw_url or os.getenv("DATABASE_URL")
+
+    # Strictly reject SQLite URLs with explicit error
+    if env_url and "sqlite" in env_url.lower():
+        raise ValueError(
+            "SQLite is not supported. Project Dhatu Rakshana requires PostgreSQL as its only database. "
+            f"Configured URL '{env_url}' was rejected. "
+            "Please configure a valid PostgreSQL connection (e.g. postgresql+psycopg2://<user>:<password>@<host>:<port>/<dbname>)."
+        )
+
+    # If empty or not provided, construct from standard PostgreSQL environment variables
     if not env_url or env_url.strip() == "":
-        return f"sqlite:///{DEFAULT_SQLITE_PATH.resolve().as_posix()}"
-    
-    clean_url = env_url.replace("\\", "/")
-    if clean_url.startswith("sqlite:////workspace/"):
-        rel_sub = clean_url[len("sqlite:////workspace/"):]
-        abs_db = (PROJECT_ROOT / rel_sub).resolve()
-        try:
-            abs_db.parent.mkdir(parents=True, exist_ok=True)
-        except Exception:
-            pass
-        return f"sqlite:///{abs_db.as_posix()}"
+        return build_default_postgres_url()
 
-    # If explicitly sqlite relative path e.g. sqlite:///./data/... or sqlite:///data/...
-    if env_url.startswith("sqlite:///./") or env_url.startswith("sqlite:///.\\"):
-        rel_path = env_url[len("sqlite:///./"):]
-        abs_db = (PROJECT_ROOT / rel_path).resolve()
-        try:
-            abs_db.parent.mkdir(parents=True, exist_ok=True)
-        except Exception:
-            pass
-        return f"sqlite:///{abs_db.as_posix()}"
-    
-    if env_url.startswith("sqlite:///") and not env_url.startswith("sqlite:////") and not (len(env_url) > 11 and env_url[10] == ":"):
-        # Relative sqlite path without dot, e.g. sqlite:///data/dhatu_rakshana.db
-        candidate_rel = env_url[len("sqlite:///"):]
-        if not Path(candidate_rel).is_absolute():
-            abs_db = (PROJECT_ROOT / candidate_rel).resolve()
-            try:
-                abs_db.parent.mkdir(parents=True, exist_ok=True)
-            except Exception:
-                pass
-            return f"sqlite:///{abs_db.as_posix()}"
+    clean_url = env_url.strip()
 
-    return env_url
+    # Ensure scheme is postgresql
+    if not (clean_url.startswith("postgresql://") or clean_url.startswith("postgresql+psycopg2://") or clean_url.startswith("postgres://")):
+        raise ValueError(
+            f"Unsupported database scheme in DATABASE_URL: '{clean_url.split('://')[0] if '://' in clean_url else clean_url}'. "
+            "Project Dhatu Rakshana requires PostgreSQL. Please configure a valid PostgreSQL connection string."
+        )
+
+    # Standardize postgres:// and generic postgresql:// to postgresql+psycopg2:// for SQLAlchemy
+    if clean_url.startswith("postgres://"):
+        clean_url = "postgresql+psycopg2://" + clean_url[len("postgres://"):]
+    elif clean_url.startswith("postgresql://") and not clean_url.startswith("postgresql+"):
+        clean_url = "postgresql+psycopg2://" + clean_url[len("postgresql://"):]
+
+    return clean_url
 
 # Load environment variables (from Backend/.env, root .env, or system)
 for env_path in [BACKEND_DIR / ".env", PROJECT_ROOT / ".env"]:
@@ -149,9 +154,13 @@ try:
         PORT: int = int(os.getenv("PORT", "8000"))
         API_V1_PREFIX: str = os.getenv("API_V1_PREFIX", "/api/v1")
 
-        # Database: Default to portable SQLite in data/
+        # PostgreSQL Database Configuration (PostgreSQL is required)
+        POSTGRES_USER: str = os.getenv("POSTGRES_USER", "postgres")
+        POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "postgrespassword")
+        POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
+        POSTGRES_PORT: int = int(os.getenv("POSTGRES_PORT", "5432"))
+        POSTGRES_DB: str = os.getenv("POSTGRES_DB", "marine_defect_db")
         DATABASE_URL: str = RESOLVED_DATABASE_URL
-        SQLITE_FALLBACK_FILE: str = str(DEFAULT_SQLITE_PATH)
 
         # Security
         SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", os.getenv("SECRET_KEY", "dhatu-rakshana-secure-jwt-secret-key-change-in-production-2026"))
@@ -214,8 +223,13 @@ except ImportError:
         PORT: int = int(os.getenv("PORT", "8000"))
         API_V1_PREFIX: str = os.getenv("API_V1_PREFIX", "/api/v1")
 
+        # PostgreSQL Database Configuration (PostgreSQL is required)
+        POSTGRES_USER: str = os.getenv("POSTGRES_USER", "postgres")
+        POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "postgrespassword")
+        POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
+        POSTGRES_PORT: int = int(os.getenv("POSTGRES_PORT", "5432"))
+        POSTGRES_DB: str = os.getenv("POSTGRES_DB", "marine_defect_db")
         DATABASE_URL: str = RESOLVED_DATABASE_URL
-        SQLITE_FALLBACK_FILE: str = str(DEFAULT_SQLITE_PATH)
 
         SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", os.getenv("SECRET_KEY", "dhatu-rakshana-secure-jwt-secret-key-change-in-production-2026"))
         JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", os.getenv("SECRET_KEY", "dhatu-rakshana-secure-jwt-secret-key-change-in-production-2026"))
