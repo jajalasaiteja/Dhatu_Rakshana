@@ -1,0 +1,34 @@
+{
+  "seed": 42,
+  "classes": [
+    "contamination",
+    "inclusion",
+    "no_defect",
+    "pinhole",
+    "scratch"
+  ],
+  "yolo_model": "yolov8m.pt",
+  "yolo_imgsz": 640,
+  "yolo_epochs": 60,
+  "tile": 512,
+  "overlap": 128,
+  "cls_backbone": "resnet34",
+  "cls_img_size": 256,
+  "epoch_cap": 6000,
+  "ema_decay": 0.998,
+  "temperature": 0.5961207151412964,
+  "detector_verdict": "ok",
+  "operating_point": {
+    "det_conf": 0.25,
+    "reject_p_no_defect": 0.5,
+    "chosen_on": "val"
+  },
+  "rf_block": 10,
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "torchvision": "0.26.0+cu130",
+    "ultralytics": "8.4.211",
+    "scikit-learn": "1.6.1",
+    "numpy": "2.1.3"
+  }
+}
