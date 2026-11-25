@@ -72,14 +72,14 @@ export default function AppLayout() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 text-[11px] font-mono">
-            <div className="flex items-center gap-1.5 text-matteSage">
-              <ShieldCheck className="w-3.5 h-3.5 text-matteSage" />
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] font-mono shrink-0">
+            <div className="flex items-center gap-1.5 text-matteSage whitespace-nowrap">
+              <ShieldCheck className="w-3.5 h-3.5 text-matteSage shrink-0" />
               <span>AMPP • ISO 4628 • SSPC-PA 2</span>
             </div>
-            <span className="text-white/20">|</span>
-            <div className="flex items-center gap-1.5 text-grayGreen-light">
-              <Cpu className="w-3.5 h-3.5 text-grayGreen-light" />
+            <span className="hidden lg:inline text-white/20">|</span>
+            <div className="hidden lg:flex items-center gap-1.5 text-grayGreen-light whitespace-nowrap">
+              <Cpu className="w-3.5 h-3.5 text-grayGreen-light shrink-0" />
               <span>SURFACE TOPOGRAPHY & MORPHOLOGY</span>
             </div>
           </div>

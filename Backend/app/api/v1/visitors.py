@@ -68,7 +68,7 @@ def request_visitor_access(
     # Validate against Visitor registry (case-insensitive)
     visitor = session.exec(
         select(Visitor).where(
-            Visitor.username == clean_username,
+            func.lower(Visitor.username) == clean_username,
             Visitor.is_active == True
         )
     ).first()

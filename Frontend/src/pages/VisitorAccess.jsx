@@ -146,18 +146,9 @@ export default function VisitorAccess() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-greige font-semibold" htmlFor="visitor-password">
-                Visitor Access Password
-              </label>
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-[10px] text-greige hover:text-fullWhite cursor-pointer"
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
-            </div>
+            <label className="block text-greige font-semibold mb-1.5" htmlFor="visitor-password">
+              Visitor Access Password
+            </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-greige">
                 <Lock className="w-3.5 h-3.5" />
@@ -177,7 +168,7 @@ export default function VisitorAccess() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-greige hover:text-fullWhite cursor-pointer"
-                aria-label="Toggle password visibility"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               </button>
@@ -218,7 +209,7 @@ export default function VisitorAccess() {
             <span className="text-[10px] text-matteSage font-normal">Password: visitor123</span>
           </div>
           <div className="flex flex-wrap gap-1.5 pt-0.5">
-            {['visitor', 'auditor', 'defense_observer', 'naval_cadet'].map((uname) => (
+            {['visitor', 'visitor-2026', 'auditor', 'defense_observer', 'naval_cadet'].map((uname) => (
               <button
                 key={uname}
                 type="button"

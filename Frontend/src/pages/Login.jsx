@@ -105,18 +105,9 @@ export default function Login() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-greige font-semibold" htmlFor="password">
-                Password
-              </label>
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-[10px] text-greige hover:text-fullWhite cursor-pointer"
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
-            </div>
+            <label className="block text-greige font-semibold mb-1" htmlFor="password">
+              Password
+            </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-greige">
                 <Lock className="w-3.5 h-3.5" />

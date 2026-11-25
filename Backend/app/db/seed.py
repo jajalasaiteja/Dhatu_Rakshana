@@ -22,6 +22,12 @@ DEFAULT_VISITORS = [
         "is_active": True
     },
     {
+        "username": "visitor-2026",
+        "full_name": "Naval Defense Reviewer 2026",
+        "organization": "Naval Technical Review Board",
+        "is_active": True
+    },
+    {
         "username": "auditor",
         "full_name": "Lead Coating Standards Auditor",
         "organization": "Maritime Coating Standards Authority",

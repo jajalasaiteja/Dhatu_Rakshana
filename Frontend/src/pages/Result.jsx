@@ -358,7 +358,7 @@ export default function Result() {
         
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-white/10">
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <h2 className="text-sm sm:text-base font-mono font-bold text-fullWhite">
                 Inspection Record Details
               </h2>
@@ -378,12 +378,12 @@ export default function Result() {
           </div>
 
           {/* PDF Report Download Action */}
-          <div className="flex flex-col items-start lg:items-end gap-1.5 shrink-0">
+          <div className="flex flex-col items-start lg:items-end gap-1.5 shrink-0 w-full sm:w-auto">
             <button
               type="button"
               onClick={handleDownloadReport}
               disabled={isPending || reportState === 'downloading'}
-              className={`px-4 py-2 rounded font-mono text-xs uppercase tracking-wider flex items-center gap-2 nav-transition border shadow-technical cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 nav-transition border shadow-technical cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                 reportState === 'downloading'
                   ? 'bg-surface-dark border-white/10 text-fullWhite'
                   : reportState === 'success'
@@ -417,7 +417,7 @@ export default function Result() {
             </button>
 
             {reportError && (
-              <p className="text-[10px] font-mono text-status-failText max-w-xs text-right">
+              <p className="text-[10px] font-mono text-status-failText max-w-xs text-left lg:text-right">
                 {reportError}
               </p>
             )}
@@ -428,8 +428,39 @@ export default function Result() {
           </div>
         </div>
 
-        {/* Structured Technical Metadata Table */}
-        <div className="overflow-x-auto rounded border border-white/10 bg-surface-dark/60">
+        {/* Structured Technical Metadata (Responsive: Cards on Mobile, Table on Desktop) */}
+        <div className="grid grid-cols-1 sm:hidden gap-2 font-mono text-xs">
+          <div className="p-2.5 rounded border border-white/10 bg-surface-dark/70">
+            <span className="text-greige uppercase font-bold text-[10px] block">PLATFORM ZONE</span>
+            <span className="text-fullWhite font-semibold mt-0.5 block">{inspection.zone?.name || inspection.zone_name || `Zone ${inspection.zone_id}`}</span>
+          </div>
+          <div className="p-2.5 rounded border border-white/10 bg-surface-dark/70">
+            <span className="text-greige uppercase font-bold text-[10px] block">ANALYSIS DATE (IST)</span>
+            <span className="text-matteSage font-medium mt-0.5 block">{formatISTDateTime(inspection.timestamp)}</span>
+          </div>
+          <div className="p-2.5 rounded border border-white/10 bg-surface-dark/70">
+            <span className="text-greige uppercase font-bold text-[10px] block">PROCESSING STATUS</span>
+            <div className="mt-0.5">
+              {isPending ? (
+                <span className="flex items-center gap-1.5 text-greige">
+                  <Spinner size="xs" />
+                  <span>Processing Imagery & Topography</span>
+                </span>
+              ) : (
+                <span className="text-matteSage font-semibold flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-matteSage" />
+                  <span>{inspection.status || 'COMPLETED'}</span>
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="p-2.5 rounded border border-white/10 bg-surface-dark/70">
+            <span className="text-greige uppercase font-bold text-[10px] block">ASSESSMENT BASIS</span>
+            <span className="text-matteSage font-medium mt-0.5 block">ISO 4628 • SSPC-PA 2 / VIS 2 • NACE SP0188</span>
+          </div>
+        </div>
+
+        <div className="hidden sm:block overflow-x-auto rounded border border-white/10 bg-surface-dark/60">
           <table className="w-full text-left text-xs font-mono">
             <tbody>
               <tr className="border-b border-white/10">

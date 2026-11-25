@@ -345,7 +345,7 @@ export default function VisitorRecords() {
                             <span className="text-fullWhite font-medium">
                               {insp.zone_name || `Zone ${insp.zone_id}`}
                             </span>
-                            <span className="px-1.5 py-0.5 rounded bg-surface-dark border border-matteSage/30 text-[9px] text-matteSage font-mono font-semibold">
+                            <span className="px-1.5 py-0.5 rounded bg-surface-dark border border-matteSage/30 text-[9px] text-matteSage font-mono font-semibold whitespace-nowrap shrink-0">
                               {insp.evaluation_engine_version ? `v${insp.evaluation_engine_version}` : 'v2.0.0-iso'}
                             </span>
                           </div>
@@ -357,9 +357,9 @@ export default function VisitorRecords() {
                         </td>
 
                         {/* Defects Count */}
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-4 text-center whitespace-nowrap">
                           <span
-                            className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold ${
+                            className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold whitespace-nowrap ${
                               insp.defect_count > 0
                                 ? 'bg-status-fail/40 text-status-failText border border-status-failBorder/50'
                                 : 'bg-status-pass/40 text-status-passText border border-status-passBorder/50'
@@ -370,10 +370,10 @@ export default function VisitorRecords() {
                         </td>
 
                         {/* 3D Topography */}
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-4 text-center whitespace-nowrap">
                           {insp.topology_available ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-grayGreen/40 bg-surface-dark text-matteSage font-semibold">
-                              <Layers className="w-3 h-3 text-matteSage" />
+                            <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-grayGreen/40 bg-surface-dark text-matteSage font-semibold whitespace-nowrap">
+                              <Layers className="w-3 h-3 text-matteSage shrink-0" />
                               <span>Available</span>
                             </span>
                           ) : (
@@ -382,10 +382,10 @@ export default function VisitorRecords() {
                         </td>
 
                         {/* Action Link */}
-                        <td className="py-3 px-4 text-right">
+                        <td className="py-3 px-4 text-right whitespace-nowrap">
                           <Link
                             to={`/visitor/records/${insp.id}`}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded border border-white/10 bg-surface-dark hover:border-matteSage hover:bg-surface-elevated text-fullWhite text-xs nav-transition cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded border border-white/10 bg-surface-dark hover:border-matteSage hover:bg-surface-elevated text-fullWhite text-xs nav-transition cursor-pointer whitespace-nowrap"
                           >
                             <Eye className="w-3.5 h-3.5 text-matteSage" />
                             <span>View Findings</span>

@@ -185,21 +185,31 @@ export async function apiClient(endpoint, options = {}) {
 
     // 401 Unauthorized
     if (response.status === 401) {
-      if (isVisitorRequest) {
-        clearVisitorToken();
-        window.dispatchEvent(new CustomEvent('visitor:unauthorized'));
-        const err = new Error('Visitor session expired or unauthorized. Please re-enter your username.');
-        err.status = 401;
-        err.isAuthError = true;
-        throw err;
-      } else {
-        clearAuthToken();
-        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
-        const err = new Error('Session expired or unauthorized. Please log in.');
-        err.status = 401;
-        err.isAuthError = true;
-        throw err;
+      let serverDetail = '';
+      try {
+        const clone = response.clone();
+        const errJson = await clone.json();
+        serverDetail = errJson.detail || errJson.message || '';
+      } catch {}
+
+      const isLoginEndpoint = endpoint.includes('/auth/login') || endpoint.includes('/visitors/access');
+      if (!isLoginEndpoint) {
+        if (isVisitorRequest) {
+          clearVisitorToken();
+          window.dispatchEvent(new CustomEvent('visitor:unauthorized'));
+        } else {
+          clearAuthToken();
+          window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+        }
       }
+
+      const defaultMsg = isVisitorRequest
+        ? 'Visitor session expired or unauthorized. Please re-enter your credentials.'
+        : 'Session expired or unauthorized. Please log in.';
+      const err = new Error(serverDetail || defaultMsg);
+      err.status = 401;
+      err.isAuthError = true;
+      throw err;
     }
 
     // 403 Forbidden

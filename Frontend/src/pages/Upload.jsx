@@ -268,57 +268,57 @@ export default function Upload() {
       <div className="bg-surface-panel rounded-lg border border-white/10 shadow-technical overflow-hidden">
         
         {/* Technical Tab Strip */}
-        <div className="flex items-center overflow-x-auto border-b border-white/10 px-4 bg-surface-dark/70 scrollbar-none font-mono">
+        <div className="flex items-center overflow-x-auto border-b border-white/10 px-2 sm:px-4 bg-surface-dark/70 scrollbar-none font-mono flex-nowrap shrink-0">
           <button
             type="button"
             onClick={() => setActiveTab('inspection')}
-            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 sm:px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'inspection'
                 ? 'border-grayGreen text-fullWhite bg-surface-panel'
                 : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-panel/40'
             }`}
           >
-            <Shield className="w-3.5 h-3.5 text-matteSage" />
-            <span>Inspection Image Analysis</span>
+            <Shield className="w-3.5 h-3.5 text-matteSage shrink-0" />
+            <span>Image Analysis</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('3d')}
-            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 sm:px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === '3d'
                 ? 'border-grayGreen text-fullWhite bg-surface-panel'
                 : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-panel/40'
             }`}
           >
-            <Box className="w-3.5 h-3.5 text-matteSage" />
-            <span>Three-Dimensional Surface Analysis</span>
+            <Box className="w-3.5 h-3.5 text-matteSage shrink-0" />
+            <span>3D Surface Topography</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('standards')}
-            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 sm:px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'standards'
                 ? 'border-grayGreen text-fullWhite bg-surface-panel'
                 : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-panel/40'
             }`}
           >
-            <FileCheck2 className="w-3.5 h-3.5 text-matteSage" />
-            <span>Standards and Assessment References</span>
+            <FileCheck2 className="w-3.5 h-3.5 text-matteSage shrink-0" />
+            <span>Standards Reference</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('history')}
-            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 sm:px-5 py-3 text-xs font-semibold border-b-2 nav-transition cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'history'
                 ? 'border-grayGreen text-fullWhite bg-surface-panel'
                 : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-panel/40'
             }`}
           >
-            <HistoryIcon className="w-3.5 h-3.5 text-matteSage" />
-            <span>Recent Inspection Records</span>
+            <HistoryIcon className="w-3.5 h-3.5 text-matteSage shrink-0" />
+            <span>Recent Records</span>
           </button>
         </div>
 
@@ -775,8 +775,8 @@ export default function Upload() {
 
       {/* Add Platform Zone Modal */}
       {showAddZoneModal && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-surface-panel rounded border border-white/15 p-5 shadow-elevated space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-md max-h-[92vh] overflow-y-auto bg-surface-panel rounded border border-white/15 p-5 shadow-elevated space-y-4 my-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-matteSage" />

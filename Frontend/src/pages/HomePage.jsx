@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Interactive3DTopography from '../components/Interactive3DTopography';
@@ -12,11 +12,16 @@ import {
   ChevronRight,
   Layers,
   History as HistoryIcon,
-  Search
+  Search,
+  Menu,
+  X,
+  UserCheck,
+  BookOpen
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isVisitorAuthenticated, visitorUser } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-surface text-content-primary font-sans selection:bg-grayGreen/50 selection:text-white">
@@ -28,19 +33,24 @@ export default function HomePage() {
           {/* Brand Header */}
           <Link
             to="/"
-            className="flex items-center gap-3 group focus:outline-hidden"
+            className="flex items-center gap-3 group focus:outline-hidden min-w-0"
             title="Dhatu Rakshana — Marine Coating Inspection & Surface Integrity Analysis"
           >
-            <div className="w-8 h-8 rounded border border-grayGreen/50 bg-[#121315] flex items-center justify-center text-matteSage group-hover:border-matteSage nav-transition">
+            <div className="w-8 h-8 rounded border border-grayGreen/50 bg-[#121315] flex items-center justify-center text-matteSage group-hover:border-matteSage nav-transition shrink-0">
               <Shield className="w-4 h-4 text-matteSage" />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-2 leading-none">
-                <span className="text-base font-bold text-fullWhite tracking-tight font-sans">
+                <span className="text-sm sm:text-base font-bold text-fullWhite tracking-tight font-sans truncate">
                   DHATU RAKSHANA
                 </span>
+                {isVisitorAuthenticated && (
+                  <span className="hidden sm:inline-block px-1.5 py-0.5 rounded border border-matteSage/40 bg-surface-dark text-matteSage font-mono text-[9px] font-semibold">
+                    VISITOR
+                  </span>
+                )}
               </div>
-              <span className="text-[10px] font-mono tracking-wider uppercase text-greige mt-0.5">
+              <span className="text-[10px] font-mono tracking-wider uppercase text-greige mt-0.5 hidden sm:block truncate max-w-xs md:max-w-none">
                 Marine Coating Inspection & Surface Integrity Analysis
               </span>
             </div>
@@ -59,8 +69,8 @@ export default function HomePage() {
             </Link>
           </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-2.5 font-mono text-xs">
+          {/* Action CTAs (Desktop) */}
+          <div className="hidden md:flex items-center gap-2.5 font-mono text-xs">
             <ThemeToggle className="mr-0.5" />
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
@@ -76,6 +86,19 @@ export default function HomePage() {
                 >
                   <span>New Inspection</span>
                   <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            ) : isVisitorAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-greige font-mono mr-1">
+                  Visitor: <strong className="text-fullWhite">{visitorUser?.username}</strong>
+                </span>
+                <Link
+                  to="/visitor/records"
+                  className="px-4 py-1.5 rounded border border-grayGreen/80 bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold shadow-technical nav-transition flex items-center gap-1.5"
+                >
+                  <UserCheck className="w-3.5 h-3.5 text-matteSage" />
+                  <span>Visitor Records</span>
                 </Link>
               </div>
             ) : (
@@ -96,7 +119,101 @@ export default function HomePage() {
             )}
           </div>
 
+          {/* Mobile Header Controls */}
+          <div className="flex md:hidden items-center gap-2 shrink-0">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded border border-white/10 text-greige hover:text-fullWhite bg-surface-dark cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-white/10 bg-surface-panel px-4 pt-3 pb-5 space-y-2.5 shadow-elevated">
+            <a
+              href="#capabilities"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3.5 py-2.5 rounded text-xs font-mono text-greige hover:bg-surface-dark hover:text-fullWhite min-h-[44px] flex items-center gap-2"
+            >
+              <Search className="w-4 h-4 text-matteSage" />
+              <span>Inspection Capabilities</span>
+            </a>
+            <a
+              href="#workflow"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3.5 py-2.5 rounded text-xs font-mono text-greige hover:bg-surface-dark hover:text-fullWhite min-h-[44px] flex items-center gap-2"
+            >
+              <Cpu className="w-4 h-4 text-matteSage" />
+              <span>Analysis Workflow</span>
+            </a>
+            <Link
+              to="/standards"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3.5 py-2.5 rounded text-xs font-mono text-greige hover:bg-surface-dark hover:text-fullWhite min-h-[44px] flex items-center gap-2"
+            >
+              <BookOpen className="w-4 h-4 text-matteSage" />
+              <span>ISO Rulebase</span>
+            </Link>
+
+            <div className="pt-2 border-t border-white/10 space-y-2">
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-3.5 py-2.5 rounded bg-grayGreen text-fullWhite text-xs font-mono font-semibold min-h-[44px] flex items-center justify-center gap-2 shadow-technical"
+                  >
+                    <span>New Inspection Analysis</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    to="/inspections"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-3.5 py-2.5 rounded border border-white/10 bg-surface-dark text-fullWhite text-xs font-mono min-h-[44px] flex items-center justify-center gap-2"
+                  >
+                    <HistoryIcon className="w-4 h-4 text-matteSage" />
+                    <span>Analysis History</span>
+                  </Link>
+                </>
+              ) : isVisitorAuthenticated ? (
+                <Link
+                  to="/visitor/records"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block w-full text-center px-3.5 py-2.5 rounded bg-grayGreen text-fullWhite text-xs font-mono font-semibold min-h-[44px] flex items-center justify-center gap-2 shadow-technical"
+                >
+                  <UserCheck className="w-4 h-4 text-matteSage" />
+                  <span>View Permitted Records ({visitorUser?.username})</span>
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-3.5 py-2.5 rounded border border-white/10 bg-surface-dark text-fullWhite text-xs font-mono min-h-[44px] flex items-center justify-center gap-2"
+                  >
+                    <Shield className="w-4 h-4 text-matteSage" />
+                    <span>Inspector Access</span>
+                  </Link>
+                  <Link
+                    to="/visitor-access"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-3.5 py-2.5 rounded bg-grayGreen text-fullWhite text-xs font-mono font-semibold min-h-[44px] flex items-center justify-center gap-2 shadow-technical"
+                  >
+                    <UserCheck className="w-4 h-4 text-matteSage" />
+                    <span>Visitor Access</span>
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Container */}

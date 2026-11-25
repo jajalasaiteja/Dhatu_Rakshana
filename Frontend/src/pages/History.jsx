@@ -171,7 +171,7 @@ export default function History() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by Asset / Zone name or Inspection ID..."
+            placeholder="Search records, zone, or ID..."
             className="w-full pl-9 pr-3 py-1.5 rounded border border-white/10 text-xs font-mono text-fullWhite bg-surface-dark focus:outline-hidden focus:ring-1 focus:ring-grayGreen"
           />
         </div>
@@ -333,9 +333,9 @@ export default function History() {
 
                   {/* Asset / Sample */}
                   <td className="py-3 px-3.5 text-fullWhite">
-                    <div className="font-semibold flex items-center gap-2">
-                      <span>{insp.zone_name || `Zone ${insp.zone_id}`}</span>
-                      <span className="px-1.5 py-0.5 rounded bg-surface-dark border border-matteSage/30 text-[9px] text-matteSage font-mono font-semibold">
+                    <div className="font-semibold flex items-center gap-1.5 flex-wrap">
+                      <span className="whitespace-nowrap">{insp.zone_name || `Zone ${insp.zone_id}`}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-surface-dark border border-matteSage/30 text-[9px] text-matteSage font-mono font-semibold whitespace-nowrap shrink-0">
                         {insp.evaluation_engine_version ? `v${insp.evaluation_engine_version}` : 'v2.0.0-iso'}
                       </span>
                     </div>

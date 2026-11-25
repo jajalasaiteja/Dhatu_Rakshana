@@ -40,8 +40,15 @@ export default function Interactive3DTopography({
     if (!mountRef.current) return;
     setLoading3D(true);
 
+    const getResponsiveHeight = () => {
+      if (typeof window === 'undefined') return 440;
+      if (window.innerWidth < 640) return 290;
+      if (window.innerWidth < 1024) return 360;
+      return 440;
+    };
+
     const width = mountRef.current.clientWidth || 600;
-    const height = 440;
+    const height = getResponsiveHeight();
 
     // 1. Scene setup with neutral dark charcoal canvas background
     const scene = new THREE.Scene();
@@ -313,9 +320,10 @@ export default function Interactive3DTopography({
     const handleResize = () => {
       if (!mountRef.current || !rendererRef.current || !cameraRef.current) return;
       const w = mountRef.current.clientWidth || 600;
-      cameraRef.current.aspect = w / height;
+      const h = getResponsiveHeight();
+      cameraRef.current.aspect = w / h;
       cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(w, height);
+      rendererRef.current.setSize(w, h);
     };
     window.addEventListener('resize', handleResize);
 
@@ -569,26 +577,26 @@ export default function Interactive3DTopography({
             <Layers className="w-3 h-3 text-matteSage" />
             <span>Elevation:</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 flex-1">
-            <div className="flex items-center gap-1.5 min-w-0">
+          <div className="flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-1.5 flex-1">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="w-2.5 h-2.5 rounded-xs bg-[#401421] border border-white/20 shrink-0" />
-              <span className="text-greige truncate">Deep Cavity</span>
+              <span className="text-greige">Deep Cavity</span>
             </div>
-            <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="w-2.5 h-2.5 rounded-xs bg-[#B9485A] border border-white/20 shrink-0" />
-              <span className="text-greige truncate">Depression</span>
+              <span className="text-greige">Depression</span>
             </div>
-            <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="w-2.5 h-2.5 rounded-xs bg-[#CE9770] border border-white/20 shrink-0" />
-              <span className="text-fullWhite font-medium truncate">Nominal Coating</span>
+              <span className="text-fullWhite font-medium">Nominal Coating</span>
             </div>
-            <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="w-2.5 h-2.5 rounded-xs bg-[#A6B890] border border-white/20 shrink-0" />
-              <span className="text-greige truncate">Upper Relief</span>
+              <span className="text-greige">Upper Relief</span>
             </div>
-            <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="w-2.5 h-2.5 rounded-xs bg-[#D0CB93] border border-white/30 shrink-0" />
-              <span className="text-matteSage font-semibold truncate">Surface Peak</span>
+              <span className="text-matteSage font-semibold">Surface Peak</span>
             </div>
           </div>
         </div>

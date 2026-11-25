@@ -249,7 +249,7 @@ export default function VisitorLogs() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-start md:self-auto font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 self-stretch sm:self-auto font-mono text-xs">
             <button
               type="button"
               onClick={() => {
@@ -257,7 +257,7 @@ export default function VisitorLogs() {
                 if (activeTab === 'logs') fetchLogs(page, logSearch);
               }}
               disabled={loadingVisitors || loadingLogs}
-              className="px-3 py-2 rounded border border-white/10 bg-surface-dark hover:bg-surface-elevated text-fullWhite nav-transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="flex-1 sm:flex-none justify-center px-3 py-2 rounded border border-white/10 bg-surface-dark hover:bg-surface-elevated text-fullWhite nav-transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
               title="Refresh data"
             >
               <RefreshCw
@@ -276,40 +276,52 @@ export default function VisitorLogs() {
                 setShowGrantPassword(false);
                 setShowGrantModal(true);
               }}
-              className="px-3.5 py-2 rounded border border-matteSage bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold nav-transition flex items-center gap-1.5 cursor-pointer shadow-technical active:scale-98"
+              className="flex-1 sm:flex-none justify-center px-3 sm:px-3.5 py-2 rounded border border-matteSage bg-grayGreen hover:bg-grayGreen-light text-fullWhite font-semibold nav-transition flex items-center gap-1.5 cursor-pointer shadow-technical active:scale-98 whitespace-nowrap"
             >
-              <UserPlus className="w-4 h-4 text-matteSage" />
-              <span>Grant Visitor Permission</span>
+              <UserPlus className="w-4 h-4 text-matteSage shrink-0" />
+              <span>Grant Permission</span>
             </button>
           </div>
         </div>
 
         {/* Operational Statistics Badges */}
-        <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-          <div className="p-3 rounded border border-white/5 bg-surface-dark/70">
-            <span className="text-[10px] text-greige uppercase tracking-wider block">Total Registered</span>
-            <span className="text-lg font-bold text-fullWhite">{visitors.length} Visitors</span>
+        <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 font-mono text-xs">
+          <div className="p-2.5 sm:p-3 rounded border border-white/5 bg-surface-dark/70">
+            <span className="text-[10px] text-greige uppercase tracking-wider block truncate">Total Registered</span>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-base sm:text-lg font-bold text-fullWhite">{visitors.length}</span>
+              <span className="text-[10px] text-greige">Visitors</span>
+            </div>
           </div>
-          <div className="p-3 rounded border border-status-passBorder/30 bg-status-pass/10">
-            <span className="text-[10px] text-matteSage uppercase tracking-wider block">Active Permissions</span>
-            <span className="text-lg font-bold text-status-passText">{activeCount} Permitted</span>
+          <div className="p-2.5 sm:p-3 rounded border border-status-passBorder/30 bg-status-pass/10">
+            <span className="text-[10px] text-matteSage uppercase tracking-wider block truncate">Active Permissions</span>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-base sm:text-lg font-bold text-status-passText">{activeCount}</span>
+              <span className="text-[10px] text-status-passText/80">Permitted</span>
+            </div>
           </div>
-          <div className="p-3 rounded border border-status-failBorder/30 bg-status-fail/10">
-            <span className="text-[10px] text-status-failText uppercase tracking-wider block">Suspended Access</span>
-            <span className="text-lg font-bold text-status-failText">{suspendedCount} Suspended</span>
+          <div className="p-2.5 sm:p-3 rounded border border-status-failBorder/30 bg-status-fail/10">
+            <span className="text-[10px] text-status-failText uppercase tracking-wider block truncate">Suspended</span>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-base sm:text-lg font-bold text-status-failText">{suspendedCount}</span>
+              <span className="text-[10px] text-status-failText/80">Suspended</span>
+            </div>
           </div>
-          <div className="p-3 rounded border border-white/5 bg-surface-dark/70">
-            <span className="text-[10px] text-greige uppercase tracking-wider block">Audit Events Logged</span>
-            <span className="text-lg font-bold text-matteSage">{totalCount} Events</span>
+          <div className="p-2.5 sm:p-3 rounded border border-white/5 bg-surface-dark/70">
+            <span className="text-[10px] text-greige uppercase tracking-wider block truncate">Audit Events</span>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-base sm:text-lg font-bold text-matteSage">{totalCount}</span>
+              <span className="text-[10px] text-matteSage/80">Events</span>
+            </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex items-center gap-2 font-mono text-xs">
+        <div className="mt-6 pt-4 border-t border-white/10 flex items-center gap-2 font-mono text-xs overflow-x-auto pb-1 scrollbar-none">
           <button
             type="button"
             onClick={() => setActiveTab('directory')}
-            className={`px-4 py-2 rounded border nav-transition flex items-center gap-2 cursor-pointer ${
+            className={`px-4 py-2 rounded border nav-transition flex items-center gap-2 cursor-pointer shrink-0 ${
               activeTab === 'directory'
                 ? 'bg-grayGreen border-matteSage text-fullWhite font-semibold shadow-technical'
                 : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-elevated'
@@ -325,7 +337,7 @@ export default function VisitorLogs() {
           <button
             type="button"
             onClick={() => setActiveTab('logs')}
-            className={`px-4 py-2 rounded border nav-transition flex items-center gap-2 cursor-pointer ${
+            className={`px-4 py-2 rounded border nav-transition flex items-center gap-2 cursor-pointer shrink-0 ${
               activeTab === 'logs'
                 ? 'bg-grayGreen border-matteSage text-fullWhite font-semibold shadow-technical'
                 : 'border-transparent text-greige hover:text-fullWhite hover:bg-surface-elevated'
@@ -780,8 +792,8 @@ export default function VisitorLogs() {
       {/* MODAL: GRANT VISITOR PERMISSION                                */}
       {/* ============================================================== */}
       {showGrantModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs font-mono">
-          <div className="w-full max-w-lg bg-surface-panel border border-white/15 rounded shadow-elevated p-6 space-y-5 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs font-mono overflow-y-auto">
+          <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto bg-surface-panel border border-white/15 rounded shadow-elevated p-5 sm:p-6 space-y-4 sm:space-y-5 animate-fade-in my-auto">
             
             {/* Modal Header */}
             <div className="flex items-start justify-between pb-3 border-b border-white/10">
